@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { commands, aliases, type CommandHandler, type Env, type ThemeName } from "@/components/terminal/commands";
+import { generateUUID } from "@/lib/utils";
 
 type HistoryItem = {
   id: string;
@@ -104,19 +105,19 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
       try {
         target?.scrollIntoView({ block: 'end' });
         return;
-      } catch {}
+      } catch { }
       try {
         const doc = document.documentElement;
         window.scrollTo({ top: doc.scrollHeight });
         return;
-      } catch {}
+      } catch { }
     }
     // Internal scroll mode: use the sentinel within the scroll container
     if (bottomRef.current) {
       try {
         bottomRef.current.scrollIntoView({ block: "end" });
         return;
-      } catch {}
+      } catch { }
     }
     const el = containerRef.current;
     if (el) el.scrollTop = el.scrollHeight;
@@ -173,7 +174,7 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
       try {
         const u = url.startsWith("http") ? url : `https://${url}`;
         window.open(u, "_blank", "noopener,noreferrer");
-      } catch {}
+      } catch { }
     },
     run: (cmd: string) => {
       run(cmd);
@@ -182,11 +183,11 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
     theme,
     prompt,
     bannerVisible,
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }), [theme, prompt, bannerVisible]);
 
   const run = useCallback((raw: string) => {
-    const id = crypto.randomUUID();
+    const id = generateUUID();
     const text = raw.trim();
     if (!text) return;
 

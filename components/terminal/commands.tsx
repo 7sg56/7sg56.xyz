@@ -14,6 +14,7 @@ import {
   getAllSkills,
   getHobbies
 } from "@/lib/data";
+import { generateUUID } from "@/lib/utils";
 
 // Single-active summon coordination so only the latest stays active
 let activeSummonId: string | null = null;
@@ -117,7 +118,7 @@ function CharacterFollow({ kind, active }: { kind: MinecraftKind; active: boolea
 
 function CharacterSpawn({ forcedKind }: { forcedKind?: MinecraftKind | null }) {
   const [kind, setKind] = useState<MinecraftKind | null>(forcedKind ?? null);
-  const [id] = useState<string>(() => crypto.randomUUID());
+  const [id] = useState<string>(() => generateUUID());
   const [isActive, setIsActive] = useState<boolean>(false);
 
   useEffect(() => {
