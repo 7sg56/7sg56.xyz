@@ -1,29 +1,16 @@
 "use client";
 
-import React from "react";
+import { getProfile } from "@/lib/data";
 
 export default function ContactWindow() {
+  const profile = getProfile();
+
   const socialLinks = [
-    {
-      name: "GitHub",
-      url: "https://github.com/7sg56"
-    },
-    {
-      name: "LinkedIn",
-      url: "https://www.linkedin.com/in/7sg56"
-    },
-    {
-      name: "Twitter",
-      url: "https://x.com/sourishghosh777"
-    },
-    {
-      name: "Instagram",
-      url: "https://www.instagram.com/7sg56"
-    },
-    {
-      name: "Email",
-      url: "mailto:7sg56.dev@gmail.com"
-    },
+    { name: "GitHub", url: profile.socials.github },
+    { name: "LinkedIn", url: profile.socials.linkedin },
+    { name: "Twitter", url: profile.socials.twitter },
+    { name: "Instagram", url: profile.socials.instagram },
+    { name: "Email", url: `mailto:${profile.contact.email_masked}` },
   ];
 
   return (
@@ -39,7 +26,7 @@ export default function ContactWindow() {
           {/* Social Links */}
           <div className="max-w-2xl mx-auto">
             <p className="text-gray-200 font-bold text-center mb-6">
-              I&apos;m always ready to collaborate and build things together! 
+              I&apos;m always ready to collaborate and build things together!
               <br />
               <span className="text-red-400">Let&apos;s connect and make it happen.</span>
             </p>
@@ -48,9 +35,9 @@ export default function ContactWindow() {
                 {socialLinks.map((link) => (
                   <div key={link.name} className="space-y-1">
                     <div className="text-white font-medium">
-                      {link.name} : <a 
-                        href={link.url} 
-                        target="_blank" 
+                      {link.name} : <a
+                        href={link.url}
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="text-red-400 hover:text-red-300 hover:underline transition-colors font-medium"
                       >

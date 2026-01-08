@@ -3,6 +3,8 @@
 import type React from "react"
 import { cn } from "@/lib/utils"
 
+import { getAllSkills } from "@/lib/data"
+
 type Item = string | { label: string }
 
 type Props = {
@@ -18,24 +20,16 @@ function renderLabel(item: Item) {
 }
 
 export default function TechStackStrip({
-  items = [
-    "Next.js",
-    "React",
-    "TypeScript",
-    "Tailwind CSS",
-    "Node.js",
-    "Vercel",
-    "Supabase",
-    "Prisma",
-    "PostgreSQL",
-    "Stripe",
-  ],
+  items,
   duration = 22,
   pauseOnHover = true,
   className,
 }: Props) {
+  const defaultSkills = getAllSkills().flatMap(s => s.skills);
+  const finalItems = items || defaultSkills;
+
   // Duplicate list to create seamless loop
-  const loop = [...items, ...items]
+  const loop = [...finalItems, ...finalItems]
 
   return (
     <div
@@ -57,7 +51,7 @@ export default function TechStackStrip({
             <span
               key={i}
               className="mx-3 my-3 inline-flex items-center rounded-full bg-secondary px-4 py-2 text-base font-bold text-secondary-foreground whitespace-nowrap shadow-sm"
-              aria-hidden={i >= items.length ? true : undefined}
+              aria-hidden={i >= finalItems.length ? true : undefined}
             >
               {renderLabel(item) === "Next.js" ? (
                 <>

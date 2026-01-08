@@ -25,7 +25,7 @@ function Banner({ visible }: { visible: boolean }) {
   `;
 
   return (
-    <div className="text-zinc-300">
+    <div className="text-zinc-300 overflow-auto">
       <pre
         className="whitespace-pre font-mono leading-none text-white crt-glow text-[10px] md:text-xs overflow-x-auto block"
         style={{

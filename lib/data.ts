@@ -43,6 +43,7 @@ export type Profile = {
     github: string;
     linkedin: string;
     twitter: string;
+    instagram: string;
     portfolio: string;
   };
   education: {
@@ -121,9 +122,9 @@ export const SKILLS: SkillCategory[] = [
 
 // ===== RESUME =====
 export const RESUME: Resume = {
-  url: "/sourish-ghosh-resume.pdf", 
+  url: "/sourish-ghosh-resume.pdf",
   filename: "sourish-ghosh-resume.pdf",
-  lastUpdated: "2025-10-01" 
+  lastUpdated: "2025-10-01"
 };
 
 // ===== PROFILE =====
@@ -133,7 +134,7 @@ export const PROFILE: Profile = {
   tagline: "Full-Stack Developer focused on Next.js + design systems",
   about: "I'm a B.Tech Computer Science student at SRMIST, Chennai, passionate about building scalable web applications and exploring modern web technologies. I enjoy creating clean, responsive designs and experimenting with full-stack projects. Beyond web development, I'm also interested in machine learning, particularly NLP, and I regularly try to solve problems on LeetCode. I'm currently looking for opportunities to contribute to meaningful projects and continue growing as a developer. Let's connect and create the unimaginable",
   contact: {
-    email_masked: "sghosh.ile.7@gmail.com (masked)",
+    email_masked: "sourishghosh777@gmail.com",
     phone_masked: "You haven't reached that level of closeness to get my number :)",
     open_to: "Open to work / mentorship",
   },
@@ -141,12 +142,23 @@ export const PROFILE: Profile = {
     github: "https://github.com/7sg56",
     linkedin: "https://www.linkedin.com/in/7sg56",
     twitter: "https://x.com/sourishghosh777",
+    instagram: "https://www.instagram.com/s0urishg",
     portfolio: "https://sourishghosh-7sg56.vercel.app",
   },
   education: {
-    summary: "B.Tech in CSE w/s SE (2024-2024) CGPA: 9.1",
+    summary: "B.Tech in CSE w/s SE (2024-2028) CGPA: 9.1",
   },
 };
+
+// ===== HOBBIES =====
+export type Hobby = string;
+
+export const HOBBIES: Hobby[] = [
+  "Gaming - Soulsborne fan, platinum trophy hunter",
+  "Chess - 1500 rating on Chess.com",
+  "Cat Lover - Proud owner of feline friends",
+  "Cooking - Experimenting in the kitchen"
+];
 
 // ===== UTILITY FUNCTIONS =====
 
@@ -241,4 +253,11 @@ export function removeProject(slug: string): void {
   if (index !== -1) {
     PROJECTS.splice(index, 1);
   }
+}
+
+/**
+ * Get all hobbies
+ */
+export function getHobbies(): Hobby[] {
+  return HOBBIES;
 }

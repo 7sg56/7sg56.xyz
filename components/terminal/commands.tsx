@@ -4,14 +4,15 @@ import React, { useEffect, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { MinecraftCharacter, MINECRAFT_MODELS, type MinecraftKind } from "@/components/three/Minecraft";
 import * as THREE from "three";
-import { 
-  getProject, 
-  getAllProjects, 
-  getAllExperience, 
-  getResume, 
+import {
+  getProject,
+  getAllProjects,
+  getAllExperience,
+  getResume,
   getProfile,
   getProjectsCount,
-  getAllSkills
+  getAllSkills,
+  getHobbies
 } from "@/lib/data";
 
 // Single-active summon coordination so only the latest stays active
@@ -41,7 +42,7 @@ export type CommandHandler = (args: string[], env: Env) => React.ReactNode;
 
 const Skills = () => {
   const skills = getAllSkills();
-  
+
   return (
     <div className="space-y-1">
       <div className="text-zinc-100">Skills</div>
@@ -196,6 +197,8 @@ export const commands: Record<string, CommandHandler> = {
         <div>View my socials</div>
         <div className="text-green-400">resume</div>
         <div>Download my resume</div>
+        <div className="text-green-400">hobbies</div>
+        <div>What I do for fun</div>
         <div className="text-green-400">spawn</div>
         <div>It&#39;s a secret</div>
         <div className="text-green-400">shutdown</div>
@@ -205,6 +208,21 @@ export const commands: Record<string, CommandHandler> = {
       </div>
     </div>
   ),
+
+  // hobbies
+  hobbies: () => {
+    const hobbies = getHobbies();
+    return (
+      <div className="space-y-1">
+        <div className="text-zinc-100">Hobbies</div>
+        <ul className="list-disc pl-6 text-zinc-300">
+          {hobbies.map((hobby, index) => (
+            <li key={index}>{hobby}</li>
+          ))}
+        </ul>
+      </div>
+    );
+  },
 
   // aboutme
   aboutme: () => {
@@ -221,7 +239,7 @@ export const commands: Record<string, CommandHandler> = {
   startx: () => {
     try {
       window.location.assign('/portfolio/desktop');
-    } catch {}
+    } catch { }
     return (
       <div className="text-zinc-300">Launching Desktop… <span className="text-green-400">/portfolio/desktop</span></div>
     );
@@ -310,7 +328,7 @@ export const commands: Record<string, CommandHandler> = {
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-    } catch {}
+    } catch { }
     return (
       <div className="space-y-1">
         <div className="text-zinc-100">Resume</div>
@@ -335,7 +353,7 @@ export const commands: Record<string, CommandHandler> = {
       <div className="flex gap-2">
         <button
           className="px-2 py-1 rounded border border-zinc-700 hover:bg-zinc-800"
-          onClick={() => { try { window.location.assign('/'); } catch {} }}
+          onClick={() => { try { window.location.assign('/'); } catch { } }}
         >
           Yes
         </button>
