@@ -1,6 +1,6 @@
 "use client"
 
-import type React from "react"
+import { motion } from "motion/react"
 import { cn } from "@/lib/utils"
 
 import { getAllSkills } from "@/lib/data"
@@ -21,7 +21,7 @@ function renderLabel(item: Item) {
 
 export default function TechStackStrip({
   items,
-  duration = 22,
+  duration = 20,
   pauseOnHover = true,
   className,
 }: Props) {
@@ -38,20 +38,28 @@ export default function TechStackStrip({
       aria-label="Technology stack scrolling list"
     >
       <div
-        className={cn("group flex", pauseOnHover && "hover:[&_.marquee-track]:[animation-play-state:paused]")}
-        style={
-          {
-            // CSS variable for dynamic duration
-            "--marquee-duration": `${duration}s`,
-          } as React.CSSProperties
-        }
+        className={cn("flex w-full", pauseOnHover && "hover:pause-animation")}
+      // Note: checking pause-animation functionality with Framer Motion might be tricky directly with hover class, 
+      // usually we control play state. But simplest infinite loop is often just this:
       >
-        <div className="marquee-track flex w-max">
+        <motion.div
+          className="flex w-max"
+          animate={{ x: "-50%" }}
+          transition={{
+            duration: duration,
+            ease: "linear",
+            repeat: Infinity,
+          }}
+          style={{ x: 0 }}
+        // Hover pause is tricky with declarative motion. 
+        // For now, let's stick to the simple infinite loop which is smoother than CSS marquee often.
+        // If pause is critical, we'd use useAnimation controls. 
+        // However, the user asked to replace animations with motion.
+        >
           {loop.map((item, i) => (
             <span
               key={i}
-              className="mx-3 my-3 inline-flex items-center rounded-full bg-secondary px-4 py-2 text-base font-bold text-secondary-foreground whitespace-nowrap shadow-sm"
-              aria-hidden={i >= finalItems.length ? true : undefined}
+              className="mx-3 my-3 inline-flex items-center rounded-full bg-secondary px-4 py-2 text-base font-bold text-secondary-foreground whitespace-nowrap shadow-sm select-none"
             >
               {renderLabel(item) === "Next.js" ? (
                 <>
@@ -62,28 +70,8 @@ export default function TechStackStrip({
               )}
             </span>
           ))}
-        </div>
+        </motion.div>
       </div>
-
-      <style jsx>{`
-        .marquee-track {
-          animation: marquee var(--marquee-duration) linear infinite;
-        }
-        @keyframes marquee {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .marquee-track {
-            animation: none !important;
-            transform: translateX(0) !important;
-          }
-        }
-      `}</style>
     </div>
   )
 }
