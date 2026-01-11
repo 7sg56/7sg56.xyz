@@ -222,40 +222,6 @@ export function getSkillsByCategory(category: string): SkillCategory | undefined
 }
 
 /**
- * Update resume information
- */
-export function updateResume(newResume: Partial<Resume>): void {
-  Object.assign(RESUME, newResume);
-}
-
-/**
- * Add new project
- */
-export function addProject(project: Project): void {
-  PROJECTS.push(project);
-}
-
-/**
- * Update existing project
- */
-export function updateProject(slug: string, updates: Partial<Project>): void {
-  const index = PROJECTS.findIndex(p => p.slug === slug);
-  if (index !== -1) {
-    PROJECTS[index] = { ...PROJECTS[index], ...updates };
-  }
-}
-
-/**
- * Remove project
- */
-export function removeProject(slug: string): void {
-  const index = PROJECTS.findIndex(p => p.slug === slug);
-  if (index !== -1) {
-    PROJECTS.splice(index, 1);
-  }
-}
-
-/**
  * Get all hobbies
  */
 export function getHobbies(): Hobby[] {

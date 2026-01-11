@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { motion } from "motion/react";
 
 type Span = { cols?: 1 | 2 | 3; rows?: 1 | 2 | 3 | 4 };
 function spanToClasses(span?: Span): string {
@@ -31,36 +32,21 @@ const songs: Song[] = [
   { title: "Timeless", artist: "The Weeknd" },
   { title: "Sicko Mode", artist: "Travis Scott" },
   { title: "Sao Paulo", artist: "The Weeknd" },
-  { title: "Pink + White", artist: "Frank Ocean"},
+  { title: "Pink + White", artist: "Frank Ocean" },
   { title: "I Wonder", artist: "Kanye West" },
-  { title: "Not You Too", artist: "Drake"},
+  { title: "Not You Too", artist: "Drake" },
   { title: "Cry for Me", artist: "The Weeknd" },
-  { title: "Carnival", artist: "Kanye West"},
+  { title: "Carnival", artist: "Kanye West" },
 ];
 
 export default function NowListeningWidget({ span }: { span?: Span }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [barHeights, setBarHeights] = useState([20, 40, 30]);
 
   useEffect(() => {
     // Random song on mount only
     setCurrentIndex(Math.floor(Math.random() * songs.length));
   }, []);
-
-  useEffect(() => {
-    if (!isPlaying) return;
-    
-    const interval = setInterval(() => {
-      setBarHeights([
-        Math.random() * 40 + 10,
-        Math.random() * 40 + 10,
-        Math.random() * 40 + 10
-      ]);
-    }, 150);
-
-    return () => clearInterval(interval);
-  }, [isPlaying]);
 
   const nextIndex = (currentIndex + 1) % songs.length;
   const prevIndex = currentIndex === 0 ? songs.length - 1 : currentIndex - 1;
@@ -89,55 +75,73 @@ export default function NowListeningWidget({ span }: { span?: Span }) {
             {songs[currentIndex].artist}
           </div>
         </div>
-        
+
         {/* Visualizer - Fixed position */}
         <div className="absolute top-3/5 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center gap-1 z-0">
-          {barHeights.map((height, index) => (
-            <div
-              key={index}
-              className="bg-zinc-400 rounded-sm transition-all duration-150"
+          {[0, 1, 2].map((i) => (
+            <motion.div
+              key={i}
+              className="bg-zinc-400 rounded-sm"
               style={{
-                width: '2.2px',
-                height: `${height * 0.4}px`,
+                width: '3px',
                 opacity: isPlaying ? 1 : 0.5
+              }}
+              animate={isPlaying ? "playing" : "paused"}
+              variants={{
+                playing: {
+                  height: [5, 10 + Math.random() * 15, 5],
+                  transition: {
+                    duration: 0.3 + i * 0.05,
+                    repeat: Infinity,
+                    repeatType: "reverse",
+                    ease: "easeInOut"
+                  }
+                },
+                paused: {
+                  height: 5,
+                  transition: {
+                    duration: 0.2,
+                    ease: "easeOut"
+                  }
+                }
               }}
             />
           ))}
         </div>
-        
+
         {/* Controls - Fixed at bottom */}
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center justify-center gap-4 z-10">
-          <button 
+          <button
             onClick={handleSkipPrevious}
             className="text-zinc-400 hover:text-white transition-colors"
             title="Previous"
           >
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z"/>
+              <path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z" />
             </svg>
           </button>
-          <button 
+          <button
             onClick={handlePlayPause}
             className="text-red-500 hover:text-red-400 transition-colors"
             title={isPlaying ? "Pause" : "Play"}
           >
             {isPlaying ? (
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M5 4a1 1 0 00-1 1v10a1 1 0 001 1h2a1 1 0 001-1V5a1 1 0 00-1-1H5zM11 4a1 1 0 00-1 1v10a1 1 0 001 1h2a1 1 0 001-1V5a1 1 0 00-1-1h-2z"/>
+                <path d="M5 4a1 1 0 00-1 1v10a1 1 0 001 1h2a1 1 0 001-1V5a1 1 0 00-1-1H5zM11 4a1 1 0 00-1 1v10a1 1 0 001 1h2a1 1 0 001-1V5a1 1 0 00-1-1h-2z" />
               </svg>
             ) : (
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+                <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
               </svg>
             )}
           </button>
-          <button 
+          <button
             onClick={handleSkipNext}
             className="text-zinc-400 hover:text-white transition-colors"
             title="Next"
           >
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M4.555 5.168A1 1 0 003 6v8a1 1 0 001.555.832L10 11.202V14a1 1 0 001.555.832l6-4a1 1 0 000-1.664l-6-4A1 1 0 0010 6v2.798l-5.445-3.63z"/>
+              <path d="M4.555 5.168A1 1 0 003 6v8a1 1 0 001.555.832L10 11.202V14a1 1 0 001.555.832l6-4a1 1 0 000-1.664l-6-4A1 1 0 0010 6v2.798l-5.445-3.63z" />
             </svg>
           </button>
         </div>

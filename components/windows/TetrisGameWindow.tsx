@@ -218,7 +218,7 @@ export default function TetrisGameWindow() {
     }, 800);
 
     return () => clearInterval(gameLoop);
-  }, [isPlaying, gameState === 'over', dropPiece]);
+  }, [isPlaying, gameState, dropPiece]);
 
   // Render board with current piece
   const renderBoard = () => {

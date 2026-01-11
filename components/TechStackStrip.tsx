@@ -33,7 +33,7 @@ export default function TechStackStrip({
 
   return (
     <div
-      className={cn("relative w-full overflow-hidden bg-background", className)}
+      className={cn("relative w-full overflow-hidden bg-transparent z-0", className)}
       role="region"
       aria-label="Technology stack scrolling list"
     >
@@ -59,7 +59,7 @@ export default function TechStackStrip({
           {loop.map((item, i) => (
             <span
               key={i}
-              className="mx-3 my-3 inline-flex items-center rounded-full bg-secondary px-4 py-2 text-base font-bold text-secondary-foreground whitespace-nowrap shadow-sm select-none"
+              className="mx-3 my-3 inline-flex items-center rounded-full bg-transparent px-4 py-2 text-base font-bold text-secondary-foreground whitespace-nowrap select-none"
             >
               {renderLabel(item) === "Next.js" ? (
                 <>
