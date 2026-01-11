@@ -128,9 +128,21 @@ export default function DesktopOSPage() {
 
   // Widget Layout - Using Responsive System
   const desktopItems: DesktopItem[] = useMemo(() => {
-    const todoWidget = responsive.widget(responsiveConfig, 310, 150);
-    const smallWidget = responsive.widget(responsiveConfig, 150, 150);
+    // Base dimensions (unscaled)
+    const baseTodoWidth = 310;
+    const baseTodoHeight = 150;
+    const baseSmallWidth = 150;
+    const baseSmallHeight = 150;
+
+    // Scale factor from config
+    const scale = responsiveConfig.widgetScale;
     const margin = responsiveConfig.widgetMargin;
+
+    // Computed scaled dimensions for layout positioning
+    const scaledTodoWidth = baseTodoWidth * scale;
+    const scaledTodoHeight = baseTodoHeight * scale;
+    const scaledSmallWidth = baseSmallWidth * scale;
+    const scaledSmallHeight = baseSmallHeight * scale;
 
     // Consistent top spacing for all screen sizes (same as 13" MacBook)
     const topSpacing = 46;
@@ -143,10 +155,11 @@ export default function DesktopOSPage() {
         type: "widget",
         widgetType: "todo",
         // TOP-RIGHT CORNER - Consistent spacing
-        x: width - todoWidget.width - margin,
+        x: width - scaledTodoWidth - margin,
         y: topSpacing,
-        widthPx: todoWidget.width,
-        heightPx: todoWidget.height,
+        widthPx: baseTodoWidth, // Pass unscaled width
+        heightPx: baseTodoHeight, // Pass unscaled height
+        scale: scale, // Pass scale factor
       },
       {
         id: "now-listening-widget",
@@ -156,9 +169,10 @@ export default function DesktopOSPage() {
         widgetType: "now-listening",
         // BOTTOM-LEFT CORNER
         x: margin,
-        y: height - (160 * responsiveConfig.widgetScale),
-        widthPx: smallWidget.width,
-        heightPx: smallWidget.height,
+        y: height - (160 * scale),
+        widthPx: baseSmallWidth,
+        heightPx: baseSmallHeight,
+        scale: scale,
       },
       {
         id: "date-now-widget",
@@ -167,10 +181,11 @@ export default function DesktopOSPage() {
         type: "widget",
         widgetType: "date-now",
         // BOTTOM-RIGHT - Position below todo widget with consistent gap
-        x: width - smallWidget.width - margin,
-        y: topSpacing + todoWidget.height + 10,
-        widthPx: smallWidget.width,
-        heightPx: smallWidget.height,
+        x: width - scaledSmallWidth - margin,
+        y: topSpacing + scaledTodoHeight + 10,
+        widthPx: baseSmallWidth,
+        heightPx: baseSmallHeight,
+        scale: scale,
       },
     ];
   }, [width, height, responsiveConfig]);
@@ -279,7 +294,7 @@ export default function DesktopOSPage() {
 
         {/* TechStackStrip - Using Responsive System */}
         <div
-          className="absolute z-20 origin-center"
+          className="absolute z-0 origin-center"
           style={{
             bottom: `${responsiveConfig.techStripBottom}px`,
             right: `${responsiveConfig.techStripRight}px`,
@@ -320,9 +335,11 @@ export default function DesktopOSPage() {
                 top: item.y,
                 width: item.widthPx,
                 height: item.heightPx,
+                transformOrigin: "top left",
+                scale: item.scale || 1
               }}
               initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
+              animate={{ opacity: 1, scale: item.scale || 1 }}
               transition={{ duration: 0.3, delay: 0.1 }}
             >
               {renderWidget(item.widgetType)}

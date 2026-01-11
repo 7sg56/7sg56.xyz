@@ -23,4 +23,5 @@ export type DesktopItem = {
     span?: { cols: number; rows: number };
     widthPx?: number;
     heightPx?: number;
+    scale?: number;
 };
