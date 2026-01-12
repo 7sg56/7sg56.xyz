@@ -387,7 +387,7 @@ export default function DesktopOSPage() {
                 minimized={isMinimized}
                 origin={dockOrigins[appType] || undefined}
                 zIndex={zBase + orderIndex}
-                initialSize={appType === 'tetris' ? { width: Math.min(450, height * 0.5), height: Math.min(800, height * 0.85) } : undefined}
+                initialSize={appType === 'tetris' ? { width: Math.min(600, width * 0.9), height: Math.min(800, height * 0.85) } : undefined}
                 hidePadding={appType === 'tetris'}
               >
                 {render()}

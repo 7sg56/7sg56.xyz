@@ -22,6 +22,7 @@ export default function TetrisGameWindow() {
     Array(BOARD_HEIGHT).fill(null).map(() => Array(BOARD_WIDTH).fill(0))
   );
   const [currentPiece, setCurrentPiece] = useState<Piece | null>(null);
+  const [nextPiece, setNextPiece] = useState<Piece | null>(null);
   const [score, setScore] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [gameState, setGameState] = useState<'idle' | 'playing' | 'paused' | 'over'>('idle');
@@ -60,7 +61,7 @@ export default function TetrisGameWindow() {
 
   // Move piece down
   const dropPiece = useCallback(() => {
-    if (!currentPiece || gameState === 'over') return;
+    if (!currentPiece || !nextPiece || gameState === 'over') return;
 
     if (canPlacePiece(currentPiece, currentPiece.x, currentPiece.y + 1)) {
       setCurrentPiece(prev => prev ? { ...prev, y: prev.y + 1 } : null);
@@ -107,15 +108,24 @@ export default function TetrisGameWindow() {
         return filteredBoard;
       });
 
-      const newPiece = generatePiece();
-      if (!canPlacePiece(newPiece, newPiece.x, newPiece.y)) {
+      // Use next piece
+      const pieceToPlay = nextPiece;
+      const newNextPiece = generatePiece();
+
+      // Reset position for new piece
+      pieceToPlay.x = Math.floor(BOARD_WIDTH / 2) - Math.floor(pieceToPlay.shape[0].length / 2);
+      pieceToPlay.y = 0;
+
+      if (!canPlacePiece(pieceToPlay, pieceToPlay.x, pieceToPlay.y)) {
         setIsPlaying(false);
         setGameState('over');
+        setCurrentPiece(null); // Clear piece on game over
       } else {
-        setCurrentPiece(newPiece);
+        setCurrentPiece(pieceToPlay);
+        setNextPiece(newNextPiece);
       }
     }
-  }, [currentPiece, gameState, canPlacePiece, generatePiece]);
+  }, [currentPiece, nextPiece, gameState, canPlacePiece, generatePiece]);
 
   // Move piece horizontally
   const movePiece = useCallback((direction: 'left' | 'right') => {
@@ -170,7 +180,10 @@ export default function TetrisGameWindow() {
   // Start game
   const startGame = () => {
     setBoard(Array(BOARD_HEIGHT).fill(null).map(() => Array(BOARD_WIDTH).fill(0)));
-    setCurrentPiece(generatePiece());
+    const firstPiece = generatePiece();
+    const secondPiece = generatePiece();
+    setCurrentPiece(firstPiece);
+    setNextPiece(secondPiece);
     setScore(0);
     setIsPlaying(true);
     setGameState('playing');
@@ -300,85 +313,120 @@ export default function TetrisGameWindow() {
   const displayBoard = renderBoard();
 
   return (
-    <div className="relative h-full w-full flex items-center justify-center overflow-hidden">
-      {/* Game Board - Centered and Aspect Ratio Locked */}
-      <div
-        className="grid gap-px p-3 h-full w-auto"
-        style={{
-          gridTemplateColumns: `repeat(${BOARD_WIDTH}, 1fr)`,
-          gridTemplateRows: `repeat(${BOARD_HEIGHT}, 1fr)`,
-          aspectRatio: `${BOARD_WIDTH}/${BOARD_HEIGHT}`,
-        }}
-      >
-        {displayBoard.map((row, y) =>
-          row.map((cell, x) => (
-            <div
-              key={`${y}-${x}`}
-              className={`w-full h-full rounded-sm transition-all duration-200 ${getCellStyle(cell)}`}
-              style={getCellBackgroundColor(cell)}
-            />
-          ))
-        )}
-      </div>
-
-      {/* Overlay UI */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="text-center pointer-events-auto">
-          {gameState === 'idle' && (
-            <div className="bg-black/80 backdrop-blur-sm rounded-lg p-4 space-y-3">
-              <div className="text-2xl font-bold text-white">Tetris</div>
-              <button
-                onClick={startGame}
-                className="px-6 py-2 bg-red-600 hover:bg-red-500 text-white text-sm rounded-lg transition-colors font-semibold"
-              >
-                Play
-              </button>
-            </div>
-          )}
-
-          {gameState === 'over' && (
-            <div className="bg-black/80 backdrop-blur-sm rounded-lg p-4 space-y-3">
-              <div className="text-lg font-bold text-gray-300">Game Over!</div>
-              <div className="text-sm text-zinc-300">Score: {score}</div>
-              <button
-                onClick={startGame}
-                className="px-6 py-2 bg-red-600 hover:bg-red-500 text-white text-sm rounded-lg transition-colors font-semibold"
-              >
-                Play Again
-              </button>
-            </div>
+    <div className="relative h-full w-full flex flex-row p-2 gap-2 overflow-hidden">
+      {/* LEFT: Game Board */}
+      <div className="h-full flex-grow flex items-center justify-center bg-black/20 rounded-xl border border-white/5 min-w-0">
+        <div
+          className="grid gap-px p-1 h-full w-auto max-w-full object-contain"
+          style={{
+            gridTemplateColumns: `repeat(${BOARD_WIDTH}, 1fr)`,
+            gridTemplateRows: `repeat(${BOARD_HEIGHT}, 1fr)`,
+            aspectRatio: `${BOARD_WIDTH}/${BOARD_HEIGHT}`,
+          }}
+        >
+          {displayBoard.map((row, y) =>
+            row.map((cell, x) => (
+              <div
+                key={`${y}-${x}`}
+                className={`w-full h-full rounded-[1px] transition-all duration-75 ${getCellStyle(cell)}`}
+                style={getCellBackgroundColor(cell)}
+              />
+            ))
           )}
         </div>
-      </div>
 
-      {/* Score overlay when playing */}
-      {gameState === 'playing' && (
-        <div className="absolute top-4 left-4 bg-black/40 backdrop-blur-md rounded-full px-4 py-2 border border-white/10 shadow-xl z-10 transition-all duration-300">
-          <div className="text-sm text-white font-medium tracking-wide font-mono">
-            Score <span className="text-emerald-400 ml-1">{score}</span>
+        {/* Overlay UI for Start/Game Over handled absolutely over this section */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+          <div className="text-center pointer-events-auto">
+            {gameState === 'idle' && (
+              <div className="bg-black/80 backdrop-blur-md rounded-2xl p-6 space-y-4 border border-zinc-700 shadow-2xl">
+                <div className="text-3xl font-bold text-white tracking-tight">Tetris</div>
+                <button
+                  onClick={startGame}
+                  className="px-8 py-3 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white rounded-xl transition-all font-semibold shadow-lg hover:shadow-red-500/20 active:scale-95"
+                >
+                  Start Game
+                </button>
+              </div>
+            )}
+
+            {gameState === 'over' && (
+              <div className="bg-black/80 backdrop-blur-md rounded-2xl p-6 space-y-4 border border-zinc-700 shadow-2xl">
+                <div className="text-xl font-bold text-red-400">Game Over</div>
+                <div className="text-3xl font-mono text-white tracking-wider">{score}</div>
+                <button
+                  onClick={startGame}
+                  className="px-8 py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl transition-all font-medium border border-zinc-600 hover:border-zinc-500"
+                >
+                  Play Again
+                </button>
+              </div>
+            )}
           </div>
         </div>
-      )}
+      </div>
 
-      {/* Controls overlay when playing */}
-      {gameState === 'playing' && (
-        <div className="absolute bottom-4 right-4 bg-black/40 backdrop-blur-md rounded-xl px-4 py-3 border border-white/10 shadow-xl z-10">
-          <div className="flex flex-col gap-1.5 text-[10px] uppercase tracking-wider font-semibold text-zinc-400">
-            <div className="flex items-center justify-between gap-4">
-              <span>Move</span>
-              <span className="text-zinc-200">A / D</span>
-            </div>
-            <div className="flex items-center justify-between gap-4">
+      {/* RIGHT: Sidebar */}
+      <div className="w-40 flex flex-col gap-3 min-w-[160px] flex-shrink-0">
+
+        {/* Next Piece Window */}
+        <div className="bg-black/20 rounded-xl p-3 border border-white/5 flex flex-col items-center gap-2 aspect-square justify-center">
+          <div className="text-xs text-zinc-400 font-medium uppercase tracking-wider">Next</div>
+          <div className="grid gap-1 w-20 h-20 items-center justify-center">
+            {nextPiece && (
+              <div
+                className="grid gap-0.5"
+                style={{
+                  gridTemplateColumns: `repeat(${nextPiece.shape[0].length}, 1fr)`,
+                  gridTemplateRows: `repeat(${nextPiece.shape.length}, 1fr)`,
+                }}
+              >
+                {nextPiece.shape.map((row, y) =>
+                  row.map((cell, x) => (
+                    <div
+                      key={`next-${y}-${x}`}
+                      className={`w-4 h-4 rounded-[1px] ${cell ? '' : 'invisible'}`}
+                      style={cell ? getCellBackgroundColor(nextPiece.id) : undefined}
+                    />
+                  ))
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Score Card */}
+        <div className="bg-black/20 rounded-xl p-3 border border-white/5 flex flex-col gap-1">
+          <div className="text-xs text-zinc-500 uppercase tracking-widest font-semibold">Score</div>
+          <div className="text-2xl text-white font-mono font-bold tracking-tight">{score}</div>
+        </div>
+
+        {/* Controls Card */}
+        <div className="bg-black/20 rounded-xl p-3 border border-white/5 flex flex-col gap-2 flex-grow min-h-0 overflow-y-auto scrollbar-hide">
+          <div className="text-xs text-zinc-500 uppercase tracking-widest font-semibold flex items-center gap-2">
+            Controls
+          </div>
+          <div className="space-y-4 text-xs text-zinc-400">
+            <div className="flex items-center justify-between">
               <span>Rotate</span>
-              <span className="text-zinc-200">W / ↑</span>
+              <kbd className="px-2 py-1 bg-white/5 rounded border border-white/10 text-white font-mono">W</kbd>
             </div>
-            <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center justify-between">
+              <span>Left</span>
+              <kbd className="px-2 py-1 bg-white/5 rounded border border-white/10 text-white font-mono">A</kbd>
+            </div>
+            <div className="flex items-center justify-between">
               <span>Drop</span>
-              <span className="text-zinc-200">S / ↓</span>
+              <kbd className="px-2 py-1 bg-white/5 rounded border border-white/10 text-white font-mono">S</kbd>
+            </div>
+            <div className="flex items-center justify-between">
+              <span>Right</span>
+              <kbd className="px-2 py-1 bg-white/5 rounded border border-white/10 text-white font-mono">D</kbd>
             </div>
           </div>
         </div>
-      )}
+
+      </div>
     </div>
   );
 }
