@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import Terminal from "@/components/terminal/Terminal";
 import { generateUUID } from "@/lib/utils";
 
