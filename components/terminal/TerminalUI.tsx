@@ -20,7 +20,7 @@ export function Banner({ visible }: { visible: boolean }) {
     return (
         <div className="text-zinc-300">
             <pre
-                className="whitespace-pre font-mono leading-none text-white crt-glow text-[10px] md:text-xs overflow-x-auto overflow-y-hidden block"
+                className="whitespace-pre font-mono leading-none text-white crt-glow text-[6px] sm:text-[9px] md:text-xs lg:text-[15px] xl:text-lg overflow-hidden block"
                 style={{
                     color: "#dbdbdb",
                     fontFamily:

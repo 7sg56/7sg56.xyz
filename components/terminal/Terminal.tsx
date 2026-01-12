@@ -221,7 +221,7 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
         )}
         <div
           ref={containerRef}
-          className={`${scrollMode === 'internal' ? 'overscroll-contain overflow-y-auto' : 'overflow-visible'} px-3 font-mono text-xs md:text-sm flex-1 min-h-0 ${scrollHeightClass ?? ""}`}
+          className={`${scrollMode === 'internal' ? 'overscroll-contain overflow-y-auto' : 'overflow-visible'} px-3 font-mono text-sm md:text-sm flex-1 min-h-0 ${scrollHeightClass ?? ""}`}
           style={{ color: "#cdd6f4" }}
           onScroll={scrollMode === 'internal' ? onScroll : undefined}
         >
@@ -238,11 +238,11 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
               </div>
             ))}
             {/* Live input as part of the scrollable flow */}
-            <div className="mt-2 mb-4 flex items-center gap-2 font-mono text-xs md:text-sm">
+            <div className="mt-2 mb-4 flex items-center gap-2 font-mono text-sm md:text-sm">
               <Prompt text={prompt} />
               <input
                 ref={inputRef}
-                className="flex-1 bg-transparent outline-none placeholder-zinc-600 text-xs md:text-sm"
+                className="flex-1 bg-transparent outline-none placeholder-zinc-600 text-base md:text-sm"
                 placeholder="type a command… (try: help)"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
@@ -273,7 +273,7 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
           </div>
         )}
 
-        <div ref={containerRef} className="h-[70vh] overscroll-contain overflow-y-auto px-3 font-mono text-xs md:text-sm" style={{ color: "#cdd6f4" }} onScroll={onScroll}>
+        <div ref={containerRef} className="h-[70vh] md:h-[70vh] overscroll-contain overflow-y-auto px-3 font-mono text-sm md:text-sm" style={{ color: "#cdd6f4" }} onScroll={onScroll}>
           <Banner visible={bannerVisible} />
           <div className="my-3 border-t" style={{ borderColor: "#313244" }} />
           <div className="max-w-[300px]">
@@ -287,11 +287,11 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
               </div>
             ))}
             {/* Live input as part of the scrollable flow */}
-            <div className="mt-2 mb-4 flex items-center gap-2 font-mono text-xs md:text-sm">
+            <div className="mt-2 mb-4 flex items-center gap-2 font-mono text-sm md:text-sm">
               <Prompt text={prompt} />
               <input
                 ref={inputRef}
-                className="flex-1 bg-transparent outline-none placeholder-zinc-600 text-xs md:text-sm"
+                className="flex-1 bg-transparent outline-none placeholder-zinc-600 text-base md:text-sm"
                 placeholder="type a command… (try: help)"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}

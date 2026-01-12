@@ -315,24 +315,27 @@ export default function TetrisGameWindow() {
   return (
     <div className="relative h-full w-full flex flex-row p-2 gap-2 overflow-hidden">
       {/* LEFT: Game Board */}
-      <div className="h-full flex-grow flex items-center justify-center bg-black/20 rounded-xl border border-white/5 min-w-0">
-        <div
-          className="grid gap-px p-1 h-full w-auto max-w-full object-contain"
-          style={{
-            gridTemplateColumns: `repeat(${BOARD_WIDTH}, 1fr)`,
-            gridTemplateRows: `repeat(${BOARD_HEIGHT}, 1fr)`,
-            aspectRatio: `${BOARD_WIDTH}/${BOARD_HEIGHT}`,
-          }}
-        >
-          {displayBoard.map((row, y) =>
-            row.map((cell, x) => (
-              <div
-                key={`${y}-${x}`}
-                className={`w-full h-full rounded-[1px] transition-all duration-75 ${getCellStyle(cell)}`}
-                style={getCellBackgroundColor(cell)}
-              />
-            ))
-          )}
+      <div className="h-full flex-grow relative bg-black/20 rounded-xl border border-white/5 min-w-0 overflow-hidden">
+        {/* Absolute wrapper to decouple size from flex flow */}
+        <div className="absolute inset-0 flex items-center justify-center p-1">
+          <div
+            className="grid gap-px max-h-full max-w-full w-auto h-auto"
+            style={{
+              gridTemplateColumns: `repeat(${BOARD_WIDTH}, 1fr)`,
+              gridTemplateRows: `repeat(${BOARD_HEIGHT}, 1fr)`,
+              aspectRatio: `${BOARD_WIDTH}/${BOARD_HEIGHT}`,
+            }}
+          >
+            {displayBoard.map((row, y) =>
+              row.map((cell, x) => (
+                <div
+                  key={`${y}-${x}`}
+                  className={`w-full h-full rounded-[1px] transition-all duration-75 ${getCellStyle(cell)}`}
+                  style={getCellBackgroundColor(cell)}
+                />
+              ))
+            )}
+          </div>
         </div>
 
         {/* Overlay UI for Start/Game Over handled absolutely over this section */}
@@ -367,7 +370,7 @@ export default function TetrisGameWindow() {
       </div>
 
       {/* RIGHT: Sidebar */}
-      <div className="w-40 flex flex-col gap-3 min-w-[160px] flex-shrink-0">
+      <div className="w-40 flex flex-col gap-3 min-w-[160px] flex-shrink-0 z-10">
 
         {/* Next Piece Window */}
         <div className="bg-black/20 rounded-xl p-3 border border-white/5 flex flex-col items-center gap-2 aspect-square justify-center">

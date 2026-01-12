@@ -65,11 +65,17 @@ export default function AppWindow({
     if (!customSize && !initialSize) {
       // Default to 70% of screen dimensions to feel like a "window"
       // But cap at a reasonable maximum (900x600) and ensure it fits
-      const targetW = Math.min(900, window.innerWidth * 0.70);
-      const targetH = Math.min(600, window.innerHeight * 0.70);
+      const isMobile = window.innerWidth < 768;
+      const targetW = isMobile
+        ? Math.min(window.innerWidth - 32, 600) // Full width minus padding on mobile
+        : Math.min(900, window.innerWidth * 0.70);
+
+      const targetH = isMobile
+        ? Math.min(window.innerHeight - 100, 800) // Taller on mobile
+        : Math.min(600, window.innerHeight * 0.70);
 
       // Ensure it's not too small
-      const finalW = Math.max(360, targetW);
+      const finalW = Math.max(300, targetW);
       const finalH = Math.max(240, targetH);
 
       setSize({ w: finalW, h: finalH });
