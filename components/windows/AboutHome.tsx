@@ -23,26 +23,26 @@ export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
   const renderAbout = () => {
     const resume = getResume();
     const profile = getProfile();
-    
+
     const containerVariants = {
       hidden: { opacity: 0 },
       visible: {
         opacity: 1,
         transition: {
-          staggerChildren: 0.1
+          staggerChildren: 0.05 // Faster stagger
         }
       }
     };
 
     const itemVariants = {
-      hidden: { opacity: 0, y: 20 },
+      hidden: { opacity: 0, y: 10 }, // Reduced y distance for subtler pop-in
       visible: { opacity: 1, y: 0 }
     };
-    
+
     return (
-      <div className="h-full flex flex-col bg-black/40 backdrop-blur-sm relative z-50">
+      <div className="flex flex-col relative z-50 pb-6">
         {/* Header with CTA buttons */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/40 backdrop-blur-md">
+        <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/80 backdrop-blur-md">
           <h1 className="text-2xl font-bold text-white">About</h1>
           <div className="flex flex-row gap-2">
             <motion.button
@@ -53,7 +53,7 @@ export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
             >
               Experience
             </motion.button>
-            
+
             <motion.button
               onClick={() => onOpen("projects")}
               className="rounded-lg border border-red-500/50 bg-red-500/10 hover:bg-red-500/20 text-white px-3 py-1.5 transition-all duration-200 font-medium text-xs"
@@ -62,7 +62,7 @@ export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
             >
               Projects
             </motion.button>
-            
+
             <motion.button
               onClick={() => onOpen("skills")}
               className="rounded-lg border border-red-500/50 bg-red-500/10 hover:bg-red-500/20 text-white px-3 py-1.5 transition-all duration-200 font-medium text-xs"
@@ -71,7 +71,7 @@ export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
             >
               Skills
             </motion.button>
-            
+
             <motion.button
               onClick={() => onOpen("contact")}
               className="rounded-lg border border-red-500/50 bg-red-500/10 hover:bg-red-500/20 text-white px-3 py-1.5 transition-all duration-200 font-medium text-xs"
@@ -84,35 +84,35 @@ export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6">
-          <motion.div 
+        <div className="p-6">
+          <motion.div
             className="max-w-4xl mx-auto space-y-6"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
           >
             {/* Hero Welcome Card */}
-            <motion.div 
+            <motion.div
               variants={itemVariants}
               className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-8"
             >
-              
+
               <div className="relative z-10">
                 <div className="mb-6">
                   <h2 className="text-3xl font-bold text-white mb-2">Hey, I&apos;m Sourish!</h2>
                   <p className="text-lg text-gray-300">{profile.tagline}</p>
                 </div>
-                
+
                 <p className="text-gray-200 leading-relaxed text-lg mb-4">
-                  Thanks for taking the time to explore my portfolio. I hope you enjoy it as much as I enjoyed developing it! 
+                  Thanks for taking the time to explore my portfolio. I hope you enjoy it as much as I enjoyed developing it!
                 </p>
-                
+
                 <div className="flex items-center gap-2 p-4 bg-black/30 rounded-lg border border-red-500/20">
                   <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
-                  <a 
-                    href="mailto:sghosh.ile.7@gmail.com" 
+                  <a
+                    href="mailto:sghosh.ile.7@gmail.com"
                     className="text-red-400 hover:text-red-300 transition-colors font-medium"
                   >
                     sghosh.ile.7@gmail.com
@@ -121,12 +121,12 @@ export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
               </div>
             </motion.div>
 
-            
+
 
             {/* Resume Download Card */}
             <motion.div variants={itemVariants}>
-              <motion.a 
-                href={resume.url} 
+              <motion.a
+                href={resume.url}
                 download={resume.filename}
                 className="block relative overflow-hidden rounded-xl border border-red-500/20 bg-black/40 p-6 group"
                 whileHover={{ scale: 1.02 }}
@@ -159,17 +159,17 @@ export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
               </div>
               <div className="space-y-4 text-gray-200 leading-relaxed">
                 <p className="text-base">
-                  From a young age, I was captivated by computers and technology - particularly games. 
+                  From a young age, I was captivated by computers and technology - particularly games.
                   What began as simple curiosity grew into a <span className="text-red-400 font-medium">true passion for programming and development</span>.
                 </p>
                 <p className="text-base">
-                  I am currently pursuing my <span className="text-red-400 font-medium">B.Tech in Computer Science (Software Engineering)</span> at SRMIST, Chennai, 
-                  where I have built a strong groundwork in programming, data structures and web development. 
-                  Throughout my studies, I have developed a keen interest in <span className="text-red-400 font-medium">machine learning and Linux networking</span>, 
+                  I am currently pursuing my <span className="text-red-400 font-medium">B.Tech in Computer Science (Software Engineering)</span> at SRMIST, Chennai,
+                  where I have built a strong groundwork in programming, data structures and web development.
+                  Throughout my studies, I have developed a keen interest in <span className="text-red-400 font-medium">machine learning and Linux networking</span>,
                   which I pursued alongside my core technologies.
                 </p>
                 <p className="text-base">
-                  I am currently working in <span className="text-red-400 font-medium">full-stack web development (MERN)</span> to develop my problem-solving skills 
+                  I am currently working in <span className="text-red-400 font-medium">full-stack web development (MERN)</span> to develop my problem-solving skills
                   through DSA while diving into new technologies that require me to think differently.
                 </p>
               </div>
@@ -210,12 +210,12 @@ export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
 
   const renderExperience = () => {
     const experience = getAllExperience();
-    
+
     return (
-      <div className="h-full flex flex-col bg-black/40 backdrop-blur-sm relative z-50">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/40 backdrop-blur-md">
+      <div className="flex flex-col relative z-50 pb-6">
+        <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/80 backdrop-blur-md">
           <h2 className="text-2xl font-bold text-white">Experience</h2>
-          <button 
+          <button
             className="text-white hover:text-gray-300 transition-colors"
             onClick={() => setCurrentView("about")}
           >
@@ -223,7 +223,7 @@ export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="p-6">
           <div className="max-w-4xl mx-auto space-y-4">
             {experience.map((exp, index) => (
               <ExperienceCard

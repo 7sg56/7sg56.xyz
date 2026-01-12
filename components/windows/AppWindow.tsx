@@ -14,7 +14,10 @@ export type WindowProps = {
   minimized?: boolean;
   zIndex?: number;
   customSize?: { width: number; height: number };
+  initialSize?: { width: number; height: number };
   disableMinimize?: boolean;
+  hidePadding?: boolean;
+  origin?: DOMRect;
   onClose?: () => void;
   onMinimize?: () => void;
   onToggleFullscreen?: () => void;
@@ -28,7 +31,10 @@ export default function AppWindow({
   minimized = false,
   zIndex = 40,
   customSize,
+  initialSize,
   disableMinimize = false,
+  hidePadding = false,
+  origin,
   onClose,
   onMinimize,
   onToggleFullscreen,
@@ -47,8 +53,28 @@ export default function AppWindow({
 
   // Local size state for windowed mode
   const [size, setSize] = useState<{ w: number; h: number }>(
-    customSize ? { w: customSize.width, h: customSize.height } : { w: 900, h: 560 }
+    customSize
+      ? { w: customSize.width, h: customSize.height }
+      : initialSize
+        ? { w: initialSize.width, h: initialSize.height }
+        : { w: 900, h: 560 }
   );
+
+  // Responsive default size on mount
+  useEffect(() => {
+    if (!customSize && !initialSize) {
+      // Default to 70% of screen dimensions to feel like a "window"
+      // But cap at a reasonable maximum (900x600) and ensure it fits
+      const targetW = Math.min(900, window.innerWidth * 0.70);
+      const targetH = Math.min(600, window.innerHeight * 0.70);
+
+      // Ensure it's not too small
+      const finalW = Math.max(360, targetW);
+      const finalH = Math.max(240, targetH);
+
+      setSize({ w: finalW, h: finalH });
+    }
+  }, [customSize, initialSize]);
   const [savedSize, setSavedSize] = useState<{ w: number; h: number } | null>(null);
   const prevFsRef = useRef(fullscreen);
 
@@ -71,13 +97,13 @@ export default function AppWindow({
       fullscreen
         ? { drag: false as const }
         : {
-            drag: true as const,
-            dragListener: false,
-            dragControls,
-            dragMomentum: false,
-            dragElastic: 0.08,
-            dragConstraints: containerRef,
-          },
+          drag: true as const,
+          dragListener: false,
+          dragControls,
+          dragMomentum: false,
+          dragElastic: 0.08,
+          dragConstraints: containerRef,
+        },
     [fullscreen, dragControls]
   );
 
@@ -110,6 +136,36 @@ export default function AppWindow({
     window.addEventListener("pointerup", onUp);
   };
 
+  // Compute animation variants based on origin
+  const variants = useMemo(() => {
+    if (!origin) {
+      // Fallback default animation
+      return {
+        initial: { opacity: 0, y: 16, scale: 0.98 },
+        animate: { opacity: 1, y: 0, scale: 1 },
+        exit: { opacity: 0, y: 20, scale: 0.96 },
+      };
+    }
+
+    // Window center is viewport center
+    const winCenterX = typeof window !== 'undefined' ? window.innerWidth / 2 : 0;
+    const winCenterY = typeof window !== 'undefined' ? window.innerHeight / 2 : 0;
+
+    // Origin center
+    const originCenterX = origin.left + origin.width / 2;
+    const originCenterY = origin.top + origin.height / 2;
+
+    // Delta from center to origin
+    const deltaX = originCenterX - winCenterX;
+    const deltaY = originCenterY - winCenterY;
+
+    return {
+      initial: { opacity: 0, x: deltaX, y: deltaY, scale: 0.2 },
+      animate: { opacity: 1, x: 0, y: 0, scale: 1 },
+      exit: { opacity: 0, x: deltaX, y: deltaY, scale: 0.2 },
+    };
+  }, [origin]);
+
   // Don't render if minimized
   if (minimized) return null;
 
@@ -119,16 +175,17 @@ export default function AppWindow({
         data-testid={id ? `window-${id}` : undefined}
         layout={fsAnim ? true : "position"}
         layoutId={id}
-        initial={{ opacity: 0, y: 16, scale: 0.98 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: 20, scale: 0.96 }}
-        transition={{ type: "spring", stiffness: 260, damping: 24, layout: { duration: 0.18 } }}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        variants={variants}
+        transition={{ type: "spring", stiffness: 300, damping: 28 }}
         className={
           (fullscreen
             ? "pointer-events-auto absolute inset-0"
             : "pointer-events-auto absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2") +
           " rounded-lg border flex flex-col font-mono text-sm shadow-[0_10px_30px_rgba(0,0,0,0.4)]" +
-          (customSize ? " p-0" : " p-3")
+          (customSize || hidePadding ? " p-0" : " p-3")
         }
         style={{
           borderColor: DEBUG_UI ? "#89b4fa" : "#27272a", // zinc-800
@@ -161,7 +218,7 @@ export default function AppWindow({
             onPointerDown={(e) => e.stopPropagation()}
             onClick={disableMinimize ? undefined : onMinimize}
             className="h-3 w-3 rounded-full"
-            style={{ 
+            style={{
               backgroundColor: disableMinimize ? "#6b7280" : "#f9e2af",
               cursor: disableMinimize ? "not-allowed" : "pointer",
               opacity: disableMinimize ? 0.5 : 1
@@ -174,7 +231,7 @@ export default function AppWindow({
             onPointerDown={(e) => e.stopPropagation()}
             onClick={onToggleFullscreen}
             className="h-3 w-3 rounded-full"
-            style={{ 
+            style={{
               backgroundColor: onToggleFullscreen ? "#a6e3a1" : "#6b7280",
               cursor: onToggleFullscreen ? "pointer" : "not-allowed",
               opacity: onToggleFullscreen ? 1 : 0.5
@@ -184,7 +241,7 @@ export default function AppWindow({
             {title}
           </span>
         </div>
-        <div className={`flex-1 min-h-0 overflow-y-auto ${customSize ? "" : "pr-2"}`} style={{ color: "#cdd6f4" }}>
+        <div className={`flex-1 min-h-0 overflow-y-auto overscroll-contain ${customSize || hidePadding ? "" : "pr-2"}`} style={{ color: "#cdd6f4" }}>
           {children}
         </div>
 

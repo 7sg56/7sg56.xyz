@@ -4,49 +4,114 @@
 
 /* Design tokens */
 :root {
-  --primary: #18181a;            /* solid window surface */
-  --accent: #f8fafc;             /* off-white accent */
-  --text: #e5e7eb;               /* primary text */
-  --text-2: #cbd5e1;             /* secondary text */
-  --border: #2a2a2d;             /* neutral border */
-  --glass-1: rgba(24,24,26,0.60); /* menus/dock */
-  --glass-2: rgba(24,24,26,0.50); /* cards/widgets */
+  --primary: #18181a;
+  /* solid window surface */
+  --accent: #f8fafc;
+  /* off-white accent */
+  --text: #e5e7eb;
+  /* primary text */
+  --text-2: #cbd5e1;
+  /* secondary text */
+  --border: #2a2a2d;
+  /* neutral border */
+  --glass-1: rgba(24, 24, 26, 0.60);
+  /* menus/dock */
+  --glass-2: rgba(24, 24, 26, 0.50);
+  /* cards/widgets */
 }
 
 /* Utility classes for theme */
-.surface-solid { background: var(--primary); }
-.glass-1 { background: var(--glass-1); backdrop-filter: blur(10px); }
-.glass-2 { background: var(--glass-2); backdrop-filter: blur(8px); }
-.border-theme { border-color: var(--border) !important; }
-.text-theme { color: var(--text) !important; }
-.text-theme-2 { color: var(--text-2) !important; }
-.bg-accent { background-color: var(--accent) !important; }
-.text-accent { color: var(--accent) !important; }
-.ring-accent { box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 65%, transparent); }
+.surface-solid {
+  background: var(--primary);
+}
+
+.glass-1 {
+  background: var(--glass-1);
+  backdrop-filter: blur(10px);
+}
+
+.glass-2 {
+  background: var(--glass-2);
+  backdrop-filter: blur(8px);
+}
+
+.border-theme {
+  border-color: var(--border) !important;
+}
+
+.text-theme {
+  color: var(--text) !important;
+}
+
+.text-theme-2 {
+  color: var(--text-2) !important;
+}
+
+.bg-accent {
+  background-color: var(--accent) !important;
+}
+
+.text-accent {
+  color: var(--accent) !important;
+}
+
+.ring-accent {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 65%, transparent);
+}
 
 /* CRT retro effects */
 @keyframes crt-flicker {
-  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
-  20%, 24%, 55% { opacity: 0.96; }
+
+  0%,
+  19%,
+  21%,
+  23%,
+  25%,
+  54%,
+  56%,
+  100% {
+    opacity: 1;
+  }
+
+  20%,
+  24%,
+  55% {
+    opacity: 0.96;
+  }
 }
+
 @keyframes crt-scan {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(100%); }
+  0% {
+    transform: translateY(-100%);
+  }
+
+  100% {
+    transform: translateY(100%);
+  }
 }
+
 /* Softer glow */
-.crt-glow { text-shadow: 0 0 1px rgba(16,255,106,0.45), 0 0 3px rgba(16,255,106,0.25); }
-.crt-flicker { animation: crt-flicker 2.8s infinite; }
+.crt-glow {
+  text-shadow: 0 0 1px rgba(16, 255, 106, 0.45), 0 0 3px rgba(16, 255, 106, 0.25);
+}
+
+.crt-flicker {
+  animation: crt-flicker 2.8s infinite;
+}
+
 .crt-scanline {
   position: absolute;
-  left: 0; right: 0;
+  left: 0;
+  right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(16,255,106,0.22), transparent);
+  background: linear-gradient(90deg, transparent, rgba(16, 255, 106, 0.22), transparent);
   animation: crt-scan 5s linear infinite;
   opacity: 0.5;
 }
 
 /* Base layout */
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   background-color: #000;
@@ -54,11 +119,15 @@ html, body {
 
 /* Hide scrollbar while maintaining scroll functionality */
 .scrollbar-hide {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
+
 .scrollbar-hide::-webkit-scrollbar {
-  display: none;  /* Chrome, Safari, Opera */
+  display: none;
+  /* Chrome, Safari, Opera */
 }
 
 /* Custom slider styles */
@@ -96,4 +165,29 @@ html, body {
 .slider::-moz-range-thumb:hover {
   transform: scale(1.1);
   box-shadow: 0 0 12px rgba(248, 250, 252, 0.6);
+}
+
+/* Dark Scrollbar Theme */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #18181a;
+  border-left: 1px solid #2a2a2d;
+}
+
+::-webkit-scrollbar-corner {
+  background: #18181a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-radius: 5px;
+  border: 2px solid #18181a;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #52525b;
 }

@@ -183,18 +183,26 @@ export default function TetrisGameWindow() {
     const handleKeyPress = (event: KeyboardEvent) => {
       switch (event.key) {
         case 'ArrowLeft':
+        case 'a':
+        case 'A':
           event.preventDefault();
           movePiece('left');
           break;
         case 'ArrowRight':
+        case 'd':
+        case 'D':
           event.preventDefault();
           movePiece('right');
           break;
         case 'ArrowDown':
+        case 's':
+        case 'S':
           event.preventDefault();
           softDropPiece();
           break;
         case 'ArrowUp':
+        case 'w':
+        case 'W':
           event.preventDefault();
           rotatePiece();
           break;
@@ -292,13 +300,14 @@ export default function TetrisGameWindow() {
   const displayBoard = renderBoard();
 
   return (
-    <div className="relative overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900/70 backdrop-blur shadow-[0_10px_30px_rgba(0,0,0,0.4)] h-full w-full">
-      {/* Game Board - Full Widget */}
+    <div className="relative h-full w-full flex items-center justify-center overflow-hidden">
+      {/* Game Board - Centered and Aspect Ratio Locked */}
       <div
-        className="h-full w-full grid gap-1.5 p-3"
+        className="grid gap-px p-3 h-full w-auto"
         style={{
           gridTemplateColumns: `repeat(${BOARD_WIDTH}, 1fr)`,
-          gridTemplateRows: `repeat(${BOARD_HEIGHT}, 1fr)`
+          gridTemplateRows: `repeat(${BOARD_HEIGHT}, 1fr)`,
+          aspectRatio: `${BOARD_WIDTH}/${BOARD_HEIGHT}`,
         }}
       >
         {displayBoard.map((row, y) =>
@@ -344,16 +353,29 @@ export default function TetrisGameWindow() {
 
       {/* Score overlay when playing */}
       {gameState === 'playing' && (
-        <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm rounded px-2 py-1">
-          <div className="text-xs text-white font-mono">Score: {score}</div>
+        <div className="absolute top-4 left-4 bg-black/40 backdrop-blur-md rounded-full px-4 py-2 border border-white/10 shadow-xl z-10 transition-all duration-300">
+          <div className="text-sm text-white font-medium tracking-wide font-mono">
+            Score <span className="text-emerald-400 ml-1">{score}</span>
+          </div>
         </div>
       )}
 
       {/* Controls overlay when playing */}
       {gameState === 'playing' && (
-        <div className="absolute bottom-2 right-2 bg-black/60 backdrop-blur-sm rounded px-2 py-1">
-          <div className="text-xs text-zinc-300 font-mono">
-            ←→ ↓ ↑
+        <div className="absolute bottom-4 right-4 bg-black/40 backdrop-blur-md rounded-xl px-4 py-3 border border-white/10 shadow-xl z-10">
+          <div className="flex flex-col gap-1.5 text-[10px] uppercase tracking-wider font-semibold text-zinc-400">
+            <div className="flex items-center justify-between gap-4">
+              <span>Move</span>
+              <span className="text-zinc-200">A / D</span>
+            </div>
+            <div className="flex items-center justify-between gap-4">
+              <span>Rotate</span>
+              <span className="text-zinc-200">W / ↑</span>
+            </div>
+            <div className="flex items-center justify-between gap-4">
+              <span>Drop</span>
+              <span className="text-zinc-200">S / ↓</span>
+            </div>
           </div>
         </div>
       )}

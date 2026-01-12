@@ -16,7 +16,7 @@ import TodoWidget from "@/components/widgets/TodoWidget";
 import NowListeningWidget from "@/components/widgets/NowListeningWidget";
 import DateNowWidget from "@/components/widgets/DateNowWidget";
 import TechStackStrip from "@/components/TechStackStrip";
-import { getResponsiveConfig, responsive } from "@/lib/responsive";
+import { getResponsiveConfig } from "@/lib/responsive";
 import AnimatedRoleText from "@/components/desktop/AnimatedRoleText";
 import DesktopDock from "@/components/desktop/DesktopDock";
 import { WindowAppType, WidgetType, DesktopItem, DockApp } from "@/components/desktop/types";
@@ -109,9 +109,23 @@ export default function DesktopOSPage() {
     bringToFront(appType);
   }, [bringToFront]);
 
+  // Track window origins for dock animations
+  const [dockOrigins, setDockOrigins] = useState<Record<WindowAppType, DOMRect | null>>({
+    about: null,
+    projects: null,
+    skills: null,
+    contact: null,
+    tetris: null,
+    algorithms: null,
+  });
+
   // Dock app click
-  const handleDockAppClick = useCallback((app: DockApp) => {
+  const handleDockAppClick = useCallback((app: DockApp, rect: DOMRect) => {
     const appType = app.appType as WindowAppType;
+
+    // Update origin
+    setDockOrigins(prev => ({ ...prev, [appType]: rect }));
+
     if (app.appType in openWindows) {
       if (minimizedWindows[appType]) {
         // Restore minimized window
@@ -142,7 +156,6 @@ export default function DesktopOSPage() {
     const scaledTodoWidth = baseTodoWidth * scale;
     const scaledTodoHeight = baseTodoHeight * scale;
     const scaledSmallWidth = baseSmallWidth * scale;
-    const scaledSmallHeight = baseSmallHeight * scale;
 
     // Consistent top spacing for all screen sizes (same as 13" MacBook)
     const topSpacing = 46;
@@ -369,11 +382,13 @@ export default function DesktopOSPage() {
                 title={title}
                 onClose={() => closeWindow(appType)}
                 onMinimize={() => minimizeWindow(appType)}
-                onToggleFullscreen={appType === 'tetris' ? undefined : () => toggleFullscreen(appType)}
+                onToggleFullscreen={() => toggleFullscreen(appType)}
                 fullscreen={fullscreenWindows[appType]}
                 minimized={isMinimized}
+                origin={dockOrigins[appType] || undefined}
                 zIndex={zBase + orderIndex}
-                customSize={appType === 'tetris' ? { width: 300, height: 600 } : undefined}
+                initialSize={appType === 'tetris' ? { width: Math.min(450, height * 0.5), height: Math.min(800, height * 0.85) } : undefined}
+                hidePadding={appType === 'tetris'}
               >
                 {render()}
               </AppWindow>

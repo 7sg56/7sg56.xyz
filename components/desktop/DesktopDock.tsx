@@ -26,7 +26,7 @@ interface DesktopDockProps {
     openWindows: Record<WindowAppType, boolean>;
     responsiveConfig: ResponsiveConfig;
     width: number;
-    onAppClick: (app: DockApp) => void;
+    onAppClick: (app: DockApp, rect: DOMRect) => void;
 }
 
 const DesktopDock: React.FC<DesktopDockProps> = ({
@@ -57,7 +57,10 @@ const DesktopDock: React.FC<DesktopDockProps> = ({
                                 minWidth: `${dock.buttonSize}px`,
                                 height: `${dock.buttonSize}px`
                             }}
-                            onClick={() => onAppClick(app)}
+                            onClick={(e) => {
+                                const rect = e.currentTarget.getBoundingClientRect();
+                                onAppClick(app, rect);
+                            }}
                             whileHover={{
                                 scale: 1.1,
                                 y: -5,
