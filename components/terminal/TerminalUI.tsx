@@ -20,7 +20,7 @@ export function Banner({ visible }: { visible: boolean }) {
     return (
         <div className="text-zinc-300">
             <pre
-                className="whitespace-pre font-mono leading-none text-white crt-glow text-[6px] sm:text-[6px] md:text-[12px] lg:text-[14px] xl:text-[16px] overflow-hidden block"
+                className="whitespace-pre font-mono leading-none text-white crt-glow text-[4px] min-[400px]:text-[5px] sm:text-[6px] md:text-[12px] lg:text-[14px] xl:text-[16px] overflow-hidden scrollbar-hide block"
                 style={{
                     color: "#dbdbdb",
                     fontFamily:
@@ -32,6 +32,10 @@ export function Banner({ visible }: { visible: boolean }) {
                     tabSize: 4,
                     whiteSpace: 'pre',
                     wordSpacing: 0,
+                    WebkitTextSizeAdjust: 'none',
+                    MozTextSizeAdjust: 'none',
+                    textSizeAdjust: 'none',
+                    textRendering: 'geometricPrecision',
                 }}
             >
                 {art}
