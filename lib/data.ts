@@ -91,7 +91,7 @@ export const EXPERIENCE: Experience[] = [
     title: "B.Tech Computer Science Engineering",
     company: "SRM Institute of Science and Technology",
     period: "2024 - 2028",
-    description: "Pursuing Bachelor of Technology in Computer Science Engineering with focus on software development, algorithms, and modern web technologies.",
+    description: "Pursuing Bachelor of Technology in Computer Science Engineering with focus on software development, and modern web technologies.",
     type: 'education'
   }
 ];

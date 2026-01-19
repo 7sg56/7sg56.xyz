@@ -8,7 +8,6 @@ import {
     SkillsIcon,
     ContactIcon,
     TetrisIcon,
-    AlgorithmsIcon
 } from "./DesktopIcons";
 import { responsive, ResponsiveConfig } from "@/lib/responsive";
 import { DockApp, WindowAppType } from "./types";
@@ -19,7 +18,6 @@ export const dockApps: DockApp[] = [
     { id: "skills", name: "Skills", icon: "skills", appType: "skills" },
     { id: "contact", name: "Contact", icon: "contact", appType: "contact" },
     { id: "tetris", name: "Tetris", icon: "tetris", appType: "tetris" },
-    { id: "algorithms", name: "Algorithms", icon: "algorithms", appType: "algorithms" },
 ];
 
 interface DesktopDockProps {
@@ -81,7 +79,6 @@ const DesktopDock: React.FC<DesktopDockProps> = ({
                                 {app.icon === "skills" && <SkillsIcon />}
                                 {app.icon === "contact" && <ContactIcon />}
                                 {app.icon === "tetris" && <TetrisIcon />}
-                                {app.icon === "algorithms" && <AlgorithmsIcon />}
                             </div>
                             {/* macOS-style indicator dot */}
                             {hasIndicator && (
