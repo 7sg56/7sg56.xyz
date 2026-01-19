@@ -5,40 +5,18 @@ import React from "react";
 export function Banner({ visible }: { visible: boolean }) {
     if (!visible) return null;
 
-    const art = `
- 
- 
- ░██████╗░█████╗░██╗░░░██╗██████╗░██╗░██████╗██╗░░██╗  ░██████╗░██╗░░██╗░█████╗░░██████╗██╗░░██╗
- ██╔════╝██╔══██╗██║░░░██║██╔══██╗██║██╔════╝██║░░██║  ██╔════╝░██║░░██║██╔══██╗██╔════╝██║░░██║
- ╚█████╗░██║░░██║██║░░░██║██████╔╝██║╚█████╗░███████║  ██║░░██╗░███████║██║░░██║╚█████╗░███████║
- ░╚═══██╗██║░░██║██║░░░██║██╔══██╗██║░╚═══██╗██╔══██║  ██║░░╚██╗██╔══██║██║░░██║░╚═══██╗██╔══██║
- ██████╔╝╚█████╔╝╚██████╔╝██║░░██║██║██████╔╝██║░░██║  ╚██████╔╝██║░░██║╚█████╔╝██████╔╝██║░░██║
- ╚═════╝░░╚════╝░░╚═════╝░╚═╝░░╚═╝╚═╝╚═════╝░╚═╝░░╚═╝  ░╚═════╝░╚═╝░░╚═╝░╚════╝░╚═════╝░╚═╝░░╚═╝                                                                                          
-  
-  `;
-
     return (
         <div className="text-zinc-300">
-            <pre
-                className="whitespace-pre font-mono leading-none text-white crt-glow text-[6px] sm:text-[6px] md:text-[12px] lg:text-[14px] xl:text-[16px] overflow-hidden block"
-                style={{
-                    color: "#dbdbdb",
-                    fontFamily:
-                        'Menlo, Monaco, Consolas, "Courier New", Courier, monospace',
-                    fontVariantLigatures: 'none',
-                    fontKerning: 'none',
-                    letterSpacing: 0,
-                    lineHeight: 1,
-                    tabSize: 4,
-                    whiteSpace: 'pre',
-                    wordSpacing: 0,
-                }}
-            >
-                {art}
-            </pre>
+            <img 
+                src="/banner-name.svg" 
+                alt="Banner" 
+                className="w-full h-auto max-w-4xl filter invert opacity-85 select-none pointer-events-none"
+                draggable={false}
+            />
             <div className="mt-1 text-xs md:text-sm" style={{ color: "#a6adc8" }}>Built by <a href="https://github.com/7sg56" target="_blank" rel="noopener noreferrer" className="text-zinc-200 hover:text-green-400 underline">Sourish Ghosh</a>. Type <span className="text-zinc-200">help</span> to see available commands.</div>
         </div>
     );
+
 }
 
 export function Prompt({ text }: { text: string }) {

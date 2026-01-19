@@ -34,7 +34,7 @@ export default function BootLog({ progress, title = "Booting Sourish’s Portfol
       "Boot from Desktop Environment...",
       "",
       "Loading Portfolio OS...",
-      "Initializing modules: about, projects, skills, contact, tetris, algorithms",
+      "Initializing modules: about, projects, skills, contact, tetris",
       "Mounting desktop directory... OK",
       "Starting widgets: todo, now-listening, date-now... OK",
       "Loading tech stack: Next.js, React, TypeScript, Tailwind... OK",
