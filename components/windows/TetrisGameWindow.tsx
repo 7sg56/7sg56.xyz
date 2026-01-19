@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 
 // function spanToClasses(span?: Span): string {
 //   if (!span) return "";
@@ -147,6 +147,34 @@ export default function TetrisGameWindow() {
     }
   }, [currentPiece, gameState, isPlaying, canPlacePiece]);
 
+  // Handle Resize Logic
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [boardConstraint, setBoardConstraint] = useState<'width' | 'height'>('height');
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (!entry) return;
+
+      const { width, height } = entry.contentRect;
+      if (width === 0 || height === 0) return;
+
+      const containerAspect = width / height;
+      const boardAspect = BOARD_WIDTH / BOARD_HEIGHT;
+
+      if (containerAspect > boardAspect) {
+        setBoardConstraint('height');
+      } else {
+        setBoardConstraint('width');
+      }
+    });
+
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   // Rotate piece
   const rotatePiece = useCallback(() => {
     if (!currentPiece || gameState === 'over' || !isPlaying) return;
@@ -267,7 +295,7 @@ export default function TetrisGameWindow() {
   // Get piece colors for rendering
   const getCellStyle = (cell: number) => {
     if (cell === 0) {
-      return 'bg-white/5 border border-white/10';
+      return 'bg-white/10 border border-white/20';
     }
 
     const isCurrentPiece = cell < 0;
@@ -317,9 +345,9 @@ export default function TetrisGameWindow() {
       {/* LEFT: Game Board */}
       <div className="h-full flex-grow relative bg-black/20 rounded-xl border border-white/5 min-w-0 overflow-hidden">
         {/* Absolute wrapper to decouple size from flex flow */}
-        <div className="absolute inset-0 flex items-center justify-center p-1">
+        <div ref={containerRef} className="absolute inset-0 flex items-center justify-center p-1">
           <div
-            className="grid gap-px max-h-full max-w-full w-auto h-auto"
+            className={`grid gap-px shadow-2xl transition-all duration-75 ${boardConstraint === 'height' ? 'h-full w-auto' : 'w-full h-auto'}`}
             style={{
               gridTemplateColumns: `repeat(${BOARD_WIDTH}, 1fr)`,
               gridTemplateRows: `repeat(${BOARD_HEIGHT}, 1fr)`,
