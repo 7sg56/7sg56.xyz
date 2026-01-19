@@ -45,4 +45,12 @@ export const ProjectsIcon = () => (
     </svg>
 );
 
-
+export const AlgorithmsIcon = () => (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="4" y="4" width="24" height="24" rx="2" fill="#f8fafc" fillOpacity="0.1" stroke="#f8fafc" strokeWidth="2" />
+        <rect x="8" y="12" width="3" height="8" fill="#f8fafc" />
+        <rect x="12" y="8" width="3" height="12" fill="#f8fafc" />
+        <rect x="16" y="14" width="3" height="6" fill="#f8fafc" />
+        <rect x="20" y="10" width="3" height="10" fill="#f8fafc" />
+    </svg>
+);

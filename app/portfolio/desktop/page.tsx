@@ -11,6 +11,7 @@ import ContactWindow from "@/components/windows/ContactWindow";
 import ProjectsWindow from "@/components/windows/ProjectsWindow";
 import AboutHome from "@/components/windows/AboutHome";
 import TetrisGameWindow from "@/components/windows/TetrisGameWindow";
+import AlgorithmWindow from "@/components/windows/AlgorithmWindow";
 import TodoWidget from "@/components/widgets/TodoWidget";
 import NowListeningWidget from "@/components/widgets/NowListeningWidget";
 import DateNowWidget from "@/components/widgets/DateNowWidget";
@@ -29,6 +30,7 @@ export default function DesktopOSPage() {
     skills: false,
     contact: false,
     tetris: false,
+    algorithms: false,
   });
 
   // Window dimensions - use consistent initial values to prevent hydration mismatch
@@ -47,6 +49,7 @@ export default function DesktopOSPage() {
     skills: false,
     contact: false,
     tetris: false,
+    algorithms: false,
   });
 
   // Track minimized state per window
@@ -56,6 +59,7 @@ export default function DesktopOSPage() {
     skills: false,
     contact: false,
     tetris: false,
+    algorithms: false,
   });
 
   // Update window dimensions after hydration to prevent hydration mismatch
@@ -112,6 +116,7 @@ export default function DesktopOSPage() {
     skills: null,
     contact: null,
     tetris: null,
+    algorithms: null,
   });
 
   // Dock app click
@@ -220,6 +225,7 @@ export default function DesktopOSPage() {
     skills: { title: "Skills", render: () => <SkillsWindow /> },
     contact: { title: "Contact / Socials", render: () => <ContactWindow /> },
     tetris: { title: "Tetris Game", render: () => <TetrisGameWindow /> },
+    algorithms: { title: "Algorithms", render: () => <AlgorithmWindow /> },
   } as const;
 
   const zBase = 100; // base z-index for windows
