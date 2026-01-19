@@ -10,7 +10,7 @@ export function Banner({ visible }: { visible: boolean }) {
             <img 
                 src="/banner-name.svg" 
                 alt="Banner" 
-                className="w-full h-auto max-w-4xl filter invert opacity-85 select-none pointer-events-none"
+                className="w-full h-auto max-w-4xl filter invert opacity-85 select-none pointer-events-none pt-4"
                 draggable={false}
             />
             <div className="mt-1 text-xs md:text-sm" style={{ color: "#a6adc8" }}>Built by <a href="https://github.com/7sg56" target="_blank" rel="noopener noreferrer" className="text-zinc-200 hover:text-green-400 underline">Sourish Ghosh</a>. Type <span className="text-zinc-200">help</span> to see available commands.</div>

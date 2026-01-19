@@ -42,7 +42,7 @@ export default function MenuBar({ hidden = false, title = "7sg56", showSystemMen
       <div className="flex items-center gap-3" ref={menuRef}>
         {showSystemMenu && (
           <div className="relative" id="system-menu-anchor">
-            <button className="font-semibold hover:text-white transition-colors" onClick={() => setOpen((v) => !v)}>
+            <button className="font-semibold px-2 py-0.5 bg-red-500/75 hover:bg-red-500 rounded-sm border border-white/10 transition-all hover:text-white shadow-sm text-xs" onClick={() => setOpen((v) => !v)}>
               7sg56
             </button>
             {open && (

@@ -214,7 +214,7 @@ export default function AppWindow({
             aria-label="Close"
             onPointerDown={(e) => e.stopPropagation()}
             onClick={onClose}
-            className="h-3 w-3 rounded-full"
+            className="h-4 w-4 rounded-full cursor-pointer hover:brightness-110 transition-all"
             style={{ backgroundColor: "#f38ba8" }}
           />
           <button
@@ -223,10 +223,9 @@ export default function AppWindow({
             aria-label={disableMinimize ? "Minimize disabled" : "Minimize"}
             onPointerDown={(e) => e.stopPropagation()}
             onClick={disableMinimize ? undefined : onMinimize}
-            className="h-3 w-3 rounded-full"
+            className={`h-4 w-4 rounded-full hover:brightness-110 transition-all ${disableMinimize ? 'cursor-not-allowed' : 'cursor-pointer'}`}
             style={{
               backgroundColor: disableMinimize ? "#6b7280" : "#f9e2af",
-              cursor: disableMinimize ? "not-allowed" : "pointer",
               opacity: disableMinimize ? 0.5 : 1
             }}
           />
@@ -236,10 +235,9 @@ export default function AppWindow({
             aria-label={onToggleFullscreen ? "Toggle fullscreen" : "Fullscreen disabled"}
             onPointerDown={(e) => e.stopPropagation()}
             onClick={onToggleFullscreen}
-            className="h-3 w-3 rounded-full"
+            className={`h-4 w-4 rounded-full hover:brightness-110 transition-all ${onToggleFullscreen ? 'cursor-pointer' : 'cursor-not-allowed'}`}
             style={{
               backgroundColor: onToggleFullscreen ? "#a6e3a1" : "#6b7280",
-              cursor: onToggleFullscreen ? "pointer" : "not-allowed",
               opacity: onToggleFullscreen ? 1 : 0.5
             }}
           />
