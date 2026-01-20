@@ -15,7 +15,7 @@ export type Experience = {
   company: string;
   period: string;
   description: string;
-  type: 'work' | 'education' | 'volunteer' | 'project';
+  type: 'internship' | 'education' | 'volunteer' | 'project' | 'work';
 };
 
 export type Resume = {
@@ -69,10 +69,25 @@ export const PROJECTS: Project[] = [
     repo: "https://github.com/7sg56/dawnmark",
     demo: "https://dawnmark.netlify.app",
   },
+  {
+    name: "ClackClick - A website to test out your typing speed",
+    slug: "clackclick",
+    desc: "A typing speed test app on the web.",
+    tech: ["Next.js", "TypeScript", "Tailwind CSS", "React", "Netlify"],
+    repo: "https://github.com/7sg56/clackclick",
+    demo: "https://clackclick.netlify.app",
+  },
 ];
 
 // ===== EXPERIENCE =====
 export const EXPERIENCE: Experience[] = [
+  {
+    title: "Frontend Intern",
+    company: "Xenkrypt Technologies",
+    period: "2026 - Present",
+    description: "Latest trends of development, and a enthusiastic startup, a perfect combo",
+    type: 'internship'
+  },
   {
     title: "Associate Technical Lead",
     company: "Hackerrank Campus Crew (HRCC - SRM)",
@@ -90,7 +105,7 @@ export const EXPERIENCE: Experience[] = [
   {
     title: "B.Tech Computer Science Engineering",
     company: "SRM Institute of Science and Technology",
-    period: "2024 - 2028",
+    period: "2024 - Present",
     description: "Pursuing Bachelor of Technology in Computer Science Engineering with focus on software development, and modern web technologies.",
     type: 'education'
   }
@@ -99,20 +114,20 @@ export const EXPERIENCE: Experience[] = [
 // ===== SKILLS =====
 export const SKILLS: SkillCategory[] = [
   {
+    title: "Programming Languages",
+    skills: ["C/C++", "Java", "TypeScript"]
+  },
+  {
     title: "Frontend",
-    skills: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Three.js"]
+    skills: ["Next.js", "AstroJs", "Three.js"]
   },
   {
     title: "Backend",
-    skills: ["Node.js", "Express", "JWT"]
+    skills: ["Node.js", "Express"]
   },
   {
     title: "Databases",
     skills: ["MongoDB", "Prisma", "SQLite", "Supabase"]
-  },
-  {
-    title: "DevOps",
-    skills: ["Vercel", "Redis"]
   },
   {
     title: "Tools",
@@ -135,20 +150,58 @@ export const PROFILE: Profile = {
   about: "I'm a B.Tech Computer Science student at SRMIST, Chennai, passionate about building scalable web applications and exploring modern web technologies. I enjoy creating clean, responsive designs and experimenting with full-stack projects. Beyond web development, I'm also interested in machine learning, particularly NLP, and I regularly try to solve problems on LeetCode. I'm currently looking for opportunities to contribute to meaningful projects and continue growing as a developer. Let's connect and create the unimaginable",
   contact: {
     email_masked: "sourishghosh777@gmail.com",
-    phone_masked: "You haven't reached that level of closeness to get my number :)",
+    phone_masked: "Let's not rush, first a date :)",
     open_to: "Open to work / mentorship",
   },
   socials: {
     github: "https://github.com/7sg56",
     linkedin: "https://www.linkedin.com/in/7sg56",
     twitter: "https://x.com/sourishghosh777",
-    instagram: "https://www.instagram.com/s0urishg",
-    portfolio: "https://sourishghosh-7sg56.vercel.app",
+    instagram: "https://www.instagram.com/nicetry",
+    portfolio: "https://sourish-ghosh.vercel.app",
   },
   education: {
     summary: "B.Tech in CSE w/s SE (2024-2028) CGPA: 9.1",
   },
 };
+
+// ===== SONGS (Now Listening Widget) =====
+export type Song = {
+  title: string;
+  artist: string;
+};
+
+export const SONGS: Song[] = [
+  { title: "My Eyes", artist: "Travis Scott" },
+  { title: "No Pole", artist: "Don Toliver" },
+  { title: "Dracula", artist: "Tame Impala" },
+  { title: "Humble", artist: "Kendrick Lamar" },
+  { title: "Softcore", artist: "The Neighbourhood" },
+  { title: "Runaway", artist: "Kanye West" },
+  { title: "Sicko Mode", artist: "Travis Scott" },
+  { title: "Sao Paulo", artist: "The Weeknd" },
+  { title: "Chanel", artist: "Tyla" },
+  { title: "We have time", artist: "Shreea Kaul" },
+  { title: "Chihiro", artist: "Billie Eilish" },
+  { title: "Cry for Me", artist: "The Weeknd" },
+  { title: "Sofia", artist: "Clairo" },
+];
+
+// ===== TASKS (Todo Widget) =====
+export type Task = {
+  id: number;
+  title: string;
+  completed: boolean;
+};
+
+export const TASKS: Task[] = [
+  { id: 1, title: "Running high on NextJs", completed: false },
+  { id: 2, title: "Petting Mr.Rowlins", completed: false },
+  { id: 3, title: "Watching True Detective", completed: false },
+  { id: 4, title: "Lewis Hamilton is the goat", completed: false },
+  { id: 5, title: "Searching for a code partner", completed: false },
+  { id: 6, title: "Looking up for Shawarma", completed: false },
+];
 
 // ===== HOBBIES =====
 export type Hobby = string;
@@ -226,4 +279,18 @@ export function getSkillsByCategory(category: string): SkillCategory | undefined
  */
 export function getHobbies(): Hobby[] {
   return HOBBIES;
+}
+
+/**
+ * Get all songs for Now Listening widget
+ */
+export function getSongs(): Song[] {
+  return SONGS;
+}
+
+/**
+ * Get all tasks for Todo widget
+ */
+export function getTasks(): Task[] {
+  return TASKS;
 }

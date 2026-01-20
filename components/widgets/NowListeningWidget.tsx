@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
+import { SONGS, type Song } from "@/lib/data";
 
 type Span = { cols?: 1 | 2 | 3; rows?: 1 | 2 | 3 | 4 };
 function spanToClasses(span?: Span): string {
@@ -17,27 +18,7 @@ function spanToClasses(span?: Span): string {
   return cls.join(" ");
 }
 
-type Song = {
-  title: string;
-  artist: string;
-};
-
-const songs: Song[] = [
-  { title: "My Eyes", artist: "Travis Scott" },
-  { title: "No Pole", artist: "Don Toliver" },
-  { title: "Dracula", artist: "Tame Impapa" },
-  { title: "Humble", artist: "Kendrick Lamar" },
-  { title: "Softcore", artist: "The Neighbourhood" },
-  { title: "Runaway", artist: "Kanye West" },
-  { title: "Timeless", artist: "The Weeknd" },
-  { title: "Sicko Mode", artist: "Travis Scott" },
-  { title: "Sao Paulo", artist: "The Weeknd" },
-  { title: "Pink + White", artist: "Frank Ocean" },
-  { title: "I Wonder", artist: "Kanye West" },
-  { title: "Not You Too", artist: "Drake" },
-  { title: "Cry for Me", artist: "The Weeknd" },
-  { title: "Carnival", artist: "Kanye West" },
-];
+const songs = SONGS;
 
 export default function NowListeningWidget({ span }: { span?: Span }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -65,19 +46,19 @@ export default function NowListeningWidget({ span }: { span?: Span }) {
 
   return (
     <div className={`relative overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900/70 backdrop-blur shadow-[0_10px_30px_rgba(0,0,0,0.4)] h-full w-full ${spanToClasses(span)}`}>
-      <div className="h-full w-full p-2 flex flex-col relative">
+      <div className="h-full w-full p-2 flex flex-col relative overflow-hidden">
         {/* Current song */}
-        <div className="flex-1 flex flex-col items-center justify-start text-center relative z-10 pt-4">
-          <div className="text-lg font-bold font-mono text-zinc-200 mb-1 px-2">
+        <div className="flex-1 flex flex-col items-center justify-start text-center relative z-10 pt-4 w-full overflow-hidden">
+          <div className="text-lg font-bold font-mono text-zinc-200 mb-1 px-3 w-full truncate text-center">
             {songs[currentIndex].title}
           </div>
-          <div className="text-xs text-zinc-500 px-2 mb-4">
+          <div className="text-xs text-zinc-500 px-3 mb-4 w-full truncate text-center">
             {songs[currentIndex].artist}
           </div>
         </div>
 
-        {/* Visualizer - Fixed position */}
-        <div className="absolute top-3/5 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center gap-1 z-0">
+        {/* Visualizer - Fixed position with contained width */}
+        <div className="absolute top-[60%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center gap-1 z-0 pointer-events-none">
           {[0, 1, 2].map((i) => (
             <motion.div
               key={i}

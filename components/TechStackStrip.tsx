@@ -59,7 +59,7 @@ export default function TechStackStrip({
           {loop.map((item, i) => (
             <span
               key={i}
-              className="mx-3 my-3 inline-flex items-center rounded-full bg-transparent px-4 py-2 text-base font-bold text-secondary-foreground whitespace-nowrap select-none"
+              className="mx-3 my-3 inline-flex items-center rounded-full bg-transparent px-4 py-2 text-base font-bold text-zinc-300 whitespace-nowrap select-none"
             >
               {renderLabel(item) === "Next.js" ? (
                 <>

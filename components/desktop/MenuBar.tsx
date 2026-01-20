@@ -37,7 +37,7 @@ export default function MenuBar({ hidden = false, title = "7sg56", showSystemMen
     <div
       className={`fixed top-0 inset-x-0 h-8 px-3 flex items-center justify-between text-xs z-50 transition-opacity ${
         hidden ? "opacity-0 pointer-events-none" : "opacity-100"
-      } glass-1 border-b border-theme text-theme-2`}
+      } glass-1 text-theme-2`}
     >
       <div className="flex items-center gap-3" ref={menuRef}>
         {showSystemMenu && (

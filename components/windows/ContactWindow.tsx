@@ -11,6 +11,7 @@ export default function ContactWindow() {
     { name: "Twitter", url: profile.socials.twitter },
     { name: "Instagram", url: profile.socials.instagram },
     { name: "Email", url: `mailto:${profile.contact.email_masked}` },
+    { name: "Phone", url: profile.contact.phone_masked }
   ];
 
   return (
