@@ -11,6 +11,7 @@ import ContactWindow from "@/components/windows/ContactWindow";
 import ProjectsWindow from "@/components/windows/ProjectsWindow";
 import AboutHome from "@/components/windows/AboutHome";
 import TetrisGameWindow from "@/components/windows/TetrisGameWindow";
+import TerminalWindow from "@/components/windows/TerminalWindow";
 import TodoWidget from "@/components/widgets/TodoWidget";
 import NowListeningWidget from "@/components/widgets/NowListeningWidget";
 import DateNowWidget from "@/components/widgets/DateNowWidget";
@@ -29,6 +30,7 @@ export default function DesktopOSPage() {
     skills: false,
     contact: false,
     tetris: false,
+    terminal: false,
   });
 
   // Window dimensions - use consistent initial values to prevent hydration mismatch
@@ -47,6 +49,7 @@ export default function DesktopOSPage() {
     skills: false,
     contact: false,
     tetris: false,
+    terminal: false,
   });
 
   // Track minimized state per window
@@ -56,6 +59,7 @@ export default function DesktopOSPage() {
     skills: false,
     contact: false,
     tetris: false,
+    terminal: false,
   });
 
   // Update window dimensions after hydration to prevent hydration mismatch
@@ -112,6 +116,7 @@ export default function DesktopOSPage() {
     skills: null,
     contact: null,
     tetris: null,
+    terminal: null,
   });
 
   // Dock app click
@@ -135,8 +140,14 @@ export default function DesktopOSPage() {
 
   const clearSelection = useCallback(() => { }, []);
 
+  // Zen mode for terminal
+  const [zenMode, setZenMode] = useState(false);
+
   // Widget Layout - Using Responsive System
   const desktopItems: DesktopItem[] = useMemo(() => {
+    // Hide widgets in zen mode
+    if (zenMode) return [];
+
     // Base dimensions (unscaled)
     const baseTodoWidth = 310;
     const baseTodoHeight = 150;
@@ -196,7 +207,7 @@ export default function DesktopOSPage() {
         scale: scale,
       },
     ];
-  }, [width, height, responsiveConfig]);
+  }, [width, height, responsiveConfig, zenMode]);
 
   // Widget renderer - direct widgets
   const renderWidget = (widgetType: WidgetType) => {
@@ -220,6 +231,24 @@ export default function DesktopOSPage() {
     skills: { title: "Skills", render: () => <SkillsWindow /> },
     contact: { title: "Contact / Socials", render: () => <ContactWindow /> },
     tetris: { title: "Tetris Game", render: () => <TetrisGameWindow /> },
+    terminal: { 
+      title: "Terminal", 
+      render: () => (
+        <TerminalWindow 
+          zenMode={zenMode}
+          onZenModeChange={(enabled) => {
+            setZenMode(enabled);
+            // If zen mode is enabled, we need to ensure this window is active and probably maximized if not already
+            if (enabled) {
+              setFullscreenWindows(prev => ({ ...prev, terminal: true }));
+              bringToFront('terminal');
+            } else {
+              setFullscreenWindows(prev => ({ ...prev, terminal: false }));
+            }
+          }} 
+        />
+      ) 
+    },
   } as const;
 
   const zBase = 100; // base z-index for windows
@@ -257,17 +286,20 @@ export default function DesktopOSPage() {
         {/* Desktop Background */}
         <DesktopBackground backgroundImage="/Julius-Caesar.webp" overlay={false} />
 
-        {/* Menu Bar */}
-        <MenuBar title={focusedWindow ? WINDOW_CONFIG[focusedWindow]?.title : "Desktop"} showSystemMenu={true} terminalHref="/terminal" shutdownHref="/" />
+        {/* Menu Bar - Hidden in Zen Mode */}
+        {!zenMode && (
+          <MenuBar title={focusedWindow ? WINDOW_CONFIG[focusedWindow]?.title : "Desktop"} showSystemMenu={true} terminalHref="/terminal" shutdownHref="/" />
+        )}
 
-        {/* Hero Text - Using Responsive System */}
-        <div
+        {/* Hero Text - Hidden in Zen Mode */}
+        {!zenMode && (
+         <div
           className="absolute z-10"
           style={{
             left: `${responsiveConfig.heroLeft}px`,
             top: `${responsiveConfig.heroTop - 40}px`
           }}
-        >
+         >
           <div className="space-y-2">
             <div className="text-white space-y-4 lg:space-y-6">
               {/* Main Name - Responsive Size */}
@@ -297,10 +329,12 @@ export default function DesktopOSPage() {
               </div>
             </div>
           </div>
-        </div>
+         </div>
+        )}
 
-        {/* TechStackStrip - Using Responsive System */}
-        <div
+        {/* TechStackStrip - Hidden in Zen Mode */}
+        {!zenMode && (
+         <div
           className="absolute z-0 origin-center"
           style={{
             bottom: `${responsiveConfig.techStripBottom}px`,
@@ -308,7 +342,7 @@ export default function DesktopOSPage() {
             transform: 'rotate(-35deg)',
             width: `${responsiveConfig.techStripWidth}px`
           }}
-        >
+         >
           <TechStackStrip
             items={[
               "Next.js",
@@ -328,7 +362,8 @@ export default function DesktopOSPage() {
             pauseOnHover={false}
             className="bg-black/30 backdrop-blur-sm text-white min-h-[50px] flex items-center"
           />
-        </div>
+         </div>
+        )}
 
         {/* Desktop Widgets */}
         {desktopItems.map((item) => {
@@ -355,34 +390,57 @@ export default function DesktopOSPage() {
         })}
 
 
-        {/* Custom Dock - Using Responsive System */}
-        <DesktopDock
+        {/* Custom Dock - Hidden in Zen Mode */}
+        {!zenMode && (
+         <DesktopDock
           openWindows={openWindows}
           responsiveConfig={responsiveConfig}
           width={width}
           onAppClick={handleDockAppClick}
-        />
+         />
+        )}
 
         {/* Windows */}
         <AnimatePresence>
           {(Object.keys(WINDOW_CONFIG) as WindowAppType[]).map((appType) => {
             if (!openWindows[appType]) return null;
+            // In Zen Mode, only show the terminal, and hide others
+            if (zenMode && appType !== 'terminal') return null;
+
             const orderIndex = Math.max(0, windowStack.indexOf(appType));
             const { title, render } = WINDOW_CONFIG[appType];
             const isMinimized = minimizedWindows[appType];
+            
+            // If Zen Mode is active, force fullscreen for terminal, and ensure it's not minimized
+            const isFullscreen = (zenMode && appType === 'terminal') ? true : fullscreenWindows[appType];
+            
             return (
               <AppWindow
                 key={appType}
                 title={title}
-                onClose={() => closeWindow(appType)}
+                onClose={() => {
+                   if (zenMode && appType === 'terminal') {
+                     setZenMode(false);
+                   }
+                   closeWindow(appType);
+                }}
                 onMinimize={() => minimizeWindow(appType)}
-                onToggleFullscreen={() => toggleFullscreen(appType)}
-                fullscreen={fullscreenWindows[appType]}
+                onToggleFullscreen={(appType === 'contact' || appType === 'tetris') ? undefined : () => toggleFullscreen(appType)}
+                fullscreen={isFullscreen}
                 minimized={isMinimized}
                 origin={dockOrigins[appType] || undefined}
                 zIndex={zBase + orderIndex}
-                initialSize={appType === 'tetris' ? { width: Math.min(600, width * 0.9), height: Math.min(800, height * 0.85) } : undefined}
-                hidePadding={appType === 'tetris'}
+                // Hide window controls if in Zen Mode and pass explicit style overrides for terminal
+                hideTitleBar={zenMode && appType === 'terminal'}
+                borderColor={appType === 'terminal' ? "#3f3f46" : undefined} // zinc-700 for distinct border, or match standard
+                backgroundColor={appType === 'terminal' ? "#09090b" : undefined} // zinc-950 for terminal background
+                
+                initialSize={
+                  appType === 'tetris' ? { width: Math.min(420, width * 0.9), height: Math.min(560, height * 0.85) } : 
+                  undefined
+                }
+                hidePadding={appType === 'tetris' || (appType === 'terminal')} // Terminal handles its own padding
+                disableMinimize={zenMode} // Cannot minimize in Zen Mode
               >
                 {render()}
               </AppWindow>

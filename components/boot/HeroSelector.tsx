@@ -14,7 +14,6 @@ export default function HeroSelector({ defaultSeconds = 10, onSelect }: { defaul
     () => [
       { key: "7sg56" as const, label: "7sg56", desc: "Curated for Professionals", disabled: false, comingSoon: false },
       { key: "desktop" as const, label: "Desktop", desc: "For developers and admirers", isDefault: true, disabled: false, comingSoon: false },
-      { key: "terminal" as const, label: "Terminal", desc: "A Terminal about me", disabled: false, comingSoon: false },
     ],
     []
   );

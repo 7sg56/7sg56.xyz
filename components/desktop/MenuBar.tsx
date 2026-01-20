@@ -42,40 +42,7 @@ export default function MenuBar({ hidden = false, title = "7sg56", showSystemMen
     >
       <div className="flex items-center gap-3" ref={menuRef}>
         {showSystemMenu && (
-          <div className="relative" id="system-menu-anchor">
-            <button className="font-semibold px-2 py-0.5 bg-red-500/75 hover:bg-red-500 rounded-sm border border-white/10 transition-all hover:text-white shadow-sm text-xs" onClick={() => setOpen((v) => !v)}>
-              7sg56
-            </button>
-            {open && (
-              <div
-                className={`absolute top-full left-0 mt-1 min-w-[200px] 
-                  bg-[#0d0d0d] border border-zinc-700 
-                  shadow-[0px_10px_30px_rgba(0,0,0,0.5)] rounded-lg py-1.5 z-50
-                  flex flex-col animate-in fade-in zoom-in-95 duration-100 ease-out origin-top-left`}
-              >
-                  <div className="px-1.5 py-1 flex flex-col gap-0.5">
-                    <button
-                        className="w-full text-left px-3 py-1.5 rounded-md text-[13px] text-white/90 hover:bg-white/10 transition-colors duration-75"
-                        onClick={() => handleAction("terminal")}
-                      >
-                        Terminal
-                      </button>
-                      <button
-                        className="w-full text-left px-3 py-1.5 rounded-md text-[13px] text-white/90 hover:bg-white/10 transition-colors duration-75"
-                        onClick={() => handleAction("restart")}
-                      >
-                        Restart
-                      </button>
-                      <button
-                        className="w-full text-left px-3 py-1.5 rounded-md text-[13px] text-white/90 hover:bg-white/10 transition-colors duration-75"
-                        onClick={() => handleAction("shutdown")}
-                      >
-                        Shut Down
-                      </button>
-                  </div>
-              </div>
-            )}
-          </div>
+             <span className="font-bold">7sg56</span>
         )}
         <span className="font-semibold hidden sm:inline">{title}</span>
         <span className="text-zinc-400 hidden sm:inline"></span>

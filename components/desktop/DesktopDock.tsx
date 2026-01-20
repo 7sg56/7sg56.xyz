@@ -8,6 +8,7 @@ import {
     SkillsIcon,
     ContactIcon,
     TetrisIcon,
+    TerminalIcon,
 } from "./DesktopIcons"
 import { ResponsiveConfig } from "@/lib/responsive"
 import { DockApp, WindowAppType } from "./types"
@@ -23,6 +24,7 @@ export const dockApps: DockApp[] = [
     { id: "projects", name: "Projects", icon: "projects", appType: "projects" },
     { id: "skills", name: "Skills", icon: "skills", appType: "skills" },
     { id: "contact", name: "Contact", icon: "contact", appType: "contact" },
+    { id: "terminal", name: "Terminal", icon: "terminal", appType: "terminal" },
     { id: "tetris", name: "Tetris", icon: "tetris", appType: "tetris" },
 ]
 
@@ -61,6 +63,7 @@ const DesktopDock: React.FC<DesktopDockProps> = ({
                             {app.icon === "projects" && <ProjectsIcon />}
                             {app.icon === "skills" && <SkillsIcon />}
                             {app.icon === "contact" && <ContactIcon />}
+                            {app.icon === "terminal" && <TerminalIcon />}
                             {app.icon === "tetris" && <TetrisIcon />}
                            </div>
                            {/* Active Indicator */}

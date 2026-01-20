@@ -17,10 +17,14 @@ export type WindowProps = {
   initialSize?: { width: number; height: number };
   disableMinimize?: boolean;
   hidePadding?: boolean;
+  hideTitleBar?: boolean;
   origin?: DOMRect;
   onClose?: () => void;
   onMinimize?: () => void;
   onToggleFullscreen?: () => void;
+  titleBarColor?: string;
+  borderColor?: string;
+  backgroundColor?: string;
   children: React.ReactNode;
 };
 
@@ -34,10 +38,14 @@ export default function AppWindow({
   initialSize,
   disableMinimize = false,
   hidePadding = false,
+  hideTitleBar = false,
   origin,
   onClose,
   onMinimize,
   onToggleFullscreen,
+  titleBarColor,
+  borderColor,
+  backgroundColor,
   children,
 }: WindowProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -194,8 +202,8 @@ export default function AppWindow({
           (customSize || hidePadding ? " p-0" : " p-3")
         }
         style={{
-          borderColor: DEBUG_UI ? "#89b4fa" : "#27272a", // zinc-800
-          backgroundColor: "#0d0d0d", // solid hex
+          borderColor: borderColor || (DEBUG_UI ? "#89b4fa" : "#27272a"), // zinc-800
+          backgroundColor: backgroundColor || "#0d0d0d", // solid hex
           width: fullscreen ? "100%" : size.w,
           height: fullscreen ? "100%" : size.h,
           outline: DEBUG_UI ? "1px dashed #89b4fa" : undefined,
@@ -203,6 +211,7 @@ export default function AppWindow({
         }}
         {...dragProps}
       >
+        {!hideTitleBar && (
         <div
           className="flex items-center gap-2 pb-2 px-4 pt-3 cursor-move select-none group/window-controls"
           onDoubleClick={onToggleFullscreen || undefined}
@@ -235,7 +244,11 @@ export default function AppWindow({
               aria-label={onToggleFullscreen ? "Toggle fullscreen" : "Fullscreen disabled"}
               onPointerDown={(e) => e.stopPropagation()}
               onClick={onToggleFullscreen}
-              className={`w-4 h-4 rounded-full bg-[#27c93f] hover:bg-[#27c93f]/90 border border-[#1aab29] flex items-center justify-center text-black/50 opacity-100 hover:text-black/80 transition-all font-bold p-0 leading-none group-hover/window-controls:opacity-100 ${onToggleFullscreen ? 'cursor-pointer' : 'cursor-not-allowed  opacity-50'}`}
+              className={`w-4 h-4 rounded-full flex items-center justify-center text-black/50 opacity-100 hover:text-black/80 transition-all font-bold p-0 leading-none group-hover/window-controls:opacity-100 ${
+                onToggleFullscreen 
+                  ? 'bg-[#27c93f] hover:bg-[#27c93f]/90 border border-[#1aab29] cursor-pointer' 
+                  : 'bg-zinc-600 border border-zinc-500 cursor-not-allowed opacity-40 hover:bg-zinc-600'
+              }`}
             >
                <span className="opacity-0 group-hover/window-controls:opacity-100 transition-opacity rotate-45 transform origin-center flex items-center justify-center h-full w-full relative left-[0.5px] top-[0.5px]">
                   <svg width="8" height="8" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -249,6 +262,7 @@ export default function AppWindow({
             {title}
           </span>
         </div>
+        )}
         <div className={`flex-1 min-h-0 overflow-y-auto overscroll-contain scrollbar-hide ${customSize || hidePadding ? "" : "pr-2"}`} style={{ color: "#cdd6f4" }}>
           {children}
         </div>
