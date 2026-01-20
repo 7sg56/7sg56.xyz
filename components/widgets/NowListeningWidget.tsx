@@ -45,7 +45,7 @@ export default function NowListeningWidget({ span }: { span?: Span }) {
   };
 
   return (
-    <div className={`relative overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900/70 backdrop-blur shadow-[0_10px_30px_rgba(0,0,0,0.4)] h-full w-full ${spanToClasses(span)}`}>
+    <div className={`relative overflow-hidden rounded-xl border border-zinc-800 bg-[#0d0d0d] shadow-[0_10px_30px_rgba(0,0,0,0.4)] h-full w-full ${spanToClasses(span)}`}>
       <div className="h-full w-full p-2 flex flex-col relative overflow-hidden">
         {/* Current song */}
         <div className="flex-1 flex flex-col items-center justify-start text-center relative z-10 pt-4 w-full overflow-hidden">

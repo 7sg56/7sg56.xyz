@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 
 type DesktopBackgroundProps = {
   backgroundImage?: string;
@@ -19,12 +20,18 @@ export default function DesktopBackground({
       {backgroundColor ? (
         <div className="absolute inset-0" style={{ backgroundColor }} />
       ) : (
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: `url('${backgroundImage}')`,
-          }}
-        />
+        <div className="absolute inset-0 w-full h-full">
+           <Image
+            src={backgroundImage}
+            alt="Desktop Background"
+            fill
+            priority
+            placeholder="blur"
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+P+/HgAFhAJ/wlseKgAAAABJRU5ErkJggg=="
+            className="object-cover object-center"
+            quality={90}
+          />
+        </div>
       )}
       
       {/* Background Overlay */}

@@ -272,7 +272,7 @@ export default function DesktopOSPage() {
             <div className="text-white space-y-4 lg:space-y-6">
               {/* Main Name - Responsive Size */}
               <h1
-                className="font-black uppercase tracking-tight"
+                className="font-black uppercase tracking-tight font-canela"
                 style={{
                   fontSize: responsiveConfig.heroNameSize,
                   lineHeight: '0.9'

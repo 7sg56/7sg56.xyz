@@ -32,7 +32,7 @@ export default function TodoWidget({ span }: { span?: Span }) {
   }, []);
 
   return (
-    <div className={`relative overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900/70 backdrop-blur shadow-[0_10px_30px_rgba(0,0,0,0.4)] h-full w-full ${spanToClasses(span)}`}>
+    <div className={`relative overflow-hidden rounded-xl border border-zinc-800 bg-[#0d0d0d] shadow-[0_10px_30px_rgba(0,0,0,0.4)] h-full w-full ${spanToClasses(span)}`}>
       <div className="h-full w-full p-4 flex flex-col">
         <div className="text-xs font-mono text-zinc-400 mb-3">Things I be doing</div>
         <div className="flex-1 flex items-center justify-center overflow-hidden">

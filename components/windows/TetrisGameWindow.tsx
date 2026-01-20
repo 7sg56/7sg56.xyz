@@ -343,7 +343,7 @@ export default function TetrisGameWindow() {
   return (
     <div className="relative h-full w-full flex flex-row p-2 gap-2 overflow-hidden">
       {/* LEFT: Game Board */}
-      <div className="h-full flex-grow relative bg-black/20 rounded-xl border border-white/5 min-w-0 overflow-hidden">
+      <div className="h-full flex-grow relative bg-zinc-900 rounded-xl border border-white/5 min-w-0 overflow-hidden">
         {/* Absolute wrapper to decouple size from flex flow */}
         <div ref={containerRef} className="absolute inset-0 flex items-center justify-center p-1">
           <div
@@ -370,7 +370,7 @@ export default function TetrisGameWindow() {
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
           <div className="text-center pointer-events-auto">
             {gameState === 'idle' && (
-              <div className="bg-black/80 backdrop-blur-md rounded-2xl p-6 space-y-4 border border-zinc-700 shadow-2xl">
+              <div className="bg-zinc-900 rounded-2xl p-6 space-y-4 border border-zinc-700 shadow-2xl">
                 <div className="text-3xl font-bold text-white tracking-tight">Tetris</div>
                 <button
                   onClick={startGame}
@@ -382,7 +382,7 @@ export default function TetrisGameWindow() {
             )}
 
             {gameState === 'over' && (
-              <div className="bg-black/80 backdrop-blur-md rounded-2xl p-6 space-y-4 border border-zinc-700 shadow-2xl">
+              <div className="bg-zinc-900 rounded-2xl p-6 space-y-4 border border-zinc-700 shadow-2xl">
                 <div className="text-xl font-bold text-red-400">Game Over</div>
                 <div className="text-3xl font-mono text-white tracking-wider">{score}</div>
                 <button
@@ -401,7 +401,7 @@ export default function TetrisGameWindow() {
       <div className="w-40 flex flex-col gap-3 min-w-[160px] flex-shrink-0 z-10">
 
         {/* Next Piece Window */}
-        <div className="bg-black/20 rounded-xl p-3 border border-white/5 flex flex-col items-center gap-2 aspect-square justify-center">
+        <div className="bg-zinc-900 rounded-xl p-3 border border-white/5 flex flex-col items-center gap-2 aspect-square justify-center">
           <div className="text-xs text-zinc-400 font-medium uppercase tracking-wider">Next</div>
           <div className="grid gap-1 w-20 h-20 items-center justify-center">
             {nextPiece && (
@@ -427,13 +427,13 @@ export default function TetrisGameWindow() {
         </div>
 
         {/* Score Card */}
-        <div className="bg-black/20 rounded-xl p-3 border border-white/5 flex flex-col gap-1">
+        <div className="bg-zinc-900 rounded-xl p-3 border border-white/5 flex flex-col gap-1">
           <div className="text-xs text-zinc-500 uppercase tracking-widest font-semibold">Score</div>
           <div className="text-2xl text-white font-mono font-bold tracking-tight">{score}</div>
         </div>
 
         {/* Controls Card */}
-        <div className="bg-black/20 rounded-xl p-3 border border-white/5 flex flex-col gap-2 flex-grow min-h-0 overflow-y-auto scrollbar-hide">
+        <div className="bg-zinc-900 rounded-xl p-3 border border-white/5 flex flex-col gap-2 flex-grow min-h-0 overflow-y-auto scrollbar-hide">
           <div className="text-xs text-zinc-500 uppercase tracking-widest font-semibold flex items-center gap-2">
             Controls
           </div>

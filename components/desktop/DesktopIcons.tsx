@@ -2,9 +2,9 @@ import React from "react";
 
 export const AboutIcon = () => (
     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="16" cy="16" r="14" fill="#f8fafc" fillOpacity="0.1" stroke="#f8fafc" strokeWidth="2" />
-        <circle cx="16" cy="12" r="3" fill="#f8fafc" />
-        <path d="M8 24c0-4 3.5-7 8-7s8 3 8 7" stroke="#f8fafc" strokeWidth="2" strokeLinecap="round" />
+        <circle cx="16" cy="16" r="14" fill="#ef4444" fillOpacity="0.1" stroke="#ef4444" strokeWidth="2" />
+        <circle cx="16" cy="12" r="3" fill="#ef4444" />
+        <path d="M8 24c0-4 3.5-7 8-7s8 3 8 7" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" />
     </svg>
 );
 

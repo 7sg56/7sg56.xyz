@@ -195,57 +195,61 @@ export default function AppWindow({
         }
         style={{
           borderColor: DEBUG_UI ? "#89b4fa" : "#27272a", // zinc-800
-          backgroundColor: "rgba(24, 24, 26, 0.85)", // transparent primary surface
-          backdropFilter: "blur(12px)",
+          backgroundColor: "#0d0d0d", // solid hex
           width: fullscreen ? "100%" : size.w,
           height: fullscreen ? "100%" : size.h,
           outline: DEBUG_UI ? "1px dashed #89b4fa" : undefined,
+          boxShadow: "0 0 0 1px rgba(255,255,255,0.1), 0 20px 50px -12px rgba(0,0,0,0.7)",
         }}
         {...dragProps}
       >
         <div
-          className="flex items-center gap-2 pb-2 px-3 pt-3 cursor-move select-none"
+          className="flex items-center gap-2 pb-2 px-4 pt-3 cursor-move select-none group/window-controls"
           onDoubleClick={onToggleFullscreen || undefined}
           onPointerDown={(e) => dragControls.start(e)}
         >
-          <button
-            type="button"
-            title="Close"
-            aria-label="Close"
-            onPointerDown={(e) => e.stopPropagation()}
-            onClick={onClose}
-            className="h-4 w-4 rounded-full cursor-pointer hover:brightness-110 transition-all"
-            style={{ backgroundColor: "#f38ba8" }}
-          />
-          <button
-            type="button"
-            title={disableMinimize ? "Minimize disabled" : "Minimize"}
-            aria-label={disableMinimize ? "Minimize disabled" : "Minimize"}
-            onPointerDown={(e) => e.stopPropagation()}
-            onClick={disableMinimize ? undefined : onMinimize}
-            className={`h-4 w-4 rounded-full hover:brightness-110 transition-all ${disableMinimize ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-            style={{
-              backgroundColor: disableMinimize ? "#6b7280" : "#f9e2af",
-              opacity: disableMinimize ? 0.5 : 1
-            }}
-          />
-          <button
-            type="button"
-            title={onToggleFullscreen ? "Toggle fullscreen" : "Fullscreen disabled"}
-            aria-label={onToggleFullscreen ? "Toggle fullscreen" : "Fullscreen disabled"}
-            onPointerDown={(e) => e.stopPropagation()}
-            onClick={onToggleFullscreen}
-            className={`h-4 w-4 rounded-full hover:brightness-110 transition-all ${onToggleFullscreen ? 'cursor-pointer' : 'cursor-not-allowed'}`}
-            style={{
-              backgroundColor: onToggleFullscreen ? "#a6e3a1" : "#6b7280",
-              opacity: onToggleFullscreen ? 1 : 0.5
-            }}
-          />
-          <span className="ml-3 text-xs" style={{ color: "#a6adc8" }}>
+          <div className="flex gap-2.5">
+            <button
+              type="button"
+              title="Close"
+              aria-label="Close"
+              onPointerDown={(e) => e.stopPropagation()}
+              onClick={onClose}
+              className="w-4 h-4 rounded-full bg-[#ff5f56] hover:bg-[#ff5f56]/90 border border-[#e0443e] flex items-center justify-center text-black/50 opacity-100 hover:text-black/80 transition-all font-bold p-0 leading-none group-hover/window-controls:opacity-100"
+            >
+              <span className="opacity-0 group-hover/window-controls:opacity-100 transition-opacity text-[11px] relative top-[0.5px]">×</span>
+            </button>
+            <button
+              type="button"
+              title={disableMinimize ? "Minimize disabled" : "Minimize"}
+              aria-label={disableMinimize ? "Minimize disabled" : "Minimize"}
+              onPointerDown={(e) => e.stopPropagation()}
+              onClick={disableMinimize ? undefined : onMinimize}
+              className={`w-4 h-4 rounded-full bg-[#ffbd2e] hover:bg-[#ffbd2e]/90 border border-[#dea123] flex items-center justify-center text-black/50 opacity-100 hover:text-black/80 transition-all font-bold p-0 leading-none group-hover/window-controls:opacity-100 ${disableMinimize ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
+            >
+              <span className="opacity-0 group-hover/window-controls:opacity-100 transition-opacity text-[10px] relative bottom-[0.5px]">−</span>
+            </button>
+            <button
+              type="button"
+              title={onToggleFullscreen ? "Toggle fullscreen" : "Fullscreen disabled"}
+              aria-label={onToggleFullscreen ? "Toggle fullscreen" : "Fullscreen disabled"}
+              onPointerDown={(e) => e.stopPropagation()}
+              onClick={onToggleFullscreen}
+              className={`w-4 h-4 rounded-full bg-[#27c93f] hover:bg-[#27c93f]/90 border border-[#1aab29] flex items-center justify-center text-black/50 opacity-100 hover:text-black/80 transition-all font-bold p-0 leading-none group-hover/window-controls:opacity-100 ${onToggleFullscreen ? 'cursor-pointer' : 'cursor-not-allowed  opacity-50'}`}
+            >
+               <span className="opacity-0 group-hover/window-controls:opacity-100 transition-opacity rotate-45 transform origin-center flex items-center justify-center h-full w-full relative left-[0.5px] top-[0.5px]">
+                  <svg width="8" height="8" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0.5 3L5.5 3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+                    <path d="M3 0.5L3 5.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+                  </svg>
+               </span>
+            </button>
+          </div>
+          <span className="ml-4 text-[15px] font-medium text-zinc-300">
             {title}
           </span>
         </div>
-        <div className={`flex-1 min-h-0 overflow-y-auto overscroll-contain ${customSize || hidePadding ? "" : "pr-2"}`} style={{ color: "#cdd6f4" }}>
+        <div className={`flex-1 min-h-0 overflow-y-auto overscroll-contain scrollbar-hide ${customSize || hidePadding ? "" : "pr-2"}`} style={{ color: "#cdd6f4" }}>
           {children}
         </div>
 

@@ -9,7 +9,7 @@ export default function DateNowWidget() {
   const dayNumber = now.getDate();
 
   return (
-    <div className="relative overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900/70 backdrop-blur shadow-[0_10px_30px_rgba(0,0,0,0.4)] h-full w-full">
+    <div className="relative overflow-hidden rounded-xl border border-zinc-800 bg-[#0d0d0d] shadow-[0_10px_30px_rgba(0,0,0,0.4)] h-full w-full">
       <div className="h-full w-full p-4 flex flex-col items-center justify-center">
         {/* Day and Month on same line */}
         <div className="text-center mb-3">
