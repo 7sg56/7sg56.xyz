@@ -6,17 +6,25 @@ export function Banner({ visible }: { visible: boolean }) {
     if (!visible) return null;
 
     return (
-        <div className="text-zinc-300">
-            <img 
-                src="/banner-name.svg" 
-                alt="Banner" 
-                className="w-full h-auto max-w-4xl filter invert opacity-85 select-none pointer-events-none pt-4"
-                draggable={false}
-            />
-            <div className="mt-1 text-xs md:text-sm" style={{ color: "#a6adc8" }}>Built by <a href="https://github.com/7sg56" target="_blank" rel="noopener noreferrer" className="text-zinc-200 hover:text-green-400 underline">Sourish Ghosh</a>. Type <span className="text-zinc-200">help</span> to see available commands.</div>
+        <div className="text-zinc-300 animate-in fade-in slide-in-from-top-4 duration-1000 mb-6">
+            <div className="relative overflow-hidden group py-6">
+                <img 
+                    src="/banner-name.svg" 
+                    alt="Banner" 
+                    className="w-full h-auto max-w-4xl filter invert opacity-85 select-none pointer-events-none crt-flicker"
+                    draggable={false}
+                />
+            </div>
+            <div className="mt-2 text-xs md:text-sm opacity-80 space-y-1" style={{ color: "#a6adc8" }}>
+                <div>
+                   Built by <a href="https://github.com/7sg56" target="_blank" rel="noopener noreferrer" className="text-green-400 hover:text-green-300 font-bold underline decoration-green-400/30 underline-offset-4">Sourish Ghosh</a>.
+                </div>
+                <div>
+                   Type <span className="text-green-400 font-bold text-base mx-1 crt-glow">help</span> to see available commands.
+                </div>
+            </div>
         </div>
     );
-
 }
 
 export function Prompt({ text }: { text: string }) {
@@ -25,11 +33,13 @@ export function Prompt({ text }: { text: string }) {
         return match ? [match[1], match[2], match[3]] : [text, "", ""];
     }, [text]);
     return (
-        <span className="shrink-0 select-none">
-            <span style={{ color: "#a6e3a1" }}>{user}</span>
-            <span className="text-zinc-400">@</span>
-            <span style={{ color: "#89b4fa" }}>{host}</span>
-            <span className="text-zinc-400">{path}$</span>
+        <span className="shrink-0 select-none font-bold">
+            <span className="text-green-400">{user}</span>
+            <span className="text-zinc-500 font-normal">@</span>
+            <span className="text-blue-400 crt-glow">{host}</span>
+            <span className="text-zinc-400 font-normal">:</span>
+            <span className="text-blue-300">{path}</span>
+            <span className="text-zinc-400 font-normal">$</span>
         </span>
     );
 }

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Fraunces } from "next/font/google";
+import { Inter, Walter_Turncoat } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -7,10 +7,10 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-const canela = Fraunces({
-  variable: "--font-canela",
+const walterTurncoat = Walter_Turncoat({
+  variable: "--font-walter-turncoat",
   subsets: ["latin"],
-  axes: ["SOFT", "WONK", "opsz"],
+  weight: "400",
 });
 
 export const metadata: Metadata = {
@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${canela.variable} antialiased font-mono bg-black`}
+        className={`${inter.variable} ${walterTurncoat.variable} antialiased font-mono bg-black`}
         suppressHydrationWarning
       >
         {children}

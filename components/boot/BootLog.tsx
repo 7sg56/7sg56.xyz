@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
-export default function BootLog({ progress, title = "Booting Sourish’s Playground…" }: { progress: number; title?: string }) {
+export default function BootLog({ progress, title = "Booting Sourish’s Playground…", onComplete }: { progress: number; title?: string; onComplete?: () => void }) {
   const lines = useMemo(
     () => [
       "7SG56 BIOS v2.0   © 2024 Sourish Ghosh",
@@ -23,7 +23,7 @@ export default function BootLog({ progress, title = "Booting Sourish’s Playgro
       "Tech Device Listing...",
       " Bus  Dev  Fun  Vendor  Device  Class   IRQ",
       " 00   01   00   React   18.0    UI      --",
-      " 00   02   00   Next.js 14.0    SSR     14",
+      " 00   02   00   Next.js 15.0    SSR     14",
       " 00   02   01   Framer  Motion  Anim    11",
       " 00   02   02   Tailwind CSS    Styles  10",
       " 00   09   00   Supabase DB     Backend 12",
@@ -46,18 +46,24 @@ export default function BootLog({ progress, title = "Booting Sourish’s Playgro
     []
   );
 
-  const [visible, setVisible] = useState(0);
+  const [visible, setVisible] = useState(2);
   const endRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (visible >= lines.length) return;
+    if (visible >= lines.length) {
+      if (onComplete) {
+        const timer = setTimeout(onComplete, 800);
+        return () => clearTimeout(timer);
+      }
+      return;
+    }
     const jitter = (min: number, max: number) => Math.random() * (max - min) + min;
     // Calculate timing to complete in max 2 seconds
     const totalTime = 2000; // 2 seconds in milliseconds
     const timePerLine = totalTime / lines.length;
-    const timer = setTimeout(() => setVisible((v) => Math.min(lines.length, v + 1)), jitter(timePerLine * 0.5, timePerLine * 1.5));
+    const timer = setTimeout(() => setVisible((v) => Math.min(lines.length, v + 1)), jitter(10, 50));
     return () => clearTimeout(timer);
-  }, [visible, lines.length]);
+  }, [visible, lines.length, onComplete]);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });

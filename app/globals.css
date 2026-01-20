@@ -1,15 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Walter+Turncoat&display=swap');
+@import "tw-animate-css";
 @import "tailwindcss";
 
 @theme {
-  --font-canela: var(--font-canela);
+  --font-walter-turncoat: var(--font-walter-turncoat);
 }
 
-.font-canela {
-  font-family: var(--font-canela), ui-serif, system-ui, serif;
-  font-variation-settings: "SOFT" 100, "WONK" 1;
+.font-walter {
+  font-family: "Walter Turncoat", cursive;
 }
-
-@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
