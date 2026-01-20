@@ -60,12 +60,12 @@ export default function Home() {
                     defaultSeconds={10}
                     onSelect={(m) => {
                       if (m === 'desktop') {
-                        router.push('/portfolio/desktop');
+                        router.push('/desktop');
                       } else if (m === 'terminal') {
-                        router.push('/portfolio/terminal');
+                        router.push('/terminal');
                       } else if (m === '7sg56') {
                         // TODO: Update this URL when 7sg56.vercel.app is deployed
-                        alert('7sg56 portfolio coming soon!');
+                        alert('Sourish-Ghosh portfolio coming soon!');
                       }
                     }}
                   />

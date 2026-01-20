@@ -14,7 +14,7 @@ import TetrisGameWindow from "@/components/windows/TetrisGameWindow";
 import TodoWidget from "@/components/widgets/TodoWidget";
 import NowListeningWidget from "@/components/widgets/NowListeningWidget";
 import DateNowWidget from "@/components/widgets/DateNowWidget";
-import TechStackStrip from "@/components/TechStackStrip";
+import TechStackStrip from "@/components/tech-marquee";
 import { getResponsiveConfig } from "@/lib/responsive";
 import AnimatedRoleText from "@/components/desktop/AnimatedRoleText";
 import DesktopDock from "@/components/desktop/DesktopDock";
@@ -255,10 +255,10 @@ export default function DesktopOSPage() {
         }}
       >
         {/* Desktop Background */}
-        <DesktopBackground backgroundImage="/bg3.png" overlay={false} />
+        <DesktopBackground backgroundImage="/Julius-Caesar.webp" overlay={false} />
 
         {/* Menu Bar */}
-        <MenuBar title={focusedWindow ? WINDOW_CONFIG[focusedWindow]?.title : "Desktop"} showSystemMenu={true} terminalHref="/portfolio/terminal" shutdownHref="/" />
+        <MenuBar title={focusedWindow ? WINDOW_CONFIG[focusedWindow]?.title : "Desktop"} showSystemMenu={true} terminalHref="/terminal" shutdownHref="/" />
 
         {/* Hero Text - Using Responsive System */}
         <div

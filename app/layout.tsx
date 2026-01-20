@@ -9,7 +9,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Sourish Ghosh",
-  description: "This is the portfolio of Sourish Ghosh",
+  description: "This is a website of Sourish Ghosh",
 };
 
 export default function RootLayout({

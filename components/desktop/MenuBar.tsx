@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function MenuBar({ hidden = false, title = "7sg56", showSystemMenu = false, terminalHref = "/portfolio/terminal", shutdownHref = "/gui" }: { hidden?: boolean; title?: string; showSystemMenu?: boolean; terminalHref?: string; shutdownHref?: string }) {
+export default function MenuBar({ hidden = false, title = "7sg56", showSystemMenu = false, terminalHref = "/terminal", shutdownHref = "/gui" }: { hidden?: boolean; title?: string; showSystemMenu?: boolean; terminalHref?: string; shutdownHref?: string }) {
   const [now, setNow] = useState<string>("");
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);

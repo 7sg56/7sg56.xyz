@@ -216,7 +216,7 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
       <div className="w-full h-full flex flex-col min-h-0">
         {chrome && (
           <div className="flex items-center gap-2 pb-2">
-            <span className="ml-3 text-xs" style={{ color: "#a6adc8" }}>sourish@portfolio — zsh</span>
+            <span className="ml-3 text-xs" style={{ color: "#a6adc8" }}>sourish@terminal — zsh</span>
           </div>
         )}
         <div
@@ -269,7 +269,7 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
       <div className="pointer-events-auto rounded-lg border backdrop-blur p-3" style={frameStyle}>
         {chrome && (
           <div className="flex items-center gap-2 pb-2">
-            <span className="ml-3 text-xs" style={{ color: "#a6adc8" }}>sourish@portfolio — zsh</span>
+            <span className="ml-3 text-xs" style={{ color: "#a6adc8" }}>7sg56@terminal — zsh</span>
           </div>
         )}
 

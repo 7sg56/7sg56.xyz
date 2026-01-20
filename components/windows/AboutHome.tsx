@@ -104,7 +104,7 @@ export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
                 </div>
 
                 <p className="text-gray-200 leading-relaxed text-lg mb-4">
-                  Thanks for taking the time to explore my portfolio. I hope you enjoy it as much as I enjoyed developing it!
+                  Thanks for taking the time to explore my website. I hope you enjoy it as much as I enjoyed developing it!
                 </p>
 
                 <div className="flex items-center gap-2 p-4 bg-black/30 rounded-lg border border-red-500/20">

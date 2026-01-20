@@ -3,10 +3,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
-export default function BootLog({ progress, title = "Booting Sourish’s Portfolio…" }: { progress: number; title?: string }) {
+export default function BootLog({ progress, title = "Booting Sourish’s Playground…" }: { progress: number; title?: string }) {
   const lines = useMemo(
     () => [
-      "SOURISH PORTFOLIO BIOS v2.0   © 2024 Sourish Microsystems",
+      "7SG56 BIOS v2.0   © 2024 Sourish Ghosh",
       "Primary Master:  Next.js SSD  2TB  LBA",
       "Primary Slave :  React Framework  1TB",
       "Secondary Mast:  TypeScript CD-ROM",
@@ -20,7 +20,7 @@ export default function BootLog({ progress, title = "Booting Sourish’s Portfol
       "Detecting IDE Primary Master...    Next.js SSD",
       "Detecting IDE Secondary Master...  TypeScript CD-ROM",
       "",
-      "Portfolio Device Listing...",
+      "Tech Device Listing...",
       " Bus  Dev  Fun  Vendor  Device  Class   IRQ",
       " 00   01   00   React   18.0    UI      --",
       " 00   02   00   Next.js 14.0    SSR     14",
@@ -30,10 +30,10 @@ export default function BootLog({ progress, title = "Booting Sourish’s Portfol
       "",
       "Press DEL to enter SETUP, F12 for Boot Menu",
       "Verifying DMI Pool Data............. OK",
-      "Boot from Portfolio CD-ROM :  ...",
+      "Boot from CD-ROM Sector 1 :  ...",
       "Boot from Desktop Environment...",
       "",
-      "Loading Portfolio OS...",
+      "Loading OS...",
       "Initializing modules: about, projects, skills, contact, tetris",
       "Mounting desktop directory... OK",
       "Starting widgets: todo, now-listening, date-now... OK",
