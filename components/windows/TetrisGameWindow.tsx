@@ -371,10 +371,10 @@ export default function TetrisGameWindow() {
           <div className="text-center pointer-events-auto">
             {gameState === 'idle' && (
               <div className="bg-zinc-900 rounded-2xl p-6 space-y-4 border border-zinc-700 shadow-2xl">
-                <div className="text-3xl font-bold text-white tracking-tight">Tetris</div>
+                <div className="text-2xl font-bold text-white tracking-tight">Tetris</div>
                 <button
                   onClick={startGame}
-                  className="px-8 py-3 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white rounded-xl transition-all font-semibold shadow-lg hover:shadow-red-500/20 active:scale-95"
+                  className="px-6 py-2 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white rounded-xl transition-all font-semibold shadow-lg hover:shadow-red-500/20 active:scale-95 text-sm"
                 >
                   Start Game
                 </button>
@@ -383,11 +383,11 @@ export default function TetrisGameWindow() {
 
             {gameState === 'over' && (
               <div className="bg-zinc-900 rounded-2xl p-6 space-y-4 border border-zinc-700 shadow-2xl">
-                <div className="text-xl font-bold text-red-400">Game Over</div>
-                <div className="text-3xl font-mono text-white tracking-wider">{score}</div>
+                <div className="text-lg font-bold text-red-400">Game Over</div>
+                <div className="text-2xl font-mono text-white tracking-wider">{score}</div>
                 <button
                   onClick={startGame}
-                  className="px-8 py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl transition-all font-medium border border-zinc-600 hover:border-zinc-500"
+                  className="px-6 py-2 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl transition-all font-medium border border-zinc-600 hover:border-zinc-500 text-sm"
                 >
                   Play Again
                 </button>
@@ -398,12 +398,12 @@ export default function TetrisGameWindow() {
       </div>
 
       {/* RIGHT: Sidebar */}
-      <div className="w-40 flex flex-col gap-3 min-w-[160px] flex-shrink-0 z-10">
+      <div className="w-32 flex flex-col gap-3 min-w-[128px] flex-shrink-0 z-10">
 
         {/* Next Piece Window */}
         <div className="bg-zinc-900 rounded-xl p-3 border border-white/5 flex flex-col items-center gap-2 aspect-square justify-center">
           <div className="text-xs text-zinc-400 font-medium uppercase tracking-wider">Next</div>
-          <div className="grid gap-1 w-20 h-20 items-center justify-center">
+          <div className="grid gap-1 w-16 h-16 items-center justify-center">
             {nextPiece && (
               <div
                 className="grid gap-0.5"
@@ -429,7 +429,7 @@ export default function TetrisGameWindow() {
         {/* Score Card */}
         <div className="bg-zinc-900 rounded-xl p-3 border border-white/5 flex flex-col gap-1">
           <div className="text-xs text-zinc-500 uppercase tracking-widest font-semibold">Score</div>
-          <div className="text-2xl text-white font-mono font-bold tracking-tight">{score}</div>
+          <div className="text-xl text-white font-mono font-bold tracking-tight">{score}</div>
         </div>
 
         {/* Controls Card */}

@@ -11,7 +11,7 @@ export function Banner({ visible }: { visible: boolean }) {
                 <img 
                     src="/banner-name.svg" 
                     alt="Banner" 
-                    className="w-full h-auto max-w-4xl filter invert opacity-85 select-none pointer-events-none crt-flicker"
+                    className="w-[75%] h-auto max-w-3xl filter invert opacity-85 select-none pointer-events-none crt-flicker"
                     draggable={false}
                 />
             </div>

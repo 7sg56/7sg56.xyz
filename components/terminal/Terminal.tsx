@@ -22,13 +22,15 @@ type TerminalProps = {
   showFooter?: boolean; // controls bottom hint/footer
   sessionKey?: string; // when this changes, the terminal clears history (new session)
   scrollMode?: 'internal' | 'page'; // 'internal' uses an inner scroll container; 'page' lets the whole page scroll
+  onZenModeChange?: (enabled: boolean) => void;
+  zenMode?: boolean;
 };
 
-export default function Terminal({ embedded = false, chrome = true, externalCommand = null, onExternalConsumed, showBanner = true, scrollHeightClass, showFooter = true, sessionKey, scrollMode = 'internal' }: TerminalProps) {
+export default function Terminal({ embedded = false, chrome = true, externalCommand = null, onExternalConsumed, showBanner = true, scrollHeightClass, showFooter = true, sessionKey, scrollMode = 'internal', onZenModeChange, zenMode = false }: TerminalProps) {
   const [history, setHistory] = useState<HistoryItem[]>(() => []);
   const [input, setInput] = useState("");
   const [historyIndex, setHistoryIndex] = useState<number | null>(null);
-  const [theme, setTheme] = useState<ThemeName>("mocha");
+  const [theme, setTheme] = useState<ThemeName>("default");
   const [bannerVisible, setBannerVisible] = useState(showBanner);
   const [prompt, setPrompt] = useState<string>("s0urish@7sg56:~");
   const [autoScroll, setAutoScroll] = useState<boolean>(true);
@@ -145,6 +147,8 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
   const env: Env = useMemo(() => ({
     setTheme,
     setBannerVisible,
+    setZenMode: onZenModeChange,
+    zenMode,
     setPrompt,
     open: (url: string) => {
       try {
@@ -160,7 +164,7 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
     prompt,
     bannerVisible,
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }), [theme, prompt, bannerVisible]);
+  }), [theme, prompt, bannerVisible, onZenModeChange, zenMode]);
 
   const run = useCallback((raw: string) => {
     const id = generateUUID();
@@ -250,13 +254,13 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
         <div
           ref={containerRef}
           className={`${scrollMode === 'internal' ? 'overscroll-contain overflow-y-auto' : 'overflow-visible'} px-3 font-mono text-base md:text-sm flex-1 min-h-0 ${scrollHeightClass ?? ""}`}
-          style={{ color: "#cdd6f4" }}
+          style={{ color: "#e4e4e7" }}
           onScroll={scrollMode === 'internal' ? onScroll : undefined}
           onClick={() => inputRef.current?.focus()}
         >
-          <div className="sticky top-0 z-20 bg-black pb-1">
+          <div className="z-20 -mx-3 px-3 pt-2 pb-1 bg-zinc-950">
             <Banner visible={bannerVisible} />
-            <div className="my-3 border-t" style={{ borderColor: "#313244" }} />
+            <div className="my-3 border-t border-zinc-800" />
           </div>
           <div className="max-w-[1100px] px-2 md:px-0">
             {history.map(item => (
@@ -310,11 +314,11 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
         <div 
           ref={containerRef} 
           className="h-[70vh] md:h-[70vh] overscroll-contain overflow-y-auto px-3 font-mono text-base md:text-sm" 
-          style={{ color: "#cdd6f4" }} 
+          style={{ color: "#e4e4e7" }} 
           onScroll={onScroll}
           onClick={() => inputRef.current?.focus()}
         >
-          <div className="sticky top-0 z-20 -mx-3 px-3 pt-2 pb-1" style={{ backgroundColor: theme === "mocha" ? "#1e1e2e" : "#000000" }}>
+          <div className="z-20 -mx-3 px-3 pt-2 pb-1" style={{ backgroundColor: theme === "mocha" ? "#1e1e2e" : "#000000" }}>
             <Banner visible={bannerVisible} />
             <div className="my-3 border-t" style={{ borderColor: "#313244" }} />
           </div>

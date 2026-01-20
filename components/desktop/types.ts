@@ -1,5 +1,5 @@
-export type AppType = "about" | "projects" | "skills" | "contact" | "tetris";
-export type WindowAppType = Exclude<AppType, "terminal">;
+export type AppType = "about" | "projects" | "skills" | "contact" | "tetris" | "terminal";
+export type WindowAppType = AppType;
 
 export type DockApp = {
     id: string;

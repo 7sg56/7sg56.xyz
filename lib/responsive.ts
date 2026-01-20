@@ -127,8 +127,8 @@ const configs: Record<ScreenSize, ResponsiveConfig> = {
   },
   
   lg: {
-    heroNameSize: '3.5rem',
-    heroTaglineSize: '1.125rem',
+    heroNameSize: '3rem',
+    heroTaglineSize: '1.25rem',
     heroLeft: 32,
     heroTop: 180,
     widgetScale: 0.8,
@@ -152,8 +152,8 @@ const configs: Record<ScreenSize, ResponsiveConfig> = {
   },
   
   xl: {
-    heroNameSize: '4rem',
-    heroTaglineSize: '1.25rem',
+    heroNameSize: '5rem',
+    heroTaglineSize: '1.5rem',
     heroLeft: 40,
     heroTop: 200,
     widgetScale: 1,
@@ -177,8 +177,8 @@ const configs: Record<ScreenSize, ResponsiveConfig> = {
   },
   
   '2xl': {
-    heroNameSize: '5rem',
-    heroTaglineSize: '1.5rem',
+    heroNameSize: '7rem',
+    heroTaglineSize: '1.75rem',
     heroLeft: 48,
     heroTop: 240,
     widgetScale: 1.2,
@@ -202,8 +202,8 @@ const configs: Record<ScreenSize, ResponsiveConfig> = {
   },
   
   '4k': {
-    heroNameSize: '6rem',
-    heroTaglineSize: '1.75rem',
+    heroNameSize: '9rem',
+    heroTaglineSize: '2rem',
     heroLeft: 64,
     heroTop: 300,
     widgetScale: 1.5,

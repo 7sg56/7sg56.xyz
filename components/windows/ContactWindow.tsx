@@ -16,12 +16,12 @@ export default function ContactWindow() {
 
   return (
     <div className="h-full flex flex-col relative z-50">
-      <div className="flex-1 overflow-y-auto p-6 scrollbar-hide">
-        <div className="max-w-3xl mx-auto space-y-10 mt-12 bg-zinc-900 border border-white/5 rounded-2xl p-8 sm:p-12 shadow-md">
+      <div className="flex-1 overflow-y-auto p-4 scrollbar-hide flex items-center justify-center">
+        <div className="w-full max-w-3xl mx-auto space-y-6 bg-zinc-900 border border-white/5 rounded-2xl p-6 sm:p-8 shadow-md">
           {/* Header */}
-          <div className="text-center space-y-3">
-            <h1 className="text-4xl font-black text-white tracking-tight">Get in Touch</h1>
-            <p className="text-zinc-400 text-lg">I&apos;m always ready to collaborate and build things together!</p>
+          <div className="text-center space-y-2">
+            <h1 className="text-3xl font-black text-white tracking-tight">Get in Touch</h1>
+            <p className="text-zinc-400 text-base">I&apos;m always ready to collaborate and build things together!</p>
           </div>
 
           {/* Social Links Grid */}

@@ -24,6 +24,8 @@ export type ThemeName = "default" | "mocha";
 
 export type Env = {
   setTheme: (name: ThemeName) => void;
+  setZenMode?: (enabled: boolean) => void;
+  zenMode?: boolean;
   setBannerVisible: (v: boolean) => void;
   setPrompt: (p: string) => void;
   open: (url: string) => void;
@@ -95,9 +97,20 @@ export const commands: Record<string, CommandHandler> = {
         <div>Return to GRUB menu</div>
         <div className="text-green-400">clear</div>
         <div>Clear terminal</div>
+        <div className="text-green-400">zen</div>
+        <div>Toggle Zen Mode</div>
       </div>
     </div>
   ),
+
+  zen: (_args, env) => {
+    if (env.setZenMode) {
+        const newState = !env.zenMode;
+        env.setZenMode(newState);
+        return <div className="text-zinc-400">{newState ? "Entering Zen Mode... (Type 'zen' to exit)" : "Exiting Zen Mode..."}</div>;
+    }
+    return <div className="text-red-400">Zen Mode not available in this environment.</div>;
+  },
 
   // hobbies
   hobbies: () => {
