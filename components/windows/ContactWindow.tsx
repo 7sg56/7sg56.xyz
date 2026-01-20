@@ -15,41 +15,67 @@ export default function ContactWindow() {
   ];
 
   return (
-    <div className="h-full flex flex-col bg-black/40 backdrop-blur-sm relative z-50">
-      <div className="flex-1 overflow-y-auto p-6">
-        <div className="max-w-4xl mx-auto space-y-6 mt-8">
+    <div className="h-full flex flex-col relative z-50">
+      <div className="flex-1 overflow-y-auto p-6 scrollbar-hide">
+        <div className="max-w-3xl mx-auto space-y-10 mt-12 bg-zinc-900 border border-white/5 rounded-2xl p-8 sm:p-12 shadow-md">
           {/* Header */}
-          <div className="text-center">
-            <h1 className="text-3xl font-bold text-white mb-2">Contact</h1>
-            <p className="text-gray-300">Get in touch with me</p>
+          <div className="text-center space-y-3">
+            <h1 className="text-4xl font-black text-white tracking-tight">Get in Touch</h1>
+            <p className="text-zinc-400 text-lg">I&apos;m always ready to collaborate and build things together!</p>
           </div>
 
-          {/* Social Links */}
-          <div className="max-w-2xl mx-auto">
-            <p className="text-gray-200 font-bold text-center mb-6">
-              I&apos;m always ready to collaborate and build things together!
-              <br />
-              <span className="text-red-400">Let&apos;s connect and make it happen.</span>
-            </p>
-            <div className="rounded-lg p-6 border border-red-500/20 bg-black/30">
-              <div className="space-y-4">
-                {socialLinks.map((link) => (
-                  <div key={link.name} className="space-y-1">
-                    <div className="text-white font-medium">
-                      {link.name} : <a
-                        href={link.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-red-400 hover:text-red-300 hover:underline transition-colors font-medium"
-                      >
-                        {link.url}
-                      </a>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+          {/* Social Links Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+             {socialLinks.map((link) => {
+               // Easter Egg Logic
+               const isPhone = link.name === "Phone";
+               const isInsta = link.name === "Instagram";
+               const rickRollUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+
+               // Phone specific render
+               if (isPhone) {
+                 return (
+                  <button
+                     key={link.name}
+                     className="relative flex items-center justify-center w-full p-4 rounded-xl bg-[#0d0d0d] border border-white/5 hover:border-red-500/30 group transition-all hover:-translate-y-0.5 cursor-help overflow-hidden h-[58px]"
+                  >
+                      {/* Default State: Label */}
+                      <div className="flex items-center justify-between w-full transition-all duration-300 group-hover:opacity-0 group-hover:-translate-y-full absolute px-4">
+                        <span className="text-zinc-300 font-medium group-hover:text-white transition-colors">{link.name}</span>
+                        <span className="text-zinc-600 text-xs uppercase tracking-wider">Reveal</span>
+                      </div>
+
+                      {/* Hover State: Message */}
+                      <span className="text-red-400 font-medium text-sm transition-all duration-300 opacity-0 translate-y-full group-hover:opacity-100 group-hover:translate-y-0 absolute">
+                        Let&apos;s not rush, first a date :)
+                      </span>
+                  </button>
+                 );
+               }
+
+               // Standard Link Render (with Instagram Easter Egg)
+               const actualUrl = isInsta ? rickRollUrl : link.url;
+               
+               return (
+                <a 
+                   href={actualUrl}
+                   key={link.name} 
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   className="flex items-center justify-between p-4 rounded-xl bg-[#0d0d0d] border border-white/5 hover:border-red-500/30 group transition-all hover:-translate-y-0.5 h-[58px]"
+                >
+                    <span className="text-zinc-300 font-medium group-hover:text-white transition-colors">{link.name}</span>
+                    <span className="text-red-500/50 group-hover:text-red-400 transition-colors">↗</span>
+                </a>
+               );
+             })}
           </div>
+
+           <div className="text-center pt-4">
+               <p className="text-zinc-500 text-sm">
+                   Prefer email? <a href={`mailto:${profile.contact.email_masked}`} className="text-red-400 hover:text-red-300 font-medium transition-colors">Send me a message</a>
+               </p>
+           </div>
         </div>
       </div>
     </div>

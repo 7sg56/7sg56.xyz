@@ -272,13 +272,13 @@ export default function DesktopOSPage() {
             <div className="text-white space-y-4 lg:space-y-6">
               {/* Main Name - Responsive Size */}
               <h1
-                className="font-black uppercase tracking-tight"
+                className="tracking-tight font-walter font-black"
                 style={{
                   fontSize: responsiveConfig.heroNameSize,
                   lineHeight: '0.9'
                 }}
               >
-                <span className="text-red-500">S</span>ourish <span className="text-red-500">G</span>HOSH
+                <span className="text-red-500">S</span>ourish <span className="text-red-500">G</span>hosh
               </h1>
 
               {/* Tagline - Responsive */}

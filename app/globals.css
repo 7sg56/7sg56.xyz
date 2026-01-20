@@ -1,5 +1,14 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Walter+Turncoat&display=swap');
 @import "tw-animate-css";
+@import "tailwindcss";
+
+@theme {
+  --font-walter-turncoat: var(--font-walter-turncoat);
+}
+
+.font-walter {
+  font-family: "Walter Turncoat", cursive;
+}
 
 @custom-variant dark (&:is(.dark *));
 
@@ -15,9 +24,9 @@
   /* secondary text */
   --border: oklch(0.922 0 0);
   /* neutral border */
-  --glass-1: rgba(24, 24, 26, 0.60);
+  --glass-1: rgba(24, 24, 26, 0.6);
   /* menus/dock */
-  --glass-2: rgba(24, 24, 26, 0.50);
+  --glass-2: rgba(24, 24, 26, 0.5);
   /* cards/widgets */
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -91,7 +100,6 @@
 
 /* CRT retro effects */
 @keyframes crt-flicker {
-
   0%,
   19%,
   21%,
@@ -122,7 +130,9 @@
 
 /* Softer glow */
 .crt-glow {
-  text-shadow: 0 0 1px rgba(16, 255, 106, 0.45), 0 0 3px rgba(16, 255, 106, 0.25);
+  text-shadow:
+    0 0 1px rgba(16, 255, 106, 0.45),
+    0 0 3px rgba(16, 255, 106, 0.25);
 }
 
 .crt-flicker {
@@ -134,7 +144,12 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(16, 255, 106, 0.22), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(16, 255, 106, 0.22),
+    transparent
+  );
   animation: crt-scan 5s linear infinite;
   opacity: 0.5;
 }

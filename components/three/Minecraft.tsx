@@ -4,9 +4,9 @@ import React, { forwardRef } from "react";
 import { useGLTF } from "@react-three/drei";
 import { Group } from "three";
 import { ThreeElements } from "@react-three/fiber";
+import { MINECRAFT_MODELS, type MinecraftKind } from "./constants";
 
-export const MINECRAFT_MODELS = ["creeper", "zombie", "steve", "enderman"] as const;
-export type MinecraftKind = typeof MINECRAFT_MODELS[number];
+export { MINECRAFT_MODELS, type MinecraftKind }; // Re-export for compatibility if needed, though we should update consumers
 
 function urlFor(kind: MinecraftKind) {
   switch (kind) {

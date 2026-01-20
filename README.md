@@ -1,54 +1,54 @@
-# Sourish Ghosh — Terminal Portfolio
+# 7sg56.xyz - Alternative Portfolio
 
-A single-page, terminal-style portfolio. Type `help` to explore.
+An interactive, web-based operating system experience designed as a portfolio for Sourish Ghosh. This project simulates a full desktop environment with window management, a command-line interface, and various applications, built with modern web technologies.
 
-## ⚠️ Important Notes
+## 🖥️ Features
 
-**This is NOT the final product** - This portfolio is currently in development and is not mobile-friendly. Please view on desktop for the best experience.
+### **Operating System Experience**
 
-### Mobile Users
-- This portfolio is **not optimized for mobile devices**
-- Mobile users will see a warning notice
-- For the best experience, please view on desktop/laptop
-- Mobile responsiveness will be added in future updates
+- **Boot Sequence**: Authentic retro BIOS-style boot loader animation.
+- **Desktop Environment**: a fully functional GUI with dragging, focusing, and minimizing windows.
+- **Window Management**: Open multiple apps simultaneously (About, Projects, Contact, etc.).
+- **Dock & Menu Bar**: macOS-inspired navigation with glassmorphism effects.
+- **Widgets**: Interactive desktop widgets for Music (Now Listening) and Todos.
 
-### Final Product
-- The final, production-ready version will be available in a separate repository
-- This current version is for development and testing purposes
-- Final product will include mobile responsiveness and additional features
+### **Applications**
 
-## Getting Started
+- **Terminal**: A ZSH-styled shell with robust command parsing, history, and autocomplete. Type `help` to explore the CLI power.
+- **About Me**: A windowed application detailing skills, bio, and experience.
+- **Projects**: Browse portfolio projects in a rich graphical interface.
+- **Tetris**: A fully playable Tetris clone running natively in a window.
+- **Contact**: Easy ways to get in touch.
 
-- Dev server: `npm run dev` (http://localhost:3000)
-- Build: `npm run build`
-- Start: `npm run start`
-- Lint: `npm run lint`
-- Type check: `npx tsc --noEmit`
+## 🛠️ Tech Stack & Architecture
 
-## Usage (in the terminal UI)
+Built with cutting-edge frontend technologies:
 
-- `about [summary|details]`
-- `projects [list|view <slug|#>]` — e.g., `projects view stamped` or `projects view 1`
-- `skills`
-- `socials`
-- `resume`
-- `clear`
+- **Framework**: [Next.js 16](https://nextjs.org/) (App Router, Turbopack) & [React 19](https://react.dev/)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/) & `tw-animate-css`
+- **3D & Graphics**: [React Three Fiber](https://docs.pmnd.rs/react-three-fiber) & [Drei](https://github.com/pmndrs/drei)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Language**: TypeScript
 
-## Content & Customization
 
-- Commands and content live in `components/terminal/commands.tsx`.
-  - Update your bio, socials, skills, and projects there.
-- Terminal UI in `components/terminal/Terminal.tsx`.
-  - Prompt is `s0urishg@7sg56:~`.
-  - Theme: Catppuccin Mocha.
+## ⌨️ Terminal Commands
 
-## Development Status
+The integrated terminal supports several commands for power users:
 
-- ✅ Desktop experience optimized
-- ❌ Mobile responsiveness (coming soon)
-- ✅ Terminal-style UI
-- ✅ Interactive commands
-- ✅ About window with tabs
-- 🔄 Additional features in development
+- `help`: List available commands
+- `about`: Display summary or details
+- `projects`: List or view specific project details
+- `skills`: List technical skills
+- `socials`: Show social media links
+- `clear`: Clear the terminal output
+- `vim`: (Try it and see!)
 
-No tests configured in this repo yet.
+## ⚠️ Notes
+
+- **Mobile Support**: The desktop environment is optimized for larger screens. Mobile responsiveness is currently in development.
+- **Performance**: Uses glassmorphism and heavy animations; performance may vary on lower-end devices.
+
+---
+
+© 2024 Sourish Ghosh. All rights reserved.

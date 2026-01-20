@@ -42,7 +42,7 @@ export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
     return (
       <div className="flex flex-col relative z-50 pb-6">
         {/* Header with CTA buttons */}
-        <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/80 backdrop-blur-md">
+        <div className="sticky top-0 z-50 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#0d0d0d]">
           <h1 className="text-2xl font-bold text-white">About</h1>
           <div className="flex flex-row gap-2">
             <motion.button
@@ -94,26 +94,26 @@ export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
             {/* Hero Welcome Card */}
             <motion.div
               variants={itemVariants}
-              className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-8"
+              className="relative overflow-hidden rounded-2xl border border-white/10 bg-zinc-900 px-8 py-10 shadow-sm"
             >
 
               <div className="relative z-10">
-                <div className="mb-6">
-                  <h2 className="text-3xl font-bold text-white mb-2">Hey, I&apos;m Sourish!</h2>
-                  <p className="text-lg text-gray-300">{profile.tagline}</p>
+                <div className="mb-8">
+                  <h2 className="text-4xl font-black text-white mb-3 tracking-tight">Hey, I&apos;m Sourish!</h2>
+                  <p className="text-xl text-gray-300 font-light">{profile.tagline}</p>
                 </div>
 
-                <p className="text-gray-200 leading-relaxed text-lg mb-4">
+                <p className="text-gray-300 leading-relaxed text-lg mb-8 max-w-2xl">
                   Thanks for taking the time to explore my website. I hope you enjoy it as much as I enjoyed developing it!
                 </p>
 
-                <div className="flex items-center gap-2 p-4 bg-black/30 rounded-lg border border-red-500/20">
-                  <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="inline-flex items-center gap-3 px-5 py-3 bg-[#0d0d0d] rounded-xl border border-red-500/10 hover:border-red-500/30 transition-colors group cursor-pointer">
+                  <svg className="w-5 h-5 text-red-400 group-hover:text-red-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                   <a
                     href="mailto:sghosh.ile.7@gmail.com"
-                    className="text-red-400 hover:text-red-300 transition-colors font-medium"
+                    className="text-zinc-200 group-hover:text-white transition-colors font-medium"
                   >
                     sghosh.ile.7@gmail.com
                   </a>
@@ -128,31 +128,31 @@ export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
               <motion.a
                 href={resume.url}
                 download={resume.filename}
-                className="block relative overflow-hidden rounded-xl border border-red-500/20 bg-black/40 p-6 group"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                className="flex items-center justify-between relative overflow-hidden rounded-2xl border border-red-500/10 bg-zinc-900 p-6 group hover:border-red-500/30 transition-colors"
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-lg border border-red-500/30 bg-red-500/10 flex items-center justify-center">
-                      <svg className="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  <div className="flex items-center gap-5">
+                    <div className="w-14 h-14 rounded-xl border border-red-500/20 bg-red-500/5 flex items-center justify-center group-hover:bg-red-500/10 transition-colors">
+                      <svg className="w-7 h-7 text-red-400 group-hover:text-red-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                       </svg>
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-white mb-1">Download My Resume</h3>
-                      <p className="text-sm text-gray-300">Get the full picture of my experience</p>
+                      <h3 className="text-xl font-bold text-white mb-1 group-hover:text-red-400 transition-colors">Download My Resume</h3>
+                      <p className="text-sm text-gray-400">Get the full picture of my experience</p>
                     </div>
                   </div>
-                  <svg className="w-6 h-6 text-red-400 transform group-hover:translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                </div>
+                  <div className="bg-zinc-800 rounded-full p-2 group-hover:bg-red-500/20 transition-colors">
+                     <svg className="w-6 h-6 text-red-400 group-hover:text-red-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                      </svg>
+                  </div>
               </motion.a>
             </motion.div>
 
             {/* About Me Section */}
-            <motion.div variants={itemVariants} className="rounded-xl border border-red-500/20 bg-black/30 p-6">
+            <motion.div variants={itemVariants} className="rounded-xl border border-red-500/20 bg-zinc-900 p-6">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-2 h-8 bg-red-500 rounded"></div>
                 <h2 className="text-2xl font-bold text-white">My Journey</h2>
@@ -175,28 +175,36 @@ export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
               </div>
             </motion.div>
 
-            {/* Hobbies & Interests */}
-            <motion.div variants={itemVariants} className="rounded-xl border border-red-500/20 bg-black/30 p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-2 h-8 bg-red-500 rounded"></div>
-                <h2 className="text-2xl font-bold text-white">Beyond Code</h2>
+            {/* Hobbies & Interests - Grid Layout Refined */}
+            <motion.div variants={itemVariants} className="rounded-2xl border border-white/5 bg-zinc-900 p-8">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-1 h-8 bg-gradient-to-b from-red-500 to-red-600 rounded-full"></div>
+                <h2 className="text-2xl font-bold text-white tracking-tight">Beyond Code</h2>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 rounded-lg bg-red-500/5 border border-red-500/10">
-                  <h4 className="font-semibold text-white mb-1">Gaming</h4>
-                  <p className="text-sm text-gray-300">Soulsborne fan, platinum trophy hunter</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="p-5 rounded-xl bg-zinc-950/50 border border-white/5 hover:border-red-500/20 transition-colors group">
+                  <h4 className="font-semibold text-white mb-2 group-hover:text-red-400 transition-colors flex items-center gap-2">
+                     <span>🎮</span> Gaming
+                  </h4>
+                  <p className="text-sm text-gray-400 leading-relaxed">Soulsborne fan, platinum trophy hunter</p>
                 </div>
-                <div className="p-4 rounded-lg bg-red-500/5 border border-red-500/10">
-                  <h4 className="font-semibold text-white mb-1">Chess</h4>
-                  <p className="text-sm text-gray-300">1500 rating on Chess.com</p>
+                <div className="p-5 rounded-xl bg-zinc-950/50 border border-white/5 hover:border-red-500/20 transition-colors group">
+                  <h4 className="font-semibold text-white mb-2 group-hover:text-red-400 transition-colors flex items-center gap-2">
+                     <span>♟️</span> Chess
+                  </h4>
+                  <p className="text-sm text-gray-400 leading-relaxed">1500 rating on Chess.com</p>
                 </div>
-                <div className="p-4 rounded-lg bg-red-500/5 border border-red-500/10">
-                  <h4 className="font-semibold text-white mb-1">Cat Lover</h4>
-                  <p className="text-sm text-gray-300">Proud owner of feline friends</p>
+                <div className="p-5 rounded-xl bg-zinc-950/50 border border-white/5 hover:border-red-500/20 transition-colors group">
+                  <h4 className="font-semibold text-white mb-2 group-hover:text-red-400 transition-colors flex items-center gap-2">
+                     <span>😺</span> Cat Lover
+                  </h4>
+                  <p className="text-sm text-gray-400 leading-relaxed">Proud owner of feline friends</p>
                 </div>
-                <div className="p-4 rounded-lg bg-red-500/5 border border-red-500/10">
-                  <h4 className="font-semibold text-white mb-1">Cooking</h4>
-                  <p className="text-sm text-gray-300">Experimenting in the kitchen</p>
+                <div className="p-5 rounded-xl bg-zinc-950/50 border border-white/5 hover:border-red-500/20 transition-colors group">
+                  <h4 className="font-semibold text-white mb-2 group-hover:text-red-400 transition-colors flex items-center gap-2">
+                     <span>🍳</span> Cooking
+                  </h4>
+                  <p className="text-sm text-gray-400 leading-relaxed">Experimenting in the kitchen</p>
                 </div>
               </div>
             </motion.div>
@@ -213,7 +221,7 @@ export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
 
     return (
       <div className="flex flex-col relative z-50 pb-6">
-        <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/80 backdrop-blur-md">
+        <div className="sticky top-0 z-50 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#0d0d0d]">
           <h2 className="text-2xl font-bold text-white">Experience</h2>
           <button
             className="text-white hover:text-gray-300 transition-colors"

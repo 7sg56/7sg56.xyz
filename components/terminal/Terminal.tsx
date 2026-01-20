@@ -30,7 +30,7 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
   const [historyIndex, setHistoryIndex] = useState<number | null>(null);
   const [theme, setTheme] = useState<ThemeName>("mocha");
   const [bannerVisible, setBannerVisible] = useState(showBanner);
-  const [prompt, setPrompt] = useState<string>("s0urishg@7sg56:~");
+  const [prompt, setPrompt] = useState<string>("s0urish@7sg56:~");
   const [autoScroll, setAutoScroll] = useState<boolean>(true);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -39,7 +39,35 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Initial focus
     inputRef.current?.focus();
+
+    // Global keydown listener to auto-focus terminal input
+    const onGlobalKeyDown = (e: KeyboardEvent) => {
+      // If already focused on our input, do nothing
+      if (document.activeElement === inputRef.current) return;
+
+      // If focused on some other interactive element, do nothing
+      if (
+        document.activeElement?.tagName === "INPUT" || 
+        document.activeElement?.tagName === "TEXTAREA" ||
+        document.activeElement?.tagName === "SELECT" ||
+        (document.activeElement as HTMLElement)?.isContentEditable
+      ) {
+        return;
+      }
+      
+      // Ignore modifier keys
+      if (e.ctrlKey || e.altKey || e.metaKey) return;
+      
+      // Focus input for printable keys, Backspace, or Enter
+      if (e.key.length === 1 || e.key === "Backspace" || e.key === "Enter") {
+        inputRef.current?.focus();
+      }
+    };
+
+    window.addEventListener("keydown", onGlobalKeyDown);
+    return () => window.removeEventListener("keydown", onGlobalKeyDown);
   }, []);
 
   useEffect(() => {
@@ -155,8 +183,8 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
     const handler: CommandHandler | undefined = commands[key];
     const ctx = envRef.current ?? env;
     const output = handler ? handler(args, ctx) : (
-      <div className="text-red-300">
-        Command not found: <span className="text-red-100">{cmd}</span>. Type <span className="text-zinc-200">help</span>.
+      <div className="text-red-500 font-medium">
+        Command not found: <span className="font-bold text-red-600">{cmd}</span>. Type <span className="text-green-500 font-bold">help</span>.
       </div>
     );
 
@@ -216,17 +244,20 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
       <div className="w-full h-full flex flex-col min-h-0">
         {chrome && (
           <div className="flex items-center gap-2 pb-2">
-            <span className="ml-3 text-xs" style={{ color: "#a6adc8" }}>sourish@terminal — zsh</span>
+            <span className="ml-3 text-xs" style={{ color: "#a6adc8" }}>sourish@7sg56 — zsh</span>
           </div>
         )}
         <div
           ref={containerRef}
-          className={`${scrollMode === 'internal' ? 'overscroll-contain overflow-y-auto' : 'overflow-visible'} px-3 font-mono text-sm md:text-sm flex-1 min-h-0 ${scrollHeightClass ?? ""}`}
+          className={`${scrollMode === 'internal' ? 'overscroll-contain overflow-y-auto' : 'overflow-visible'} px-3 font-mono text-base md:text-sm flex-1 min-h-0 ${scrollHeightClass ?? ""}`}
           style={{ color: "#cdd6f4" }}
           onScroll={scrollMode === 'internal' ? onScroll : undefined}
+          onClick={() => inputRef.current?.focus()}
         >
-          <Banner visible={bannerVisible} />
-          <div className="my-3 border-t" style={{ borderColor: "#313244" }} />
+          <div className="sticky top-0 z-20 bg-black pb-1">
+            <Banner visible={bannerVisible} />
+            <div className="my-3 border-t" style={{ borderColor: "#313244" }} />
+          </div>
           <div className="max-w-[1100px] px-2 md:px-0">
             {history.map(item => (
               <div key={item.id} className="mb-2">
@@ -242,7 +273,7 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
               <Prompt text={prompt} />
               <input
                 ref={inputRef}
-                className="flex-1 bg-transparent outline-none placeholder-zinc-600 text-base md:text-sm"
+                className="flex-1 bg-transparent outline-none placeholder-zinc-600 text-base md:text-sm text-zinc-300"
                 placeholder="type a command… (try: help)"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
@@ -250,6 +281,9 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
                 aria-label="Terminal command input"
                 autoComplete="off"
                 spellCheck={false}
+                autoCapitalize="none"
+                autoCorrect="off"
+                enterKeyHint="go"
                 style={{ caretColor: "#a6e3a1" }}
               />
             </div>
@@ -269,13 +303,21 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
       <div className="pointer-events-auto rounded-lg border backdrop-blur p-3" style={frameStyle}>
         {chrome && (
           <div className="flex items-center gap-2 pb-2">
-            <span className="ml-3 text-xs" style={{ color: "#a6adc8" }}>7sg56@terminal — zsh</span>
+            <span className="ml-3 text-xs" style={{ color: "#a6adc8" }}>sourish@7sg56 — zsh</span>
           </div>
         )}
 
-        <div ref={containerRef} className="h-[70vh] md:h-[70vh] overscroll-contain overflow-y-auto px-3 font-mono text-sm md:text-sm" style={{ color: "#cdd6f4" }} onScroll={onScroll}>
-          <Banner visible={bannerVisible} />
-          <div className="my-3 border-t" style={{ borderColor: "#313244" }} />
+        <div 
+          ref={containerRef} 
+          className="h-[70vh] md:h-[70vh] overscroll-contain overflow-y-auto px-3 font-mono text-base md:text-sm" 
+          style={{ color: "#cdd6f4" }} 
+          onScroll={onScroll}
+          onClick={() => inputRef.current?.focus()}
+        >
+          <div className="sticky top-0 z-20 -mx-3 px-3 pt-2 pb-1" style={{ backgroundColor: theme === "mocha" ? "#1e1e2e" : "#000000" }}>
+            <Banner visible={bannerVisible} />
+            <div className="my-3 border-t" style={{ borderColor: "#313244" }} />
+          </div>
           <div className="max-w-[300px]">
             {history.map(item => (
               <div key={item.id} className="mb-2">
@@ -291,7 +333,7 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
               <Prompt text={prompt} />
               <input
                 ref={inputRef}
-                className="flex-1 bg-transparent outline-none placeholder-zinc-600 text-base md:text-sm"
+                className="flex-1 bg-transparent outline-none placeholder-zinc-600 text-base md:text-sm text-zinc-300"
                 placeholder="type a command… (try: help)"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
@@ -299,6 +341,9 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
                 aria-label="Terminal command input"
                 autoComplete="off"
                 spellCheck={false}
+                autoCapitalize="none"
+                autoCorrect="off"
+                enterKeyHint="go"
                 style={{ caretColor: "#a6e3a1" }}
               />
             </div>
