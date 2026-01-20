@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Apple, Settings, Power, Info, Command } from "lucide-react";
 
 export default function MenuBar({ hidden = false, title = "7sg56", showSystemMenu = false, terminalHref = "/terminal", shutdownHref = "/gui" }: { hidden?: boolean; title?: string; showSystemMenu?: boolean; terminalHref?: string; shutdownHref?: string }) {
   const [now, setNow] = useState<string>("");
@@ -47,12 +48,31 @@ export default function MenuBar({ hidden = false, title = "7sg56", showSystemMen
             </button>
             {open && (
               <div
-                id="system-menu"
-                className="absolute top-6 left-0 mt-2 w-30 rounded-md border border-zinc-700/40 bg-black/80 backdrop-blur text-zinc-100 shadow-xl desktop-system-menu"
+                className={`absolute top-full left-0 mt-1 min-w-[200px] 
+                  bg-black/60 backdrop-blur-2xl border border-white/10 
+                  shadow-[0px_10px_30px_rgba(0,0,0,0.5)] rounded-lg py-1.5 z-50
+                  flex flex-col animate-in fade-in zoom-in-95 duration-100 ease-out origin-top-left`}
               >
-                <button onClick={() => handleAction("shutdown")} className="w-full text-left px-3 py-2 hover:bg-white/10">Shutdown</button>
-                <button onClick={() => handleAction("terminal")} className="w-full text-left px-3 py-2 hover:bg-white/10">Terminal</button>
-                <button onClick={() => handleAction("restart")} className="w-full text-left px-3 py-2 hover:bg-white/10">Restart</button>
+                  <div className="px-1.5 py-1 flex flex-col gap-0.5">
+                    <button
+                        className="w-full text-left px-3 py-1.5 rounded-md text-[13px] text-white/90 hover:bg-white/10 transition-colors duration-75"
+                        onClick={() => handleAction("terminal")}
+                      >
+                        Terminal
+                      </button>
+                      <button
+                        className="w-full text-left px-3 py-1.5 rounded-md text-[13px] text-white/90 hover:bg-white/10 transition-colors duration-75"
+                        onClick={() => handleAction("restart")}
+                      >
+                        Restart
+                      </button>
+                      <button
+                        className="w-full text-left px-3 py-1.5 rounded-md text-[13px] text-white/90 hover:bg-white/10 transition-colors duration-75"
+                        onClick={() => handleAction("shutdown")}
+                      >
+                        Shut Down
+                      </button>
+                  </div>
               </div>
             )}
           </div>
