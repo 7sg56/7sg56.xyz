@@ -4,8 +4,8 @@ import React, { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import BootLog from "@/components/boot/BootLog";
 import HeroSelector from "@/components/boot/HeroSelector";
-import SpaceShooterBG from "@/components/boot/SpaceShooterBG";
 import { useRouter } from "next/navigation";
+
 export default function Home() {
   const router = useRouter();
 
@@ -33,7 +33,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="relative min-h-screen overflow-hidden">
+    <main className="relative min-h-screen overflow-hidden bg-black">
       
       {/* Boot/GRUB overlay (no routing) */}
       <AnimatePresence>
@@ -53,9 +53,7 @@ export default function Home() {
                   <BootLog progress={progress} />
                 </div>
               ) : (
-                <>
-                  <SpaceShooterBG opacity={0.9} />
-                  <div className="relative w-full max-w-3xl">
+                <div className="relative w-full flex items-center justify-center">
                   <HeroSelector
                     defaultSeconds={10}
                     onSelect={(m) => {
@@ -69,8 +67,7 @@ export default function Home() {
                       }
                     }}
                   />
-                  </div>
-                </>
+                </div>
               )}
             </div>
           </motion.div>

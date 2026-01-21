@@ -24,9 +24,10 @@ type TerminalProps = {
   scrollMode?: 'internal' | 'page'; // 'internal' uses an inner scroll container; 'page' lets the whole page scroll
   onZenModeChange?: (enabled: boolean) => void;
   zenMode?: boolean;
+  onExit?: () => void; // callback to close the terminal window
 };
 
-export default function Terminal({ embedded = false, chrome = true, externalCommand = null, onExternalConsumed, showBanner = true, scrollHeightClass, showFooter = true, sessionKey, scrollMode = 'internal', onZenModeChange, zenMode = false }: TerminalProps) {
+export default function Terminal({ embedded = false, chrome = true, externalCommand = null, onExternalConsumed, showBanner = true, scrollHeightClass, showFooter = true, sessionKey, scrollMode = 'internal', onZenModeChange, zenMode = false, onExit }: TerminalProps) {
   const [history, setHistory] = useState<HistoryItem[]>(() => []);
   const [input, setInput] = useState("");
   const [historyIndex, setHistoryIndex] = useState<number | null>(null);
@@ -160,11 +161,12 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
       run(cmd);
       inputRef.current?.focus();
     },
+    onExit,
     theme,
     prompt,
     bannerVisible,
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }), [theme, prompt, bannerVisible, onZenModeChange, zenMode]);
+  }), [theme, prompt, bannerVisible, onZenModeChange, zenMode, onExit]);
 
   const run = useCallback((raw: string) => {
     const id = generateUUID();
@@ -223,6 +225,13 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
       // Simulate ^C to cancel current line
       e.preventDefault();
       setInput("");
+    } else if (e.key === "l" && (e.ctrlKey || e.metaKey)) {
+      // Cmd+L (Mac) or Ctrl+L (Windows/Linux) to clear terminal
+      e.preventDefault();
+      setHistory([]);
+      setInput("");
+      setAutoScroll(true);
+      requestAnimationFrame(() => scrollToBottom());
     }
   };
 
@@ -253,16 +262,16 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
         )}
         <div
           ref={containerRef}
-          className={`${scrollMode === 'internal' ? 'overscroll-contain overflow-y-auto' : 'overflow-visible'} px-3 font-mono text-base md:text-sm flex-1 min-h-0 ${scrollHeightClass ?? ""}`}
+          className={`${scrollMode === 'internal' ? 'overscroll-contain overflow-y-auto' : 'overflow-visible'} font-mono text-base md:text-sm flex-1 min-h-0 ${scrollHeightClass ?? ""}`}
           style={{ color: "#e4e4e7" }}
           onScroll={scrollMode === 'internal' ? onScroll : undefined}
           onClick={() => inputRef.current?.focus()}
         >
-          <div className="z-20 -mx-3 px-3 pt-2 pb-1 bg-zinc-950">
+          <div className="sticky top-0 z-20 bg-zinc-950 px-3 pt-2 pb-1">
             <Banner visible={bannerVisible} />
             <div className="my-3 border-t border-zinc-800" />
           </div>
-          <div className="max-w-[1100px] px-2 md:px-0">
+          <div className="px-3">
             {history.map(item => (
               <div key={item.id} className="mb-2">
                 <div className="flex items-start gap-2">
@@ -313,16 +322,16 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
 
         <div 
           ref={containerRef} 
-          className="h-[70vh] md:h-[70vh] overscroll-contain overflow-y-auto px-3 font-mono text-base md:text-sm" 
+          className="h-[70vh] md:h-[70vh] overscroll-contain overflow-y-auto font-mono text-base md:text-sm" 
           style={{ color: "#e4e4e7" }} 
           onScroll={onScroll}
           onClick={() => inputRef.current?.focus()}
         >
-          <div className="z-20 -mx-3 px-3 pt-2 pb-1" style={{ backgroundColor: theme === "mocha" ? "#1e1e2e" : "#000000" }}>
+          <div className="sticky top-0 z-20 px-3 pt-2 pb-1" style={{ backgroundColor: theme === "mocha" ? "#1e1e2e" : "#000000" }}>
             <Banner visible={bannerVisible} />
             <div className="my-3 border-t" style={{ borderColor: "#313244" }} />
           </div>
-          <div className="max-w-[300px]">
+          <div className="px-3">
             {history.map(item => (
               <div key={item.id} className="mb-2">
                 <div className="flex items-start gap-2">

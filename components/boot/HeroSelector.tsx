@@ -6,20 +6,16 @@ import { motion } from "motion/react";
 export default function HeroSelector({ defaultSeconds = 10, onSelect }: { defaultSeconds?: number; onSelect: (mode: "desktop" | "terminal" | "7sg56") => void }) {
   const [seconds, setSeconds] = useState(defaultSeconds);
   
-  // Touch support (optional; not used for gating behavior)
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [touchEnd, setTouchEnd] = useState<number | null>(null);
-  
   const items = useMemo(
     () => [
-      { key: "7sg56" as const, label: "7sg56", desc: "Curated for Professionals", disabled: false, comingSoon: false },
-      { key: "desktop" as const, label: "Desktop", desc: "For developers and admirers", isDefault: true, disabled: false, comingSoon: false },
+      { key: "7sg56" as const, label: "7sg56", desc: "Curated for Professionals", disabled: false },
+      { key: "desktop" as const, label: "Desktop OS", desc: "Interactive Portfolio", isDefault: true, disabled: false },
     ],
     []
   );
   const [index, setIndex] = useState(1); // default selection: Desktop OS
 
-  // Retro roles with typewriter effect (slower)
+  // Retro roles with typewriter effect
   const roles = useMemo(() => [
     "FullStack Dev",
     "Game Designer",
@@ -29,11 +25,12 @@ export default function HeroSelector({ defaultSeconds = 10, onSelect }: { defaul
   const [roleIdx, setRoleIdx] = useState(0);
   const [typed, setTyped] = useState("");
   const [deleting, setDeleting] = useState(false);
+  
   useEffect(() => {
     const full = roles[roleIdx];
-    let delay = deleting ? 55 : 95; // typing speed
-    if (!deleting && typed === full) delay = 1000; // pause at end
-    if (deleting && typed === "") delay = 450; // pause at start
+    let delay = deleting ? 55 : 95;
+    if (!deleting && typed === full) delay = 1000;
+    if (deleting && typed === "") delay = 450;
     const id = setTimeout(() => {
       if (!deleting) {
         if (typed === full) setDeleting(true);
@@ -47,17 +44,18 @@ export default function HeroSelector({ defaultSeconds = 10, onSelect }: { defaul
     }, delay);
     return () => clearTimeout(id);
   }, [typed, deleting, roleIdx, roles]);
-  const containerRef = useRef<HTMLDivElement | null>(null);
 
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const [paused, setPaused] = useState(false);
-  // Countdown timer with pause support
+
+  // Countdown timer
   useEffect(() => {
-    if (paused) return;
-    if (seconds <= 0) return;
+    if (paused || seconds <= 0) return;
     const t = setInterval(() => setSeconds((s) => (s > 0 ? s - 1 : 0)), 1000);
     return () => clearInterval(t);
   }, [paused, seconds]);
-  // Auto-boot when countdown ends (if not paused)
+
+  // Auto-boot
   useEffect(() => {
     if (!paused && seconds === 0) {
       onSelect("desktop");
@@ -70,7 +68,6 @@ export default function HeroSelector({ defaultSeconds = 10, onSelect }: { defaul
         e.preventDefault();
         setIndex((i) => {
           let newIndex = (i - 1 + items.length) % items.length;
-          // Skip disabled items
           while (items[newIndex]?.disabled && newIndex !== i) {
             newIndex = (newIndex - 1 + items.length) % items.length;
           }
@@ -80,7 +77,6 @@ export default function HeroSelector({ defaultSeconds = 10, onSelect }: { defaul
         e.preventDefault();
         setIndex((i) => {
           let newIndex = (i + 1) % items.length;
-          // Skip disabled items
           while (items[newIndex]?.disabled && newIndex !== i) {
             newIndex = (newIndex + 1) % items.length;
           }
@@ -104,173 +100,124 @@ export default function HeroSelector({ defaultSeconds = 10, onSelect }: { defaul
     return () => window.removeEventListener("keydown", handleKey);
   }, [handleKey]);
 
-  // Touch handlers for mobile navigation
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchEnd(null);
-    setTouchStart(e.targetTouches[0].clientY);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientY);
-  };
-
-  const handleTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
-    const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > 50;
-    const isRightSwipe = distance < -50;
-
-    if (isLeftSwipe || isRightSwipe) {
-      // Navigate menu items
-      if (isLeftSwipe) {
-        setIndex((i) => {
-          let newIndex = (i + 1) % items.length;
-          while (items[newIndex]?.disabled && newIndex !== i) {
-            newIndex = (newIndex + 1) % items.length;
-          }
-          return newIndex;
-        });
-      } else {
-        setIndex((i) => {
-          let newIndex = (i - 1 + items.length) % items.length;
-          while (items[newIndex]?.disabled && newIndex !== i) {
-            newIndex = (newIndex - 1 + items.length) % items.length;
-          }
-          return newIndex;
-        });
-      }
-    }
-  };
-
   return (
     <div 
       ref={containerRef} 
-      className="relative w-full"
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
+      className="relative w-full px-4 sm:px-6"
     >
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.35, ease: "easeOut" }}
-        className="relative mx-auto w-full max-w-4xl rounded-xl border border-zinc-800/50 bg-zinc-950/40 shadow-2xl backdrop-blur-md shadow-red-500/5"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+        className="relative mx-auto w-full max-w-3xl"
       >
-        {/* Header bar */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 sm:px-6 py-4 border-b border-zinc-800/50 bg-zinc-900/30 rounded-t-xl gap-2">
-          <div className="text-xs sm:text-sm font-mono text-red-300">GRUB v2.06 — Boot Manager</div>
-          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
-            <div className="text-xs font-mono text-green-400">
-              {paused ? "Auto boot paused" : "Auto boot Desktop OS in "}
-              {!paused && <span className="text-green-300 font-bold text-sm">{seconds}</span>}
-              {!paused && <span className="text-green-400">s</span>}
+        {/* Boot Menu Header */}
+        <div className="border border-green-500/30 bg-black/95">
+          {/* Title Bar */}
+          <div className="border-b border-green-500/30 bg-green-500/10 px-3 sm:px-4 py-2">
+            <div className="font-mono text-xs sm:text-sm text-green-400">
+              GNU GRUB version 2.06
             </div>
-            <button
-              onClick={() => setPaused((p) => !p)}
-              className="text-xs font-mono px-2 py-1 rounded border border-zinc-800 bg-zinc-900/40 hover:bg-zinc-900/60 text-zinc-200 touch-manipulation"
-            >
-              {paused ? "Continue" : "Pause"}
-            </button>
           </div>
-        </div>
 
-        {/* Name + retro tagline */}
-        <div className="px-4 sm:px-8 pt-6 sm:pt-8 pb-4 text-center">
-          <div className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-zinc-50">I&apos;m Sourish Ghosh</div>
-          <div className="mt-2 font-mono text-green-400 text-sm md:text-base">
-            {typed}
-            <span className="ml-1 text-green-500 animate-pulse">|</span>
-          </div>
-          <p className="mt-2 text-xs text-zinc-400">Press Enter to continue • Use P to pause/resume</p>
-          <div className="mt-3 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3">
-            <a href="/sourish-ghosh-resume.pdf" download className="text-xs font-mono px-3 py-1.5 rounded border border-zinc-800 bg-zinc-900/40 hover:bg-zinc-900/60 text-zinc-200 touch-manipulation">Resume</a>
-            <a href="https://github.com/7sg56" target="_blank" rel="noopener noreferrer" className="text-xs font-mono px-3 py-1.5 rounded border border-zinc-800 bg-zinc-900/40 hover:bg-zinc-900/60 text-zinc-200 touch-manipulation">GitHub</a>
-          </div>
-        </div>
-
-        {/* Divider */}
-        <div className="px-4 sm:px-8">
-          <div className="h-px w-full bg-gradient-to-r from-transparent via-red-500/20 to-transparent" />
-        </div>
-
-        {/* Menu */}
-        <div role="menu" aria-label="Boot menu" className="px-4 sm:px-6 py-4 sm:py-6">
-          <div className="mx-auto w-full max-w-2xl">
-            {items.map((it, i) => {
-              const selected = i === index;
-              const isDisabled = it.disabled;
-              return (
-                <motion.button
-                  key={it.key}
-                  onClick={() => {
-                    if (!isDisabled) {
-                      onSelect(it.key);
-                    }
-                  }}
-                  onMouseEnter={() => {
-                    if (!isDisabled) {
-                      setIndex(i);
-                    }
-                  }}
-                  initial={{ opacity: 0, y: 4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.15, delay: i * 0.03 }}
-                  disabled={isDisabled}
-                  className={[
-                    "group relative w-full text-left rounded-md border border-zinc-800/70 px-3 sm:px-4 py-3 mb-3 touch-manipulation",
-                    isDisabled 
-                      ? "bg-zinc-950/30 opacity-50 cursor-not-allowed"
-                      : selected
-                        ? "bg-gradient-to-r from-zinc-900 to-zinc-900/40 shadow-inner"
-                        : "bg-zinc-950/60 hover:bg-zinc-900/50 active:bg-zinc-900/40",
-                  ].join(" ")}
+          {/* Main Content */}
+          <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
+            {/* System Info */}
+            <div className="text-center space-y-2 sm:space-y-3">
+              <div className="font-mono text-lg sm:text-xl md:text-2xl text-green-400">
+                Sourish Ghosh
+              </div>
+              <div className="font-mono text-xs sm:text-sm text-green-500/80">
+                &gt; {typed}
+                <span className="animate-pulse">_</span>
+              </div>
+              <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+                <a 
+                  href="/sourish-ghosh-resume.pdf" 
+                  download 
+                  className="font-mono text-xs px-3 py-1 border border-green-500/40 text-green-400 hover:bg-green-500/10 transition-colors"
                 >
-                  {/* Left accent and caret when selected */}
-                  <span className="absolute left-0 top-0 h-full w-1 rounded-l-md"
-                    style={{ 
-                      background: selected && !isDisabled 
-                        ? "linear-gradient(180deg,rgb(99, 239, 68) 0%,rgb(181, 220, 38) 100%)" 
-                        : isDisabled 
-                          ? "linear-gradient(180deg, #ef4444 0%, #dc2626 100%)"
-                          : "transparent" 
+                  [Resume]
+                </a>
+                <a 
+                  href="https://github.com/7sg56" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="font-mono text-xs px-3 py-1 border border-green-500/40 text-green-400 hover:bg-green-500/10 transition-colors"
+                >
+                  [GitHub]
+                </a>
+              </div>
+            </div>
+
+            {/* Boot Options */}
+            <div className="space-y-2">
+              {items.map((it, i) => {
+                const selected = i === index;
+                const isDisabled = it.disabled;
+                return (
+                  <button
+                    key={it.key}
+                    onClick={() => {
+                      if (!isDisabled) {
+                        onSelect(it.key);
+                      }
                     }}
-                  />
-                  <div className="flex items-center gap-2 sm:gap-3">
-                    <div className="w-4 sm:w-5 text-right font-mono text-zinc-500">
-                      {selected && !isDisabled ? <span className="text-green-400">&gt;</span> : ""}
-                      {isDisabled ? <span className="text-red-400">✗</span> : ""}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className={`font-semibold tracking-tight flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 ${
-                        isDisabled ? "text-zinc-500" : "text-zinc-100"
-                      }`}>
-                        <span className="text-sm sm:text-base">{it.label}</span>
-                        <div className="flex flex-wrap gap-1 sm:gap-2">
-                          {it.isDefault && <span className="text-xs text-zinc-500">(default)</span>}
-                          {it.comingSoon && <span className="text-xs text-orange-400 font-mono">(coming soon)</span>}
+                    onMouseEnter={() => {
+                      if (!isDisabled) {
+                        setIndex(i);
+                      }
+                    }}
+                    disabled={isDisabled}
+                    className={`
+                      w-full text-left font-mono text-xs sm:text-sm px-3 sm:px-4 py-2 sm:py-3
+                      ${selected && !isDisabled ? "bg-green-500/20 text-green-300" : "text-green-400/70"}
+                      ${isDisabled ? "opacity-50 cursor-not-allowed" : "hover:bg-green-500/10 cursor-pointer"}
+                      transition-colors
+                    `}
+                  >
+                    <div className="flex items-start gap-2 sm:gap-3">
+                      <span className="mt-0.5 flex-shrink-0">
+                        {selected && !isDisabled ? "►" : " "}
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                          <span className="font-semibold">{it.label}</span>
+                          {it.isDefault && (
+                            <span className="text-green-500/60 text-xs">(default)</span>
+                          )}
+                        </div>
+                        <div className="text-xs text-green-500/60 mt-0.5">
+                          {it.desc}
                         </div>
                       </div>
-                      <div className={`text-xs sm:text-sm ${isDisabled ? "text-zinc-600" : "text-zinc-400"}`}>
-                        {it.desc}
-                      </div>
                     </div>
-                    {selected && !isDisabled && (
-                      <div className="text-xs font-mono text-green-400 hidden sm:block">selected</div>
-                    )}
-                    {isDisabled && (
-                      <div className="text-xs font-mono text-red-400 hidden sm:block">disabled</div>
-                    )}
-                  </div>
-                </motion.button>
-              );
-            })}
-          </div>
-        </div>
+                  </button>
+                );
+              })}
+            </div>
 
-        {/* Footer help */}
-        <div className="px-4 sm:px-8 pb-4 sm:pb-6">
-          <div className="flex items-center justify-center text-xs font-mono text-zinc-500">
-            <div className="text-center">Use ↑ ↓ to choose, Enter to boot • P to pause/resume</div>
+            {/* Status Bar */}
+            <div className="border-t border-green-500/30 pt-3 sm:pt-4 space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div className="text-xs font-mono text-green-500/70 text-center sm:text-left">
+                  {paused ? (
+                    <span className="text-yellow-500">⏸ Paused</span>
+                  ) : (
+                    <span>Booting in {seconds}s...</span>
+                  )}
+                </div>
+                <button
+                  onClick={() => setPaused((p) => !p)}
+                  className="px-4 py-2 border border-green-500/40 bg-green-500/10 hover:bg-green-500/20 text-green-400 font-mono text-xs transition-colors active:bg-green-500/30"
+                >
+                  {paused ? "▶ Resume" : "⏸ Pause"}
+                </button>
+              </div>
+              <div className="text-xs font-mono text-green-500/50 text-center">
+                Use ↑↓ arrows to select • Press [Enter] to boot
+              </div>
+            </div>
           </div>
         </div>
       </motion.div>
