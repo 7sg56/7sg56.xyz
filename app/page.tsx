@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import BootLog from "@/components/boot/BootLog";
-import HeroSelector from "@/components/boot/HeroSelector";
+// import HeroSelector from "@/components/boot/HeroSelector";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
@@ -26,7 +26,8 @@ export default function Home() {
       setProgress(current);
       if (current >= 100) {
         clearInterval(id);
-        setTimeout(() => setPhase("grub"), 100);
+        // setTimeout(() => setPhase("grub"), 100);
+        router.push('/desktop');
       }
     }, interval);
     return () => clearInterval(id);
@@ -53,6 +54,7 @@ export default function Home() {
                   <BootLog progress={progress} />
                 </div>
               ) : (
+                /*
                 <div className="relative w-full flex items-center justify-center">
                   <HeroSelector
                     defaultSeconds={10}
@@ -68,6 +70,8 @@ export default function Home() {
                     }}
                   />
                 </div>
+                */
+                null
               )}
             </div>
           </motion.div>

@@ -89,20 +89,6 @@ export const EXPERIENCE: Experience[] = [
     type: 'internship'
   },
   {
-    title: "Associate Technical Lead",
-    company: "Hackerrank Campus Crew (HRCC - SRM)",
-    period: "2025 - Present",
-    description: "Leading technical initiatives and mentoring fellow students in competitive programming and software development. Organizing coding contests and technical workshops for the campus community.",
-    type: 'volunteer'
-  },
-  {
-    title: "Technical Team Member",
-    company: "Newton School of Coding Club SRM (NSCC - SRM)",
-    period: "2025 - Present",
-    description: "Active member of the technical team, contributing to coding competitions, hackathons, and collaborative projects. Focus on modern web development and competitive programming.",
-    type: 'volunteer'
-  },
-  {
     title: "B.Tech Computer Science Engineering",
     company: "SRM Institute of Science and Technology",
     period: "2024 - Present",
@@ -143,7 +129,7 @@ export const SKILLS: SkillCategory[] = [
 export const RESUME: Resume = {
   url: "/sourish-ghosh-resume.pdf",
   filename: "sourish-ghosh-resume.pdf",
-  lastUpdated: "2025-10-01"
+  lastUpdated: "2025-10-01 (outdated)"
 };
 
 // ===== PROFILE =====
@@ -151,7 +137,7 @@ export const PROFILE: Profile = {
   name: "Sourish Ghosh",
   handle: "7sg56",
   tagline: "Full-Stack Developer focused on Next.js + design systems",
-  about: "I'm a B.Tech Computer Science student at SRMIST, Chennai, passionate about building scalable web applications and exploring modern web technologies. I enjoy creating clean, responsive designs and experimenting with full-stack projects. Beyond web development, I'm also interested in machine learning, particularly NLP, and I regularly try to solve problems on LeetCode. I'm currently looking for opportunities to contribute to meaningful projects and continue growing as a developer. Let's connect and create the unimaginable",
+  about: "I'm a B.Tech Computer Science student at SRMIST, Chennai, passionate about building scalable web applications and exploring modern web technologies. I enjoy creating clean, responsive designs and experimenting with full-stack projects. Beyond web development, I'm also interested in devOps, and I regularly try to solve problems on LeetCode. I'm currently looking for opportunities to contribute to meaningful projects and continue growing as a developer. Let's connect and create the unimaginable",
   contact: {
     email_masked: "sourishghosh777@gmail.com",
     phone_masked: "Let's not rush, first a date :)",
@@ -162,7 +148,7 @@ export const PROFILE: Profile = {
     linkedin: "https://www.linkedin.com/in/7sg56",
     twitter: "https://x.com/sourishghosh777",
     instagram: "https://www.instagram.com/nicetry",
-    portfolio: "https://sourish-ghosh.vercel.app",
+    portfolio: "coming soon",
   },
   education: {
     summary: "B.Tech in CSE w/s SE (2024-2028) CGPA: 9.1",
@@ -182,13 +168,13 @@ export const SONGS: Song[] = [
   { title: "Humble", artist: "Kendrick Lamar" },
   { title: "Softcore", artist: "The Neighbourhood" },
   { title: "Runaway", artist: "Kanye West" },
-  { title: "Sicko Mode", artist: "Travis Scott" },
+  { title: "Wildflower", artist: "Billie Eilish" },
   { title: "Sao Paulo", artist: "The Weeknd" },
   { title: "Chanel", artist: "Tyla" },
-  { title: "We have time", artist: "Shreea Kaul" },
   { title: "Chihiro", artist: "Billie Eilish" },
-  { title: "Cry for Me", artist: "The Weeknd" },
   { title: "Sofia", artist: "Clairo" },
+  { title: "Guess", artist: "Billie Eilish"},
+  { title: "I KNOW?", artist: "Travis Scott"}
 ];
 
 // ===== TASKS (Todo Widget) =====
@@ -199,22 +185,30 @@ export type Task = {
 };
 
 export const TASKS: Task[] = [
-  { id: 1, title: "Running high on NextJs", completed: false },
-  { id: 2, title: "Petting Mr.Rowlins", completed: false },
-  { id: 3, title: "Watching True Detective", completed: false },
-  { id: 4, title: "Lewis Hamilton is the goat", completed: false },
-  { id: 5, title: "Searching for a code partner", completed: false },
-  { id: 6, title: "Looking up for Shawarma", completed: false },
+  { id: 1, title: "Running high on AstroJs", completed: false },
+  { id: 2, title: "Petting Mr. Rowlins", completed: false },
+  { id: 3, title: "May God shed light when i debug", completed: false},
+  { id: 4, title: "Just keep Watching", completed: false },
+  { id: 5, title: "Watching The Night Manager", completed: false },
+  { id: 6, title: "Intern Lesson 101: Git is dangerous", completed: false},
+  { id: 7, title: "Lewis Hamilton is the GOAT", completed: false },
+  { id: 8, title: "Try starting your day with Jim Beam", completed: false },
+  { id: 9, title: "Life's a B*TCH, so are we", completed: false },
+  { id: 10, title: "I love Billie Eilish" , completed: false },
+  { id: 11, title: "Sometimes I wish I'd become a composer", completed: false},
+  { id: 12, title: "Can Fanny Magnet work on one person?", completed: false},
+  { id: 13, title: "I swear I didn't use AI to build this", completed: false},
+  { id: 14, title: "My flirting style is forgetting how to talk", completed: false}
 ];
 
 // ===== HOBBIES =====
 export type Hobby = string;
 
 export const HOBBIES: Hobby[] = [
-  "Gaming - Soulsborne fan, platinum trophy hunter",
-  "Chess - 1500 rating on Chess.com",
-  "Cat Lover - Proud owner of feline friends",
-  "Cooking - Experimenting in the kitchen"
+  "Gaming — \"Rise, Tarnished.\" - Elden Ring",
+  "Chess — 1200+ on Chess.com",
+  "Cats — Permanently chosen by at least one feline",
+  "Cooking — Alchemy, to satisfy my hunger"
 ];
 
 // ===== UTILITY FUNCTIONS =====
