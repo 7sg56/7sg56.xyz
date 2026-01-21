@@ -18,7 +18,7 @@ import DateNowWidget from "@/components/widgets/DateNowWidget";
 import TechStackStrip from "@/components/tech-marquee";
 import { getResponsiveConfig } from "@/lib/responsive";
 import AnimatedRoleText from "@/components/desktop/AnimatedRoleText";
-import DesktopDock from "@/components/desktop/DesktopDock";
+import DesktopDock, { dockApps } from "@/components/desktop/DesktopDock";
 import { WindowAppType, WidgetType, DesktopItem, DockApp } from "@/components/desktop/types";
 
 export default function DesktopOSPage() {
@@ -256,25 +256,9 @@ export default function DesktopOSPage() {
 
   return (
     <div>
-      {/* Mobile message (SSR-safe, CSS-hidden on md and up) */}
-      <div className="lg:hidden flex items-center justify-center min-h-screen bg-black text-white p-6 text-center">
-        <div className="space-y-3 max-w-md">
-          <div className="text-2xl font-semibold">Not supported on Small Screens</div>
-          <div className="text-zinc-300">Please use a desktop device</div>
-          <div className="pt-2">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded border border-zinc-700 bg-zinc-900/60 hover:bg-zinc-800/60 text-zinc-200"
-            >
-              ← Go to Boot Menu
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* Actual desktop UI hidden on small screens */}
+      {/* Actual desktop UI - Visible on all screens now */}
       <div
-        className="hidden lg:block relative w-full h-screen bg-black overflow-hidden select-none"
+        className="fixed inset-0 w-full h-full bg-black overflow-hidden select-none touch-none"
         role="application"
         aria-label="Desktop environment"
         onMouseDown={(e) => {
@@ -297,8 +281,8 @@ export default function DesktopOSPage() {
          <div
           className="absolute z-10"
           style={{
-            left: `${responsiveConfig.heroLeft}px`,
-            top: `${responsiveConfig.heroTop - 40}px`
+            left: `${width < 768 ? 20 : responsiveConfig.heroLeft}px`,
+            top: `${width < 768 ? 100 : responsiveConfig.heroTop - 40}px`
           }}
          >
           <div className="space-y-2">
@@ -307,7 +291,7 @@ export default function DesktopOSPage() {
               <h1
                 className="tracking-tight font-walter font-black"
                 style={{
-                  fontSize: responsiveConfig.heroNameSize,
+                  fontSize: width < 768 ? '3rem' : responsiveConfig.heroNameSize,
                   lineHeight: '0.9'
                 }}
               >
@@ -318,7 +302,7 @@ export default function DesktopOSPage() {
               <div
                 className="font-light leading-relaxed"
                 style={{
-                  fontSize: responsiveConfig.heroTaglineSize
+                  fontSize: width < 768 ? '1rem' : responsiveConfig.heroTaglineSize
                 }}
               >
                 <span className="text-gray-300">I build </span>
@@ -333,8 +317,8 @@ export default function DesktopOSPage() {
          </div>
         )}
 
-        {/* TechStackStrip - Hidden in Zen Mode */}
-        {!zenMode && (
+        {/* TechStackStrip - Hidden in Zen Mode and Mobile */}
+        {!zenMode && width >= 768 && (
          <div
           className="absolute z-0 origin-center"
           style={{
@@ -366,8 +350,8 @@ export default function DesktopOSPage() {
          </div>
         )}
 
-        {/* Desktop Widgets */}
-        {desktopItems.map((item) => {
+        {/* Desktop Widgets - Hidden on Mobile */}
+        {width >= 768 && desktopItems.map((item) => {
           if (item.type !== "widget" || !item.widgetType) return null;
           return (
             <motion.div
@@ -398,6 +382,7 @@ export default function DesktopOSPage() {
           responsiveConfig={responsiveConfig}
           width={width}
           onAppClick={handleDockAppClick}
+          items={width < 768 ? dockApps.filter(app => ['about', 'projects', 'skills', 'contact'].includes(app.appType)) : undefined}
          />
         )}
 

@@ -16,23 +16,66 @@ export default function SkillsWindow() {
             <p className="text-zinc-400 text-lg">Technologies and tools I work with</p>
           </div>
 
-          {/* Skills Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+{/* Skills Sections */}
+<div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-x-12 md:gap-y-12 items-start">
             {skillCategories.map((category) => (
-              <div key={category.title} className="rounded-2xl p-6 border border-white/5 bg-zinc-900 hover:border-red-500/20 transition-all hover:-translate-y-1 duration-300 group">
-                <h3 className="text-lg font-bold text-white mb-5 pb-2 border-b border-white/5 flex items-center justify-between">
+              <div key={category.title} className="relative">
+                <h3 className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-5 pl-1">
                     {category.title}
-                    <span className="text-red-500/50 text-xs font-mono px-2 py-0.5 rounded bg-red-500/5 group-hover:bg-red-500/10 transition-colors">
-                        {category.skills.length}
-                    </span>
                 </h3>
                 
-                <div className="flex flex-wrap gap-2.5">
-                  {category.skills.map((skill) => (
-                    <span key={skill} className="px-2.5 py-1.5 bg-[#0d0d0d] text-zinc-300 rounded-md text-xs font-medium border border-white/5 hover:border-red-500/30 hover:text-white transition-all cursor-default">
-                      {skill}
-                    </span>
-                  ))}
+                <div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
+                  {category.skills.map((skill) => {
+                    const iconMap: Record<string, string> = {
+                      "Bash": "Bash.svg",
+                      "C": "C.svg",
+                      "C++": "C++-(CPlusPlus).svg",
+                      "Java": "Java.svg",
+                      "TypeScript": "TypeScript.svg",
+                      "React": "React.svg",
+                      "Next.js": "Next.js.svg",
+                      "AstroJs": "Astro.svg",
+                      "Tailwind": "Tailwind-CSS.svg",
+                      "Node.js": "Node.js.svg",
+                      "Express": "Express.svg",
+                      "MongoDB": "MongoDB.svg",
+                      "MySQL": "MySQL.svg",
+                      "SQLite": "SQLite.svg",
+                      "React Native": "React.svg",
+                      "Tauri": "Tauri.svg",
+                      "Electron": "Electron.svg",
+                      "AWS": "AWS.svg",
+                      "Docker": "Docker.svg",
+                      "Jenkins": "Jenkins.svg",
+                      "Linux": "Linux.svg",
+                      "Git": "Git.svg",
+                      "Figma": "Figma.svg",
+                      "Postman": "Postman.svg",
+                      "Jest": "Jest.svg",
+                    };
+
+                    const iconFile = iconMap[skill];
+                    const diffIcon = ["Next.js", "Express", "AstroJs", "Bash", "AWS"].includes(skill);
+
+                    return (
+                      <div key={skill} className="flex flex-col items-center gap-2.5 p-2 rounded-xl hover:bg-white/5 transition-colors group">
+                        <div className="w-14 h-14 flex items-center justify-center bg-zinc-900/50 rounded-2xl border border-white/5 group-hover:border-white/10 group-hover:-translate-y-1 group-hover:shadow-lg group-hover:shadow-black/50 transition-all duration-300">
+                          {iconFile ? (
+                            <img 
+                              src={`/tech svg/${iconFile}`} 
+                              alt={`${skill} icon`}
+                              className={`w-7 h-7 object-contain ${diffIcon ? "brightness-0 invert" : ""} opacity-80 group-hover:opacity-100 transition-opacity`}
+                            />
+                          ) : (
+                            <div className="w-1.5 h-1.5 rounded-full bg-zinc-700" />
+                          )}
+                        </div>
+                        <span className="text-zinc-500 font-medium text-xs text-center group-hover:text-zinc-300 transition-colors leading-tight">
+                          {skill}
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             ))}

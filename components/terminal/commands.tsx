@@ -236,15 +236,13 @@ export const commands: Record<string, CommandHandler> = {
     const profile = getProfile();
     return (
       <div className="space-y-1">
-        <div className="text-zinc-100">Contact & Links</div>
-        <div>Email: <span className="text-zinc-200">{profile.contact.email_masked}</span></div>
-        <div>Phone: <span className="text-zinc-200">{profile.contact.phone_masked}</span></div>
         <div className="mt-2">
-          <div className="text-zinc-100 text-sm">Socials</div>
+          <div className="text-zinc-100 text-sm">Socials & Contact</div>
           <div>GitHub: {link(profile.socials.github)}</div>
           <div>LinkedIn: {link(profile.socials.linkedin)}</div>
           <div>Twitter/X: {link(profile.socials.twitter)}</div>
           <div>Portfolio: {link(profile.socials.portfolio)}</div>
+          <div>Email: {link(profile.contact.email_masked)}</div>
         </div>
       </div>
     );

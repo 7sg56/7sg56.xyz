@@ -13,6 +13,7 @@ type Enemy = {
   vy: number;
   type: EnemyType;
   hp?: number; // For boss enemies
+  bossLevel?: number; // Scaling factor for boss
 };
 
 type BossLaser = {
@@ -87,6 +88,7 @@ export default function StarBladeGame({ onExit }: { onExit?: () => void }) {
     let invulnerableUntil = 0;
     let lastBossScore = 0; // Track when last boss was spawned
     let bossShootTimer = 0; // Track boss shooting waves
+    let bossSpawnCount = 0; // Track how many bosses have appeared
     
     // Power-ups with limits
     let fireRateBoost = 0; // Number of fire rate boosts (blue enemies killed) - MAX 5
@@ -237,7 +239,7 @@ export default function StarBladeGame({ onExit }: { onExit?: () => void }) {
     };
 
     // Draw Boss using new SVG (Silver/Red core)
-    const drawBoss = (x: number, y: number, hp: number, maxHp: number) => {
+    const drawBoss = (x: number, y: number, hp: number, maxHp: number, level: number = 0) => {
       ctx.save();
       ctx.translate(x, y);
       
@@ -312,12 +314,12 @@ export default function StarBladeGame({ onExit }: { onExit?: () => void }) {
       ctx.save();
       ctx.textAlign = "center";
       
-      // Label "SHIELD" or "HITS"
+      // Label "BOSS LVL X"
       ctx.font = "bold 14px monospace";
       ctx.fillStyle = "#9ca3af";
-      ctx.fillText("HITS REMAINING", x, y - 80);
+      ctx.fillText(`TITAN LVL ${level + 1}`, x, y - 80);
       
-      // The Number
+      // The Number (Hits Remaining)
       ctx.font = "bold 24px monospace";
       // Color shifts from Green -> Yellow -> Red based on HP
       if (hp > 25) ctx.fillStyle = "#4ade80"; // Green > 50%
@@ -353,6 +355,7 @@ export default function StarBladeGame({ onExit }: { onExit?: () => void }) {
         powerModeUntil = 0;
         lastBossScore = 0;
         bossShootTimer = 0;
+        bossSpawnCount = 0;
         setGameState("playing");
         setScore(0);
         setLives(5);
@@ -473,9 +476,11 @@ export default function StarBladeGame({ onExit }: { onExit?: () => void }) {
             vy: 0,
 
             type: "boss",
-            hp: 30 // Boss has 30 HP (Takes 30 hits)
+            hp: 30 + (bossSpawnCount * 5), // Boss HP +5 per spawn
+            bossLevel: bossSpawnCount
           });
           lastBossScore = currentScore;
+          bossSpawnCount++;
         }
 
         // Progressive difficulty: spawn rate and speed increase with score
@@ -537,16 +542,22 @@ export default function StarBladeGame({ onExit }: { onExit?: () => void }) {
             // Wave movement - more aggressive
             E.vy = Math.sin(now / 400) * 3;
             
-            // Boss shooting in waves (every 1 second - faster!)
-            if (now - bossShootTimer > 1000) {
-              // Shoot 5 lasers in a spread pattern (more dangerous!)
+            const level = E.bossLevel || 0;
+            // Scale interval: 1000ms reduced by 10% per level (down to min 300ms)
+            const fireInterval = Math.max(300, 1000 * Math.pow(0.9, level));
+            
+            // Boss shooting in waves
+            if (now - bossShootTimer > fireInterval) {
+              // Shoot lasers (speed increases by 10% per level)
+              const bulletSpeed = 7 * Math.pow(1.1, level);
+              
               const angles = [-0.5, -0.25, 0, 0.25, 0.5]; // Wider spread with more lasers
               for (const angle of angles) {
                 bossLasers.push({
                   x: E.x - 30,
                   y: E.y,
-                  vx: -7 * Math.cos(angle), // Faster projectiles
-                  vy: -7 * Math.sin(angle)
+                  vx: -bulletSpeed * Math.cos(angle), 
+                  vy: -bulletSpeed * Math.sin(angle)
                 });
               }
               bossShootTimer = now;
@@ -680,7 +691,7 @@ export default function StarBladeGame({ onExit }: { onExit?: () => void }) {
       // Draw enemies and bosses
       for (const E of enemies) {
         if (E.type === "boss") {
-          drawBoss(E.x, E.y, E.hp || 20, 20);
+          drawBoss(E.x, E.y, E.hp || 30, 30 + (E.bossLevel || 0) * 5, E.bossLevel || 0);
         } else {
           drawEnemy(E.x, E.y, E.type);
         }

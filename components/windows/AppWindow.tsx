@@ -105,10 +105,19 @@ export default function AppWindow({
     prevFsRef.current = fullscreen;
   }, [fullscreen, savedSize, size]);
 
-  // Disable dragging when fullscreen
+  // Check for mobile
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Disable dragging when fullscreen or on mobile
   const dragProps = useMemo(
     () =>
-      fullscreen
+      fullscreen || isMobile
         ? { drag: false as const }
         : {
           drag: true as const,
@@ -118,7 +127,7 @@ export default function AppWindow({
           dragElastic: 0.08,
           dragConstraints: containerRef,
         },
-    [fullscreen, dragControls]
+    [fullscreen, dragControls, isMobile]
   );
 
   // Resize handler (bottom-right corner)
@@ -195,7 +204,7 @@ export default function AppWindow({
         variants={variants}
         transition={{ type: "spring", stiffness: 300, damping: 28 }}
         className={
-          (fullscreen
+          (fullscreen || isMobile
             ? "pointer-events-auto absolute inset-0"
             : "pointer-events-auto absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2") +
           " rounded-lg border flex flex-col font-mono text-sm shadow-[0_10px_30px_rgba(0,0,0,0.4)]" +
@@ -204,8 +213,15 @@ export default function AppWindow({
         style={{
           borderColor: borderColor || (DEBUG_UI ? "#89b4fa" : "#27272a"), // zinc-800
           backgroundColor: backgroundColor || "#0d0d0d", // solid hex
-          width: fullscreen ? "100%" : size.w,
-          height: fullscreen ? "100%" : size.h,
+          // On mobile, use margin to constrain it slightly if not fullscreen, or just fill
+          // But "inset-0" class handles position, so we just need size adjustments
+          width: (fullscreen || isMobile) ? "auto" : size.w,
+          height: (fullscreen || isMobile) ? "auto" : size.h,
+          right: isMobile ? 0 : undefined, // Ensure it stretches
+          left: isMobile ? 0 : undefined,
+          margin: isMobile ? "0.5rem" : undefined, // Add small margin on mobile
+          marginTop: isMobile ? "4rem" : undefined, // Space from top
+          marginBottom: isMobile ? "5rem" : undefined, // Space from bottom/dock
           outline: DEBUG_UI ? "1px dashed #89b4fa" : undefined,
           boxShadow: "0 0 0 1px rgba(255,255,255,0.1), 0 20px 50px -12px rgba(0,0,0,0.7)",
         }}

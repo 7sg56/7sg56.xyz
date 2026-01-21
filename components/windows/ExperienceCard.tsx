@@ -22,37 +22,38 @@ export default function ExperienceCard({
   isCurrent = false,
 }: ExperienceCardProps) {
   return (
-    <div className="border border-white/5 hover:border-red-500/20 rounded-2xl p-6 bg-zinc-900 transition-colors group">
-      <div className="flex items-start justify-between mb-4">
-        <div>
-           <h3 className="text-xl font-bold text-white mb-1 group-hover:text-red-400 transition-colors">{title}</h3>
-           <div className="text-zinc-400 text-sm font-medium">{company} • <span className="text-zinc-500 font-normal">{duration}</span></div>
-        </div>
+    <div className="py-2 group">
+      <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between mb-2">
+           <h3 className="text-lg font-bold text-white group-hover:text-red-400 transition-colors">{title}</h3>
+           <div className="text-zinc-500 text-sm font-mono">{duration}</div>
+      </div>
+      
+      <div className="mb-3 text-zinc-400 font-medium text-sm flex items-center gap-2">
+        {company}
         {isCurrent && (
-          <div className="bg-green-500/10 px-3 py-1 rounded-full text-xs font-semibold text-green-400 border border-green-500/20 tracking-wide">
-            PRESENT
-          </div>
+            <span className="bg-red-500/10 text-red-400 px-2 py-0.5 rounded text-[10px] uppercase tracking-wider font-bold">
+                Current
+            </span>
         )}
       </div>
       
-      <p className="text-zinc-300 leading-relaxed mb-6">{description}</p>
+      <p className="text-zinc-400 leading-relaxed mb-4 text-sm max-w-3xl">{description}</p>
       
       {tech && tech.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-4">
+        <div className="flex flex-wrap gap-x-4 gap-y-1 mb-3">
            {tech.map((t, i) => (
-             <span key={i} className="text-xs px-2 py-1 rounded bg-[#0d0d0d] border border-white/5 text-zinc-400 font-mono">
-               {t}
+             <span key={i} className="text-xs text-zinc-600 font-mono">
+               #{t}
              </span>
            ))}
         </div>
       )}
       
       {achievements && achievements.length > 0 && (
-        <ul className="space-y-2">
+        <ul className="space-y-1 mt-2">
           {achievements.map((achievement, index) => (
-            <li key={index} className="text-zinc-400 text-sm flex items-start gap-2">
-              <span className="text-red-500/50 mt-1.5 w-1.5 h-1.5 rounded-full bg-red-500 shrink-0"></span>
-              <span>{achievement}</span>
+            <li key={index} className="text-zinc-400 text-sm flex items-start gap-2 pl-2 border-l border-zinc-800">
+              <span className="leading-relaxed">{achievement}</span>
             </li>
           ))}
         </ul>
