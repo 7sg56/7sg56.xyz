@@ -33,6 +33,7 @@ interface DesktopDockProps {
     responsiveConfig: ResponsiveConfig
     width: number
     onAppClick: (app: DockApp, rect: DOMRect) => void
+    items?: DockApp[]
 }
 
 const DesktopDock: React.FC<DesktopDockProps> = ({
@@ -40,12 +41,15 @@ const DesktopDock: React.FC<DesktopDockProps> = ({
     responsiveConfig,
     width,
     onAppClick,
+    items,
 }) => {
+    const appsToRender = items || dockApps;
+
     return (
         <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-50">
            <TooltipProvider>
             <Dock magnification={80} distance={100} iconSize={56} layout className= "border border-zinc-700 bg-zinc-900 shadow-[0_10px_30px_rgba(0,0,0,0.4)] min-w-[300px] flex items-center justify-center">
-              {dockApps.map((app) => {
+              {appsToRender.map((app) => {
                  const isOpen = openWindows[app.appType as WindowAppType];
                  return (
                   <DockIcon key={app.id} className="bg-black/10 dark:bg-white/10 p-3 rounded-full size-10 sm:size-12 md:size-14">
