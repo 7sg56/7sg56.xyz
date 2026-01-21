@@ -20,6 +20,12 @@ const DynamicMinecraftSpawn = dynamic(() => import("./MinecraftSpawn"), {
   loading: () => <div className="text-zinc-500 text-sm">Loading 3D Module...</div>
 });
 
+// Lazy load the StarBlade game
+const DynamicStarBladeGame = dynamic(() => import("./StarBladeGame"), {
+  ssr: false,
+  loading: () => <div className="text-zinc-500 text-sm">Loading StarBlade...</div>
+});
+
 export type ThemeName = "default" | "mocha";
 
 export type Env = {
@@ -30,6 +36,7 @@ export type Env = {
   setPrompt: (p: string) => void;
   open: (url: string) => void;
   run: (cmd: string) => void; // programmatically run a command from clickable UI
+  onExit?: () => void; // callback to close the terminal window
   theme: ThemeName;
   prompt: string;
   bannerVisible: boolean;
@@ -65,8 +72,9 @@ function link(href: string, text?: string) {
 }
 
 export const aliases: Record<string, string> = {
-  about: "aboutme",
-  surprise: "spawn", // backward-compatible alias
+  work: "exp",
+  play: "starblade",
+  game: "starblade",
 };
 
 export const commands: Record<string, CommandHandler> = {
@@ -75,30 +83,28 @@ export const commands: Record<string, CommandHandler> = {
       <div className="grid grid-cols-[140px_1fr] gap-x-4 gap-y-1 font-mono text-sm">
         <div className="text-green-400">help</div>
         <div>List all commands</div>
-        <div className="text-green-400">startx</div>
-        <div>access GUI</div>
         <div className="text-green-400">about</div>
-        <div>Who Am I ?</div>
-        <div className="text-green-400">experience</div>
+        <div>Who Am I? (use -f for full)</div>
+        <div className="text-green-400">exp</div>
         <div>Places I have worked</div>
         <div className="text-green-400">skills</div>
         <div>My Tech Stack</div>
         <div className="text-green-400">projects</div>
-        <div>View my projects</div>
-        <div className="text-green-400">socials</div>
-        <div>View my socials</div>
+        <div>View my projects (use -f for details)</div>
+        <div className="text-green-400">contact</div>
+        <div>Get in touch with me</div>
         <div className="text-green-400">resume</div>
-        <div>Download my resume</div>
-        <div className="text-green-400">hobbies</div>
-        <div>What I do for fun</div>
+        <div>View my resume</div>
+        <div className="text-green-400">starblade</div>
+        <div>Play StarBlade - Space Shooter</div>
         <div className="text-green-400">spawn</div>
         <div>It&#39;s a secret</div>
-        <div className="text-green-400">shutdown</div>
-        <div>Return to GRUB menu</div>
         <div className="text-green-400">clear</div>
-        <div>Clear terminal</div>
+        <div>Clear terminal (Ctrl/Cmd+L)</div>
         <div className="text-green-400">zen</div>
         <div>Toggle Zen Mode</div>
+        <div className="text-green-400">exit</div>
+        <div>Close terminal window</div>
       </div>
     </div>
   ),
@@ -112,44 +118,40 @@ export const commands: Record<string, CommandHandler> = {
     return <div className="text-red-400">Zen Mode not available in this environment.</div>;
   },
 
-  // hobbies
-  hobbies: () => {
-    const hobbies = getHobbies();
-    return (
-      <div className="space-y-1">
-        <div className="text-zinc-100">Hobbies</div>
-        <ul className="list-disc pl-6 text-zinc-300">
-          {hobbies.map((hobby, index) => (
-            <li key={index}>{hobby}</li>
-          ))}
-        </ul>
-      </div>
-    );
-  },
-
-  // aboutme
-  aboutme: () => {
+  // about with optional -f flag for full details
+  about: (args) => {
     const profile = getProfile();
+    const fullMode = args.includes("-f") || args.includes("--full");
+    
+    if (fullMode) {
+      return (
+        <div className="space-y-2">
+          <div className="text-zinc-100 font-semibold">{profile.name}</div>
+          <div className="text-zinc-300">{profile.tagline}</div>
+          <div className="text-zinc-400 whitespace-pre-wrap">{profile.about}</div>
+          <div className="mt-3 space-y-1">
+            <div className="text-zinc-100">Education</div>
+            <div className="text-zinc-300">{profile.education.summary}</div>
+          </div>
+          <div className="mt-2 space-y-1">
+            <div className="text-zinc-100">Status</div>
+            <div className="text-zinc-300">{profile.contact.open_to}</div>
+          </div>
+        </div>
+      );
+    }
+    
     return (
       <div className="space-y-1">
         <div className="text-zinc-100 font-semibold">{profile.name}</div>
         <div className="text-zinc-300">{profile.tagline}</div>
-        <div className="text-zinc-400 whitespace-pre-wrap">{profile.about}</div>
+        <div className="text-zinc-400">Use <span className="text-green-400">about -f</span> for full details</div>
       </div>
     );
   },
 
-  startx: () => {
-    try {
-      window.location.assign('/desktop');
-    } catch { }
-    return (
-      <div className="text-zinc-300">Launching Desktop… <span className="text-green-400">o/desktop</span></div>
-    );
-  },
-
-  // experience
-  experience: () => (
+  // exp (experience) - alias: work
+  exp: () => (
     <div className="space-y-1">
       <div className="text-zinc-100">Experience</div>
       <ul className="list-disc pl-6 text-zinc-300 space-y-1">
@@ -166,9 +168,12 @@ export const commands: Record<string, CommandHandler> = {
   // skills (keep existing component)
   skills: () => <Skills />,
 
-  // projects (keep existing implementation)
+  // projects with -f flag for full details, or projects view <slug>
   projects: (args) => {
-    const sub = (args[0] || "list").toLowerCase();
+    const hasFullFlag = args.includes("-f") || args.includes("--full");
+    const sub = (args[0] || "").toLowerCase();
+    
+    // Handle "projects view <slug>" command
     if (sub === "view") {
       const key = (args[1] || "").toLowerCase();
       const p = getProject(key);
@@ -185,58 +190,83 @@ export const commands: Record<string, CommandHandler> = {
         </div>
       );
     }
+    
+    // Full mode: show descriptions
+    if (hasFullFlag) {
+      return (
+        <div className="space-y-1">
+          <div className="text-zinc-100">Projects ({getProjectsCount()})</div>
+          <ul className="list-disc pl-6 space-y-2">
+            {getAllProjects().map((p, i) => (
+              <li key={p.slug}>
+                <div className="text-zinc-200 font-semibold">[{i + 1}] {p.name}</div>
+                <div className="text-zinc-400">{p.desc}</div>
+                <div className="text-zinc-500 text-sm">Tech: {p.tech.join(", ")}</div>
+                <div className="space-x-3 mt-1">
+                  {p.demo && link(p.demo, "demo")}
+                  {p.repo && link(p.repo, "repo")}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    }
+    
+    // Default: simple list
     return (
       <div className="space-y-1">
         <div className="text-zinc-100">Projects ({getProjectsCount()})</div>
         <ul className="list-disc pl-6 space-y-1">
           {getAllProjects().map((p, i) => (
             <li key={p.slug}>
-              <span className="text-zinc-200">[{i + 1}] {p.name}</span>
-              <span className="text-zinc-500"> — {p.desc}</span>{" "}
+              <span className="text-zinc-200">[{i + 1}] {p.name}</span>{" "}
               {p.demo && link(p.demo, "demo")}
               {p.repo && <span className="ml-2">{link(p.repo, "repo")}</span>}
             </li>
           ))}
         </ul>
-        <div className="text-zinc-500">View details: projects view &lt;slug|#&gt;</div>
+        <div className="text-zinc-500 text-sm mt-1">Use <span className="text-green-400">projects -f</span> for details or <span className="text-green-400">projects view &lt;slug&gt;</span></div>
       </div>
     );
   },
 
-  // socials (keep existing)
-  socials: () => {
+  // contact (renamed from socials)
+  contact: () => {
     const profile = getProfile();
     return (
       <div className="space-y-1">
-        <div className="text-zinc-100">Links & Contact</div>
-        <div>GitHub: {link(profile.socials.github)}</div>
-        <div>LinkedIn: {link(profile.socials.linkedin)}</div>
-        <div>Twitter/X: {link(profile.socials.twitter)}</div>
-        <div>Portfolio: {link(profile.socials.portfolio)}</div>
+        <div className="text-zinc-100">Contact & Links</div>
         <div>Email: <span className="text-zinc-200">{profile.contact.email_masked}</span></div>
+        <div>Phone: <span className="text-zinc-200">{profile.contact.phone_masked}</span></div>
+        <div className="mt-2">
+          <div className="text-zinc-100 text-sm">Socials</div>
+          <div>GitHub: {link(profile.socials.github)}</div>
+          <div>LinkedIn: {link(profile.socials.linkedin)}</div>
+          <div>Twitter/X: {link(profile.socials.twitter)}</div>
+          <div>Portfolio: {link(profile.socials.portfolio)}</div>
+        </div>
       </div>
     );
   },
 
-  // resume: attempt to download a PDF from /public
-  resume: (args) => {
+  // resume: open in new tab instead of downloading
+  resume: (args, env) => {
     const resume = getResume();
     const target = (args[0] || resume.url).replace(/^\/+/, '');
     const url = `/${target}`;
+    
+    // Open in new tab
     try {
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = resume.filename;
-      a.style.display = 'none';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      window.open(url, '_blank', 'noopener,noreferrer');
     } catch { }
+    
     return (
       <div className="space-y-1">
         <div className="text-zinc-100">Resume</div>
-        <div>Attempting download: <span className="text-zinc-200">{resume.filename}</span></div>
+        <div>Opening resume in new tab...</div>
         <div className="text-zinc-500 text-sm">Last updated: {resume.lastUpdated}</div>
+        <div className="mt-1">{link(url, "Click here if it didn't open")}</div>
       </div>
     );
   },
@@ -249,26 +279,22 @@ export const commands: Record<string, CommandHandler> = {
     return <DynamicMinecraftSpawn forcedKind={asKind} />;
   },
 
-  // shutdown with confirmation
-  shutdown: () => (
-    <div className="space-y-2">
-      <div className="text-zinc-100">Shutdown requested</div>
-      <div className="text-zinc-400">Return to GRUB menu? This will leave the terminal.</div>
-      <div className="flex gap-2">
-        <button
-          className="px-2 py-1 rounded border border-zinc-700 hover:bg-zinc-800"
-          onClick={() => { try { window.location.assign('/'); } catch { } }}
-        >
-          Yes
-        </button>
-        <button
-          className="px-2 py-1 rounded border border-zinc-700 hover:bg-zinc-800"
-          onClick={() => { /* no-op: user can continue */ }}
-        >
-          No
-        </button>
-      </div>
-      <div className="text-zinc-500 text-xs">Tip: type <span className="text-zinc-200">help</span> to continue.</div>
-    </div>
-  ),
+  // starblade: interactive space shooter game
+  starblade: (_args, env) => {
+    return <DynamicStarBladeGame onExit={() => env.run("clear")} />;
+  },
+
+  // exit: close the terminal window
+  exit: (_args, env) => {
+    if (env.onExit) {
+      // If in zen mode, exit zen mode first to restore the desktop
+      if (env.zenMode && env.setZenMode) {
+        env.setZenMode(false);
+      }
+      // Small delay to show the message and allow zen mode to exit before closing
+      setTimeout(() => env.onExit?.(), 300);
+      return <div className="text-zinc-400">Closing terminal...</div>;
+    }
+    return <div className="text-red-400">Exit not available in this environment.</div>;
+  },
 };

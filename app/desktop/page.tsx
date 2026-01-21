@@ -245,7 +245,8 @@ export default function DesktopOSPage() {
             } else {
               setFullscreenWindows(prev => ({ ...prev, terminal: false }));
             }
-          }} 
+          }}
+          onExit={() => closeWindow('terminal')}
         />
       ) 
     },

@@ -6,9 +6,10 @@ import Terminal from "@/components/terminal/Terminal";
 interface TerminalWindowProps {
   onZenModeChange: (enabled: boolean) => void;
   zenMode: boolean;
+  onExit?: () => void; // callback to close the terminal window
 }
 
-export default function TerminalWindow({ onZenModeChange, zenMode }: TerminalWindowProps) {
+export default function TerminalWindow({ onZenModeChange, zenMode, onExit }: TerminalWindowProps) {
   // We want the terminal to look like it's part of the window, 
   // so we use embedded=true and handle chrome in the window title bar if needed,
   // but standard AppWindow has its own chrome. 
@@ -30,6 +31,7 @@ export default function TerminalWindow({ onZenModeChange, zenMode }: TerminalWin
             // Pass the zen mode handler via a custom prop we will add to Terminal
             onZenModeChange={onZenModeChange}
             zenMode={zenMode}
+            onExit={onExit}
           />
        </div>
     </div>
