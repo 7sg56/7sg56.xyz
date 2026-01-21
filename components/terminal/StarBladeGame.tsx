@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { createPortal } from "react-dom";
 
 type GameState = "playing" | "gameover";
-type EnemyType = "normal" | "yellow" | "purple" | "blue";
+type EnemyType = "normal" | "yellow" | "purple" | "blue" | "boss";
 
 type Enemy = {
   x: number;
@@ -12,6 +12,14 @@ type Enemy = {
   vx: number;
   vy: number;
   type: EnemyType;
+  hp?: number; // For boss enemies
+};
+
+type BossLaser = {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
 };
 
 export default function StarBladeGame({ onExit }: { onExit?: () => void }) {
@@ -59,22 +67,25 @@ export default function StarBladeGame({ onExit }: { onExit?: () => void }) {
     const player: Ship = { x: 80, y: height / 2, vx: 0, vy: 0 };
     const enemies: Enemy[] = [];
     const lasers: Laser[] = [];
+    const bossLasers: BossLaser[] = [];
     let currentScore = 0;
     let currentLives = 5;
     let currentGameState: GameState = "playing";
     let invulnerable = false;
     let invulnerableUntil = 0;
+    let lastBossScore = 0; // Track when last boss was spawned
+    let bossShootTimer = 0; // Track boss shooting waves
     
     // Power-ups with limits
-    let fireRateBoost = 0; // Number of fire rate boosts (yellow enemies killed) - MAX 5
-    let blasterCount = 1; // Number of blasters (purple enemies killed) - MAX 4
+    let fireRateBoost = 0; // Number of fire rate boosts (blue enemies killed) - MAX 5
+    let blasterCount = 1; // Number of blasters (purple enemies killed) - MAX 3
     const MAX_FIRE_RATE_BOOST = 5;
-    const MAX_BLASTERS = 4;
+    const MAX_BLASTERS = 3;
     
-    // Power mode (blue enemy)
+    // Power mode (yellow/golden enemy - rarest)
     let powerModeActive = false;
     let powerModeUntil = 0;
-    const POWER_MODE_DURATION = 15000; // 15 seconds
+    const POWER_MODE_DURATION = 10000; // 10 seconds
 
     for (let i = 0; i < 150; i++) {
       stars.push({ 
@@ -207,6 +218,82 @@ export default function StarBladeGame({ onExit }: { onExit?: () => void }) {
       ctx.restore();
     };
 
+    // Millennium Falcon-style boss drawing function
+    const drawBoss = (x: number, y: number, hp: number, maxHp: number) => {
+      ctx.save();
+      ctx.translate(x, y);
+      
+      const scale = 2.5; // Boss is bigger
+      ctx.scale(scale, scale);
+      
+      // Main circular body (golden/yellow)
+      ctx.fillStyle = "#fbbf24"; // golden yellow
+      ctx.beginPath();
+      ctx.arc(0, 0, 15, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Darker golden outline
+      ctx.strokeStyle = "#f59e0b";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      
+      // Cockpit offset (like Millennium Falcon)
+      ctx.fillStyle = "#60a5fa"; // blue cockpit
+      ctx.beginPath();
+      ctx.arc(8, 0, 4, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Side mandibles/prongs (Falcon-style)
+      ctx.fillStyle = "#eab308";
+      ctx.beginPath();
+      ctx.moveTo(-15, -5);
+      ctx.lineTo(-25, -8);
+      ctx.lineTo(-22, -3);
+      ctx.closePath();
+      ctx.fill();
+      
+      ctx.beginPath();
+      ctx.moveTo(-15, 5);
+      ctx.lineTo(-25, 8);
+      ctx.lineTo(-22, 3);
+      ctx.closePath();
+      ctx.fill();
+      
+      // Engine glow
+      ctx.fillStyle = "#3b82f6"; // blue engine glow
+      ctx.beginPath();
+      ctx.arc(15, 0, 3, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Detail lines
+      ctx.strokeStyle = "#ca8a04";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(-10, 0);
+      ctx.lineTo(10, 0);
+      ctx.stroke();
+      
+      ctx.restore();
+      
+      // HP bar above boss
+      const barWidth = 60;
+      const barHeight = 6;
+      const hpPercent = hp / maxHp;
+      
+      ctx.fillStyle = "#1f2937"; // dark background
+      ctx.fillRect(x - barWidth / 2, y - 50, barWidth, barHeight);
+      
+      // HP bar color (green to red based on health)
+      const hpColor = hpPercent > 0.5 ? "#4ade80" : hpPercent > 0.25 ? "#fbbf24" : "#ef4444";
+      ctx.fillStyle = hpColor;
+      ctx.fillRect(x - barWidth / 2, y - 50, barWidth * hpPercent, barHeight);
+      
+      // HP bar border
+      ctx.strokeStyle = "#9ca3af";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(x - barWidth / 2, y - 50, barWidth, barHeight);
+    };
+
     const handleKeyDown = (e: KeyboardEvent) => {
       const key = e.key.toLowerCase();
       
@@ -229,6 +316,8 @@ export default function StarBladeGame({ onExit }: { onExit?: () => void }) {
         blasterCount = 1;
         powerModeActive = false;
         powerModeUntil = 0;
+        lastBossScore = 0;
+        bossShootTimer = 0;
         setGameState("playing");
         setScore(0);
         setLives(5);
@@ -236,6 +325,7 @@ export default function StarBladeGame({ onExit }: { onExit?: () => void }) {
         player.y = height / 2;
         enemies.length = 0;
         lasers.length = 0;
+        bossLasers.length = 0;
         invulnerable = false;
         return;
       }
@@ -306,8 +396,9 @@ export default function StarBladeGame({ onExit }: { onExit?: () => void }) {
         const effectiveFireRateBoost = powerModeActive ? MAX_FIRE_RATE_BOOST : Math.min(fireRateBoost, MAX_FIRE_RATE_BOOST);
         const fireRate = Math.max(50, baseFireRate - (effectiveFireRateBoost * 20));
         
-        // In power mode: use max blasters
-        const effectiveBlasterCount = powerModeActive ? MAX_BLASTERS : blasterCount;
+        // In power mode: use 4 blasters (special bonus!)
+        const POWER_MODE_BLASTERS = 4;
+        const effectiveBlasterCount = powerModeActive ? POWER_MODE_BLASTERS : blasterCount;
         
         if (shootingRef.current && now >= nextShotAt) {
           // Calculate blaster positions based on count
@@ -338,29 +429,50 @@ export default function StarBladeGame({ onExit }: { onExit?: () => void }) {
           nextShotAt = now + fireRate;
         }
 
+        // Spawn mini-boss every 500 points
+        if (currentScore >= lastBossScore + 500 && currentScore > 0) {
+          enemies.push({
+            x: width + 50,
+            y: height / 2,
+            vx: -1.5,
+            vy: 0,
+            type: "boss",
+            hp: 35 // Boss has 35 HP - tanky!
+          });
+          lastBossScore = currentScore;
+        }
+
+        // Progressive difficulty: spawn rate and speed increase with score
+        const difficultyMultiplier = 1 + Math.floor(currentScore / 100) * 0.1; // Increases every 100 points
+        const spawnRate = Math.max(300, 700 - Math.floor(currentScore / 50) * 20); // Faster spawning as score increases
+        const baseSpeed = 2 + Math.floor(currentScore / 100) * 0.3; // Faster enemies as score increases
+        
         // Spawn enemies with rare special types
-        if (now - lastSpawn > 700) {
+        if (now - lastSpawn > spawnRate) {
           const rand = Math.random();
           let enemyType: EnemyType = "normal";
           
-          // 5% chance for yellow (fire rate boost)
-          if (rand < 0.05) {
+          // 1% chance for yellow/golden (speed boost - RAREST)
+          if (rand < 0.01) {
             enemyType = "yellow";
           }
-          // 3% chance for purple (dual blasters)
-          else if (rand < 0.08) {
+          // 2% chance for purple (extra blasters - RARE)
+          else if (rand < 0.03) {
             enemyType = "purple";
           }
-          // 2% chance for blue (power mode)
-          else if (rand < 0.02) {
+          // 4% chance for blue (fire rate boost - UNCOMMON)
+          else if (rand < 0.07) {
             enemyType = "blue";
           }
+          
+          // Special enemies move faster (50% speed boost)
+          const speedMultiplier = enemyType !== "normal" ? 1.5 : 1;
           
           enemies.push({ 
             x: width + 20, 
             y: Math.random() * (height - 40) + 20, 
-            vx: -(2 + Math.random() * 1.5), 
-            vy: (Math.random() - 0.5) * 1.2,
+            vx: -(baseSpeed + Math.random() * 1.5) * speedMultiplier, 
+            vy: (Math.random() - 0.5) * 1.2 * speedMultiplier,
             type: enemyType
           });
           lastSpawn = now;
@@ -384,12 +496,45 @@ export default function StarBladeGame({ onExit }: { onExit?: () => void }) {
           E.x += E.vx;
           E.y += E.vy;
           
-          // Bounce enemies off top/bottom
-          if (E.y < 20 || E.y > height - 20) {
-            E.vy *= -1;
+          // Boss behavior: move in a wave pattern and shoot
+          if (E.type === "boss") {
+            // Wave movement - more aggressive
+            E.vy = Math.sin(now / 400) * 3;
+            
+            // Boss shooting in waves (every 1 second - faster!)
+            if (now - bossShootTimer > 1000) {
+              // Shoot 5 lasers in a spread pattern (more dangerous!)
+              const angles = [-0.5, -0.25, 0, 0.25, 0.5]; // Wider spread with more lasers
+              for (const angle of angles) {
+                bossLasers.push({
+                  x: E.x - 30,
+                  y: E.y,
+                  vx: -7 * Math.cos(angle), // Faster projectiles
+                  vy: -7 * Math.sin(angle)
+                });
+              }
+              bossShootTimer = now;
+            }
+          } else {
+            // Bounce normal enemies off top/bottom
+            if (E.y < 20 || E.y > height - 20) {
+              E.vy *= -1;
+            }
           }
           
           if (E.x < -40) enemies.splice(i, 1);
+        }
+
+        // Update boss lasers
+        for (let i = bossLasers.length - 1; i >= 0; i--) {
+          const BL = bossLasers[i];
+          BL.x += BL.vx;
+          BL.y += BL.vy;
+          
+          // Remove if out of bounds
+          if (BL.x < -30 || BL.y < -30 || BL.y > height + 30) {
+            bossLasers.splice(i, 1);
+          }
         }
 
         // Collisions - laser hits enemy
@@ -397,22 +542,38 @@ export default function StarBladeGame({ onExit }: { onExit?: () => void }) {
           const E = enemies[i];
           for (let j = lasers.length - 1; j >= 0; j--) {
             const L = lasers[j];
-            if (Math.abs(L.x - E.x) < 18 && Math.abs(L.y - E.y) < 15) {
+            const hitRadius = E.type === "boss" ? 35 : 18;
+            const hitRadiusY = E.type === "boss" ? 30 : 15;
+            
+            if (Math.abs(L.x - E.x) < hitRadius && Math.abs(L.y - E.y) < hitRadiusY) {
               const enemyType = E.type;
-              enemies.splice(i, 1);
               lasers.splice(j, 1);
-              currentScore += enemyType === "normal" ? 10 : 25;
-              setScore(currentScore);
               
-              // Apply power-ups with limits
-              if (enemyType === "yellow" && fireRateBoost < MAX_FIRE_RATE_BOOST) {
-                fireRateBoost++;
-              } else if (enemyType === "purple" && blasterCount < MAX_BLASTERS) {
-                blasterCount++;
-              } else if (enemyType === "blue") {
-                // Activate power mode for 15 seconds
-                powerModeActive = true;
-                powerModeUntil = now + POWER_MODE_DURATION;
+              // Boss takes damage instead of dying immediately
+              if (enemyType === "boss") {
+                E.hp = (E.hp || 35) - 1;
+                if (E.hp <= 0) {
+                  enemies.splice(i, 1);
+                  currentScore += 150; // Big score for killing boss
+                  setScore(currentScore);
+                }
+              } else {
+                enemies.splice(i, 1);
+                currentScore += enemyType === "normal" ? 10 : 25;
+                setScore(currentScore);
+                
+                // Apply power-ups with limits
+                if (enemyType === "blue" && fireRateBoost < MAX_FIRE_RATE_BOOST) {
+                  // Blue = fire rate boost
+                  fireRateBoost++;
+                } else if (enemyType === "purple" && blasterCount < MAX_BLASTERS) {
+                  // Purple = extra blasters (up to 3)
+                  blasterCount++;
+                } else if (enemyType === "yellow") {
+                  // Yellow/Golden = Power mode (10 seconds, 4 boosters, max fire rate)
+                  powerModeActive = true;
+                  powerModeUntil = now + POWER_MODE_DURATION;
+                }
               }
               
               break;
@@ -429,12 +590,36 @@ export default function StarBladeGame({ onExit }: { onExit?: () => void }) {
         if (!invulnerable) {
           for (let i = enemies.length - 1; i >= 0; i--) {
             const E = enemies[i];
-            if (Math.abs(player.x - E.x) < 20 && Math.abs(player.y - E.y) < 18) {
-              enemies.splice(i, 1);
+            const hitRadius = E.type === "boss" ? 40 : 20;
+            const hitRadiusY = E.type === "boss" ? 35 : 18;
+            
+            if (Math.abs(player.x - E.x) < hitRadius && Math.abs(player.y - E.y) < hitRadiusY) {
+              // Don't remove boss on collision, just damage player
+              if (E.type !== "boss") {
+                enemies.splice(i, 1);
+              }
               currentLives--;
               setLives(currentLives);
               invulnerable = true;
               invulnerableUntil = now + 2000; // 2 seconds invulnerability
+              
+              if (currentLives <= 0) {
+                currentGameState = "gameover";
+                setGameState("gameover");
+              }
+              break;
+            }
+          }
+          
+          // Boss laser hits player
+          for (let i = bossLasers.length - 1; i >= 0; i--) {
+            const BL = bossLasers[i];
+            if (Math.abs(player.x - BL.x) < 15 && Math.abs(player.y - BL.y) < 15) {
+              bossLasers.splice(i, 1);
+              currentLives--;
+              setLives(currentLives);
+              invulnerable = true;
+              invulnerableUntil = now + 2000;
               
               if (currentLives <= 0) {
                 currentGameState = "gameover";
@@ -452,9 +637,13 @@ export default function StarBladeGame({ onExit }: { onExit?: () => void }) {
         drawSpaceship(player.x, player.y, isFlashing);
       }
 
-      // Draw enemies
+      // Draw enemies and bosses
       for (const E of enemies) {
-        drawEnemy(E.x, E.y, E.type);
+        if (E.type === "boss") {
+          drawBoss(E.x, E.y, E.hp || 20, 20);
+        } else {
+          drawEnemy(E.x, E.y, E.type);
+        }
       }
 
       // Draw lasers (glowing projectiles)
@@ -473,6 +662,26 @@ export default function StarBladeGame({ onExit }: { onExit?: () => void }) {
         ctx.fillStyle = "#86efac";
         ctx.beginPath();
         ctx.arc(L.x, L.y, 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+
+      // Draw boss lasers (red glowing projectiles)
+      ctx.save();
+      for (const BL of bossLasers) {
+        // Glow effect
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = "#ef4444";
+        ctx.fillStyle = "#ef4444";
+        ctx.beginPath();
+        ctx.arc(BL.x, BL.y, 4, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Core
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = "#fca5a5";
+        ctx.beginPath();
+        ctx.arc(BL.x, BL.y, 2.5, 0, Math.PI * 2);
         ctx.fill();
       }
       ctx.restore();
