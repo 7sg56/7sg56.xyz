@@ -15,7 +15,7 @@ export default function ProjectsWindow() {
           
           <div className="flex flex-col gap-4">
             {PROJECTS.map((p) => (
-            <div key={p.slug} className="group relative flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-4 rounded-xl bg-zinc-900/50 border border-white/5 hover:border-white/10 hover:bg-zinc-900 transition-all">
+            <div key={p.slug} className="group relative flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 p-4 rounded-xl bg-zinc-900/50 border border-white/5 hover:border-white/10 hover:bg-zinc-900 transition-all">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-3 mb-1">
                   <h3 className="text-white font-bold text-lg group-hover:text-red-400 transition-colors">{p.name}</h3>
@@ -37,13 +37,61 @@ export default function ProjectsWindow() {
                    </div>
               </div>
               
-              <div className="grid grid-cols-3 gap-2 w-full md:w-auto md:min-w-[280px] shrink-0 md:ml-auto mt-4 md:mt-0">
-                 {p.tech.map(t => (
-                    <div key={t} className="text-[10px] font-mono px-2 py-1.5 rounded bg-black/20 text-zinc-500 border border-white/5 flex items-center justify-center text-center truncate hover:bg-white/5 hover:text-zinc-400 transition-colors cursor-default" title={t}>
-                        {t}
-                    </div>
-                 ))}
-              </div>
+                <div className="flex flex-wrap lg:justify-end gap-2 w-full lg:w-auto lg:max-w-[300px] shrink-0 lg:ml-auto mt-4 lg:mt-0">
+                  {p.tech.map(t => {
+                    const iconMap: Record<string, string> = {
+                      "Bash": "Bash.svg",
+                      "C": "C.svg",
+                      "C++": "C++-(CPlusPlus).svg",
+                      "Java": "Java.svg",
+                      "TypeScript": "TypeScript.svg",
+                      "React": "React.svg",
+                      "Next.js": "Next.js.svg",
+                      "AstroJs": "Astro.svg",
+                      "Tailwind": "Tailwind-CSS.svg",
+                      "Tailwind CSS": "Tailwind-CSS.svg", 
+                      "Sass": "Sass.svg",
+                      "Three.js": "Three.js.svg",
+                      "Node.js": "Node.js.svg",
+                      "Express": "Express.svg",
+                      "MongoDB": "MongoDB.svg",
+                      "MySQL": "MySQL.svg",
+                      "SQLite": "SQLite.svg",
+                      "React Native": "React.svg",
+                      "Tauri": "Tauri.svg",
+                      "Electron": "Electron.svg",
+                      "AWS": "AWS.svg",
+                      "Docker": "Docker.svg",
+                      "Jenkins": "Jenkins.svg",
+                      "Linux": "Linux.svg",
+                      "Git": "Git.svg",
+                      "Figma": "Figma.svg",
+                      "Postman": "Postman.svg",
+                      "Jest": "Jest.svg",
+                      "JWT": "JSON.svg",
+                      "Vercel": "Vercel.svg",
+                      "Netlify": "Netlify.svg"
+                    };
+
+                    const iconFile = iconMap[t];
+                    // Flexible check for tech names that might vary
+                    const resolvedIcon = iconFile || Object.entries(iconMap).find(([k]) => t.includes(k) || k.includes(t))?.[1];
+
+                    const diffIcon = ["Next.js", "Express", "Three.js", "Bash", "AWS", "Vercel", "Netlify"].some(k => t.includes(k));
+
+                    if (!resolvedIcon) return null;
+
+                    return (
+                        <div key={t} className="w-8 h-8 flex items-center justify-center bg-zinc-900 border border-white/5 rounded-lg hover:border-white/20 transition-all hover:-translate-y-0.5" title={t}>
+                            <img 
+                              src={`/tech svg/${resolvedIcon}`} 
+                              alt={t}
+                              className={`w-4 h-4 object-contain ${diffIcon ? "brightness-0 invert" : ""}`}
+                            />
+                        </div>
+                    );
+                  })}
+               </div>
             </div>
             ))}
             {PROJECTS.length === 0 && (

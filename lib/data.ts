@@ -57,7 +57,7 @@ export const PROJECTS: Project[] = [
     name: "Stamped — Event management & Attendance system",
     slug: "stamped",
     desc: "Seamless event registration, instant QR check-ins, and real-time analytics.",
-    tech: ["Next.js", "Node.js", "Express", "MongoDB", "Tailwind", "JWT"],
+    tech: ["Next.js", "Express", "MongoDB", "Tailwind CSS"],
     repo: "https://github.com/7sg56/stamped-v0",
     demo: "https://stamped-v0.vercel.app",
   },
@@ -65,7 +65,7 @@ export const PROJECTS: Project[] = [
     name: "DawnMark - Online Markdown editor with live file uploads",
     slug: "dawnmark",
     desc: "A sleek, user-friendly online Markdown editor with real-time preview and seamless file uploads.",
-    tech: ["Next.js", "TypeScript", "Tailwind CSS", "React", "Vercel"],
+    tech: ["Next.js", "Tailwind CSS", "React"],
     repo: "https://github.com/7sg56/dawnmark",
     demo: "https://dawnmark.netlify.app",
   },
@@ -73,7 +73,7 @@ export const PROJECTS: Project[] = [
     name: "ClackClick - A website to test out your typing speed",
     slug: "clackclick",
     desc: "A typing speed test app on the web.",
-    tech: ["Next.js", "TypeScript", "Tailwind CSS", "React", "Netlify"],
+    tech: ["Next.js", "Tailwind CSS", "React"],
     repo: "https://github.com/7sg56/clackclick",
     demo: "https://clackclick.netlify.app",
   },
@@ -114,24 +114,28 @@ export const EXPERIENCE: Experience[] = [
 // ===== SKILLS =====
 export const SKILLS: SkillCategory[] = [
   {
-    title: "Programming Languages",
-    skills: ["C/C++", "Java", "TypeScript"]
+    title: "Languages",
+    skills: ["C", "C++", "Java", "TypeScript"]
   },
   {
     title: "Frontend",
-    skills: ["Next.js", "AstroJs", "Three.js"]
+    skills: ["React", "Next.js", "AstroJs", "Tailwind"]
   },
   {
     title: "Backend",
-    skills: ["Node.js", "Express"]
+    skills: ["Node.js", "Express", "MongoDB", "MySQL", "SQLite"]
   },
   {
-    title: "Databases",
-    skills: ["MongoDB", "Prisma", "SQLite", "Supabase"]
+    title: "Mobile & Desktop",
+    skills: ["React Native", "Tauri", "Electron"]
   },
   {
-    title: "Tools",
-    skills: ["Git", "Figma", "Postman", "Linux", "Raspberry Pi"]
+    title: "DevOps & Cloud",
+    skills: ["AWS", "Docker", "Jenkins", "Linux", "Git", "Bash"]
+  },
+  {
+    title: "Tools & Testing",
+    skills: ["Figma", "Postman", "Jest"]
   }
 ];
 

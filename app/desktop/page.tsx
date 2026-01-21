@@ -258,7 +258,7 @@ export default function DesktopOSPage() {
     <div>
       {/* Actual desktop UI - Visible on all screens now */}
       <div
-        className="relative w-full h-screen bg-black overflow-hidden select-none"
+        className="fixed inset-0 w-full h-full bg-black overflow-hidden select-none touch-none"
         role="application"
         aria-label="Desktop environment"
         onMouseDown={(e) => {

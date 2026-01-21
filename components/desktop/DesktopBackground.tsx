@@ -20,7 +20,7 @@ export default function DesktopBackground({
       {backgroundColor ? (
         <div className="absolute inset-0" style={{ backgroundColor }} />
       ) : (
-        <div className="absolute inset-x-0 bottom-0 top-[15%] md:inset-0 w-full h-auto md:h-full">
+        <div className="absolute inset-x-0 bottom-0 top-[20%] md:inset-0 w-full h-auto md:h-full">
            <Image
             src={backgroundImage}
             alt="Desktop Background"

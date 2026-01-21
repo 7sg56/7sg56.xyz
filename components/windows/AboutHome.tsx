@@ -12,6 +12,15 @@ type View = "about" | "experience";
 export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
   const [currentView, setCurrentView] = useState<View>("about");
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   useEffect(() => {
     // Load Google Fonts dynamically
     const link = document.createElement('link');
@@ -42,12 +51,12 @@ export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
     return (
       <div className="flex flex-col relative z-50 pb-6">
         {/* Header with CTA buttons */}
-        <div className="sticky top-0 z-50 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#0d0d0d]/80 backdrop-blur-md">
+        <div className={`sticky top-0 z-50 flex ${isMobile ? 'flex-col gap-3 items-start' : 'flex-row items-center justify-between'} px-6 py-4 border-b border-white/10 bg-[#0d0d0d]/80 backdrop-blur-md`}>
           <h1 className="text-2xl font-bold text-white">About</h1>
-          <div className="flex flex-row gap-2">
+          <div className={`flex flex-row ${isMobile ? 'overflow-x-auto w-full pb-1 scrollbar-hide' : 'gap-2'}`}>
             <motion.button
               onClick={() => setCurrentView("experience")}
-              className="text-zinc-400 hover:text-white px-3 py-1.5 transition-colors font-medium text-sm"
+              className={`text-zinc-400 hover:text-white px-3 py-1.5 transition-colors font-medium text-sm whitespace-nowrap ${isMobile ? 'bg-white/5 rounded-full mr-2' : ''}`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -56,7 +65,7 @@ export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
 
             <motion.button
               onClick={() => onOpen("projects")}
-              className="text-zinc-400 hover:text-white px-3 py-1.5 transition-colors font-medium text-sm"
+              className={`text-zinc-400 hover:text-white px-3 py-1.5 transition-colors font-medium text-sm whitespace-nowrap ${isMobile ? 'bg-white/5 rounded-full mr-2' : ''}`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -65,7 +74,7 @@ export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
 
             <motion.button
               onClick={() => onOpen("skills")}
-              className="text-zinc-400 hover:text-white px-3 py-1.5 transition-colors font-medium text-sm"
+              className={`text-zinc-400 hover:text-white px-3 py-1.5 transition-colors font-medium text-sm whitespace-nowrap ${isMobile ? 'bg-white/5 rounded-full mr-2' : ''}`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -74,7 +83,7 @@ export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
 
             <motion.button
               onClick={() => onOpen("contact")}
-              className="text-zinc-400 hover:text-white px-3 py-1.5 transition-colors font-medium text-sm"
+              className={`text-zinc-400 hover:text-white px-3 py-1.5 transition-colors font-medium text-sm whitespace-nowrap ${isMobile ? 'bg-white/5 rounded-full' : ''}`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -84,7 +93,7 @@ export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
         </div>
 
         {/* Content */}
-        <div className="p-6">
+        <div className={isMobile ? "p-4" : "p-6"}>
           <motion.div
             className="max-w-4xl mx-auto space-y-12"
             variants={containerVariants}
@@ -94,11 +103,11 @@ export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
             {/* Hero Welcome */}
             <motion.div
               variants={itemVariants}
-              className="pl-2"
+              className={isMobile ? "pl-0" : "pl-2"}
             >
                 <div className="mb-6">
-                  <h2 className="text-5xl font-black text-white mb-4 tracking-tight">Hey, I&apos;m Sourish!</h2>
-                  <p className="text-2xl text-zinc-400 font-light max-w-2xl">{profile.tagline}</p>
+                  <h2 className={`${isMobile ? 'text-3xl' : 'text-5xl'} font-black text-white mb-4 tracking-tight`}>Hey, I&apos;m Sourish!</h2>
+                  <p className={`${isMobile ? 'text-xl' : 'text-2xl'} text-zinc-400 font-light max-w-2xl`}>{profile.tagline}</p>
                 </div>
 
                 <p className="text-zinc-400 leading-relaxed text-lg mb-8 max-w-2xl">
@@ -134,8 +143,8 @@ export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
             </motion.div>
 
             {/* About Me Section */}
-            <motion.div variants={itemVariants} className="pl-2 border-l-2 border-white/10 ml-1">
-              <div className="pl-6 space-y-4">
+            <motion.div variants={itemVariants} className={isMobile ? "ml-0" : "pl-2 border-l-2 border-white/10 ml-1"}>
+              <div className={isMobile ? "pl-0 space-y-4" : "pl-6 space-y-4"}>
                   <h2 className="text-2xl font-bold text-white mb-4">My Journey</h2>
                   <div className="space-y-4 text-zinc-400 leading-relaxed max-w-3xl">
                     <p>
@@ -157,7 +166,7 @@ export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
             </motion.div>
 
             {/* Hobbies & Interests */}
-            <motion.div variants={itemVariants} className="pl-2">
+            <motion.div variants={itemVariants} className={isMobile ? "pl-0" : "pl-2"}>
               <h2 className="text-2xl font-bold text-white mb-6">Beyond Code</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6 max-w-3xl">
                 <div className="group">
@@ -209,7 +218,7 @@ export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
           </button>
         </div>
 
-        <div className="p-6">
+        <div className={isMobile ? "p-4" : "p-6"}>
           <div className="max-w-4xl mx-auto space-y-4">
             {experience.map((exp, index) => (
               <ExperienceCard
