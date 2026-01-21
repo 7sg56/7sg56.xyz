@@ -254,7 +254,7 @@ export default function Terminal({ embedded = false, chrome = true, externalComm
   // Embedded: render body only (no outer overlay/chrome)
   if (embedded) {
     return (
-      <div className="w-full h-full flex flex-col min-h-0">
+      <div className="relative w-full h-full flex flex-col min-h-0">
         {chrome && (
           <div className="flex items-center gap-2 pb-2">
             <span className="ml-3 text-xs" style={{ color: "#a6adc8" }}>sourish@7sg56 — zsh</span>
