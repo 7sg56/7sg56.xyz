@@ -174,7 +174,8 @@ export const SONGS: Song[] = [
   { title: "Chihiro", artist: "Billie Eilish" },
   { title: "Sofia", artist: "Clairo" },
   { title: "Guess", artist: "Billie Eilish"},
-  { title: "I KNOW?", artist: "Travis Scott"}
+  { title: "I KNOW?", artist: "Travis Scott"},
+  { title: "Ilomilo", artist: "Billie Eilish"}
 ];
 
 // ===== TASKS (Todo Widget) =====
@@ -186,19 +187,17 @@ export type Task = {
 
 export const TASKS: Task[] = [
   { id: 1, title: "Running high on AstroJs", completed: false },
-  { id: 2, title: "Petting Mr. Rowlins", completed: false },
-  { id: 3, title: "May God shed light when i debug", completed: false},
-  { id: 4, title: "Just keep Watching", completed: false },
-  { id: 5, title: "Watching The Night Manager", completed: false },
-  { id: 6, title: "Intern Lesson 101: Git is dangerous", completed: false},
-  { id: 7, title: "Lewis Hamilton is the GOAT", completed: false },
-  { id: 8, title: "Try starting your day with Jim Beam", completed: false },
-  { id: 9, title: "Life's a B*TCH, so are we", completed: false },
-  { id: 10, title: "I love Billie Eilish" , completed: false },
-  { id: 11, title: "Sometimes I wish I'd become a composer", completed: false},
-  { id: 12, title: "Can Fanny Magnet work on one person?", completed: false},
-  { id: 13, title: "I swear I didn't use AI to build this", completed: false},
-  { id: 14, title: "My flirting style is forgetting how to talk", completed: false}
+  { id: 2, title: "May God shed light when i debug", completed: false},
+  { id: 3, title: "Just keep Watching", completed: false },
+  { id: 4, title: "Watching The Night Manager", completed: false },
+  { id: 5, title: "Intern Lesson 101: Git is dangerous", completed: false},
+  { id: 6, title: "Lewis Hamilton is the GOAT", completed: false },
+  { id: 7, title: "Try starting your day with Jim Beam", completed: false },
+  { id: 8, title: "Life's a B*TCH, so are we", completed: false },
+  { id: 9, title: "I love Billie Eilish" , completed: false },
+  { id: 10, title: "Sometimes I wish I'd become a composer", completed: false},
+  { id: 11, title: "I swear I didn't use AI to build this", completed: false},
+  { id: 12, title: "My flirting style is forgetting how to talk", completed: false}
 ];
 
 // ===== HOBBIES =====
