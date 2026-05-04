@@ -2,6 +2,7 @@
 
 import React from "react";
 import { PROJECTS } from "@/lib/data";
+import { resolveTechIcon } from "@/lib/techIcons";
 
 export default function ProjectsWindow() {
   return (
@@ -39,54 +40,15 @@ export default function ProjectsWindow() {
               
                 <div className="flex flex-wrap lg:justify-end gap-2 w-full lg:w-auto lg:max-w-[300px] shrink-0 lg:ml-auto mt-4 lg:mt-0">
                   {p.tech.map(t => {
-                    const iconMap: Record<string, string> = {
-                      "Bash": "Bash.svg",
-                      "C": "C.svg",
-                      "C++": "C++-(CPlusPlus).svg",
-                      "Java": "Java.svg",
-                      "TypeScript": "TypeScript.svg",
-                      "React": "React.svg",
-                      "Next.js": "Next.js.svg",
-                      "AstroJs": "Astro.svg",
-                      "Tailwind": "Tailwind-CSS.svg",
-                      "Tailwind CSS": "Tailwind-CSS.svg", 
-                      "Sass": "Sass.svg",
-                      "Three.js": "Three.js.svg",
-                      "Node.js": "Node.js.svg",
-                      "Express": "Express.svg",
-                      "MongoDB": "MongoDB.svg",
-                      "MySQL": "MySQL.svg",
-                      "SQLite": "SQLite.svg",
-                      "React Native": "React.svg",
-                      "Tauri": "Tauri.svg",
-                      "Electron": "Electron.svg",
-                      "AWS": "AWS.svg",
-                      "Docker": "Docker.svg",
-                      "Jenkins": "Jenkins.svg",
-                      "Linux": "Linux.svg",
-                      "Git": "Git.svg",
-                      "Figma": "Figma.svg",
-                      "Postman": "Postman.svg",
-                      "Jest": "Jest.svg",
-                      "JWT": "JSON.svg",
-                      "Vercel": "Vercel.svg",
-                      "Netlify": "Netlify.svg"
-                    };
-
-                    const iconFile = iconMap[t];
-                    // Flexible check for tech names that might vary
-                    const resolvedIcon = iconFile || Object.entries(iconMap).find(([k]) => t.includes(k) || k.includes(t))?.[1];
-
-                    const diffIcon = ["Next.js", "Express", "Three.js", "Bash", "AWS", "Vercel", "Netlify"].some(k => t.includes(k));
-
-                    if (!resolvedIcon) return null;
+                    const icon = resolveTechIcon(t);
+                    if (!icon) return null;
 
                     return (
                         <div key={t} className="w-8 h-8 flex items-center justify-center bg-zinc-900 border border-white/5 rounded-lg hover:border-white/20 transition-all hover:-translate-y-0.5" title={t}>
                             <img 
-                              src={`/tech svg/${resolvedIcon}`} 
+                              src={`/tech svg/${icon.file}`} 
                               alt={t}
-                              className={`w-4 h-4 object-contain ${diffIcon ? "brightness-0 invert" : ""}`}
+                              className={`w-4 h-4 object-contain ${icon.invert ? "brightness-0 invert" : ""}`}
                             />
                         </div>
                     );
