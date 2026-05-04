@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { TASKS, type Task } from "@/lib/data";
+import { useTasks } from "@/lib/useSanityData";
 
 type Span = { cols?: 1 | 2 | 3; rows?: 1 | 2 | 3 | 4 };
 function spanToClasses(span?: Span): string {
@@ -18,9 +18,8 @@ function spanToClasses(span?: Span): string {
   return cls.join(" ");
 }
 
-const tasks = TASKS;
-
 export default function TodoWidget({ span }: { span?: Span }) {
+  const tasks = useTasks();
   // Start with a deterministic task (0) to prevent hydration mismatch
   const [currentIndex, setCurrentIndex] = useState(0);
 

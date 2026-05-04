@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
-import { SONGS, type Song } from "@/lib/data";
+import { useSongs } from "@/lib/useSanityData";
 
 type Span = { cols?: 1 | 2 | 3; rows?: 1 | 2 | 3 | 4 };
 function spanToClasses(span?: Span): string {
@@ -18,9 +18,8 @@ function spanToClasses(span?: Span): string {
   return cls.join(" ");
 }
 
-const songs = SONGS;
-
 export default function NowListeningWidget({ span }: { span?: Span }) {
+  const songs = useSongs();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
 

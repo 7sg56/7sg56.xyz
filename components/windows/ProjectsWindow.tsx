@@ -1,10 +1,12 @@
 "use client";
 
 import React from "react";
-import { PROJECTS } from "@/lib/data";
+import { useProjects } from "@/lib/useSanityData";
 import { resolveTechIcon } from "@/lib/techIcons";
 
 export default function ProjectsWindow() {
+  const PROJECTS = useProjects();
+
   return (
     <div className="h-full flex flex-col relative z-50">
       <div className="flex-1 overflow-y-auto p-6 scrollbar-hide">

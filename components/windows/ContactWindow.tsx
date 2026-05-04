@@ -1,9 +1,9 @@
 "use client";
 
-import { getProfile } from "@/lib/data";
+import { useProfile } from "@/lib/useSanityData";
 
 export default function ContactWindow() {
-  const profile = getProfile();
+  const profile = useProfile();
 
   const socialLinks = [
     { name: "GitHub", url: profile.socials.github },

@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import { getAllSkills } from "@/lib/data";
+import { useSkills } from "@/lib/useSanityData";
 import { resolveTechIcon } from "@/lib/techIcons";
 
 export default function SkillsWindow() {
-  const skillCategories = getAllSkills();
+  const skillCategories = useSkills();
 
   return (
     <div className="h-full flex flex-col relative z-50">

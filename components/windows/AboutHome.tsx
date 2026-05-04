@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import ExperienceCard from "./ExperienceCard";
-import { getAllExperience, getResume, getProfile } from "@/lib/data";
+import { useExperience, useResume, useProfile } from "@/lib/useSanityData";
 import { motion } from "motion/react";
 
 export type OpenAppFn = (app: "about" | "projects" | "skills" | "contact") => void;
@@ -29,9 +29,11 @@ export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
     document.head.appendChild(link);
   }, []);
 
+  const experience = useExperience();
+  const resume = useResume();
+  const profile = useProfile();
+
   const renderAbout = () => {
-    const resume = getResume();
-    const profile = getProfile();
 
     const containerVariants = {
       hidden: { opacity: 0 },
@@ -204,7 +206,6 @@ export default function AboutHome({ onOpen }: { onOpen: OpenAppFn }) {
 
 
   const renderExperience = () => {
-    const experience = getAllExperience();
 
     return (
       <div className="flex flex-col relative z-50 pb-6">
